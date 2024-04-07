@@ -1,0 +1,119 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    overflow: hidden;
+    align-items: stretch;
+}
+
+.left_sidebar {
+    width: 250px;
+    background-color: #f4f4f4;
+    overflow-y: auto;
+}
+
+.right_content {
+    flex: 1;
+    height: 1200px;
+    overflow-y: auto;
+    padding: 0 20px;
+}
+
+.left_sidebar .search-btn {
+    margin: 10px 10px;
+    margin-right: auto;
+    display: inline;
+}
+
+.left_sidebar .search-btn input {
+    margin: 10px 0;
+    border-radius: 8px;
+    width: 190px;
+    height: 38px;
+    text-align: left;
+    border: 1px solid transparent;
+}
+
+.left_sidebar .search-btn a{
+    display: inline;
+    padding: 0px;
+}
+
+.left_sidebar .search-btn .search-icon {
+    padding: 12px;
+    font-size: 12px;
+    border-radius: 8px;
+}
+
+.left_sidebar .search-btn .search-icon:hover {
+    background-color: #ea4c89;
+    cursor: pointer;
+}
+
+.left_sidebar a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.left_sidebar a:hover {
+    background-color: #ddd;
+}
+
+.icon-img{
+    width: 240px;
+    height: 200px;
+    display: block;
+}
+
+.right_content #header{
+    height: 46px;
+    /* giúp thanh header nổi lên trên khi chỗ đó có nhiều lớp*/
+    z-index: 1;
+}
+
+#nav{
+    /* độ dài khối đc đánh giá bằng độ dài chữ, chữ đến đâu khối đến đó */
+    display: inline-block;
+    padding: 0px;
+}
+
+/* bỏ các dấu đầu dòng li */
+#nav{
+    list-style: none;
+    margin: 5px;
+}
+
+
+#nav li{
+    /* các li ghi trên 1 dòng */
+    display: inline-block;
+    position: relative;
+}
+
+/*Tác động đến thẻ con trực tiếp, ngoài ra thì ko tác động */
+#nav > li > a{
+    font-weight: 700;
+    color: #6e1d1d;
+    /* viết hoa thẻ li cha */
+    text-transform: uppercase;
+}
+
+/* Tác động đến tất cả thẻ a */
+#nav li a{
+    text-decoration: none;
+    line-height: 46px;
+    padding: 0 24px;
+    display: inline-block;
+}
+
+/* Tác động đến lớp con trực tiếp: khi di chuyển đến li thì a biến đổi */
+#nav > li:hover > a{
+    color: #000;
+    background-color: #ccc;
+}
