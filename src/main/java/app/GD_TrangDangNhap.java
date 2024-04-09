@@ -30,12 +30,14 @@ import dao.DangNhap_dao;
 
 public class GD_TrangDangNhap extends JFrame  implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	private JLabel lblTitle;
-    private JTextField txtUsername, txtPassword;
-    private JButton btnLogin, btnQuenMatKhau;
-	private JLabel lblKaeaoke;
+	private final JLabel lblTitle;
+    private final JTextField txtUsername;
+    private final JTextField txtPassword;
+    private final JButton btnLogin;
+    private final JButton btnQuenMatKhau;
+	private final JLabel lblKaeaoke;
 	private DangNhap_dao dangNhap_dao;
-	private GD_TrangChu gd_TrangChu;
+	private final GD_TrangChu gd_TrangChu;
 	private String username;
 
 	public GD_TrangDangNhap() {
@@ -195,7 +197,7 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
 	          char[] mk = ((JPasswordField) txtPassword).getPassword();
 	          String mkstr = new String(mk);
 	          dangNhap_dao = new DangNhap_dao();
-	          if (dangNhap_dao.Timkiem(username, mkstr) == true) {
+	          if (dangNhap_dao.Timkiem(username, mkstr)) {
 	        	  String roleName = dangNhap_dao.getRole(username, mkstr);
 	        	    try {
 	        	        if (roleName.equals("Quản lý")) {

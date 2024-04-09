@@ -25,19 +25,19 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel lblSLDaDat;
-	private Font font = new Font("Arial", Font.BOLD, 14);
-	private JTextField txtSLDat;
-	private JLabel lblSLTra;
-	private JTextField txtSLTra;
-	private JButton btnDongY;
-	private JButton btnHuy;
-	private ChiTietDichVu_dao ctdv_dao;
-	private SanPham_dao sp_dao;
-	private String tenSp;
-	private String maHD;
-	private Dialog_ThanhToan thanhToan;
-	private String maPhong;
+	private final JLabel lblSLDaDat;
+	private final Font font = new Font("Arial", Font.BOLD, 14);
+	private final JTextField txtSLDat;
+	private final JLabel lblSLTra;
+	private final JTextField txtSLTra;
+	private final JButton btnDongY;
+	private final JButton btnHuy;
+	private final ChiTietDichVu_dao ctdv_dao;
+	private final SanPham_dao sp_dao;
+	private final String tenSp;
+	private final String maHD;
+	private final Dialog_ThanhToan thanhToan;
+	private final String maPhong;
 
 	public Dialog_TraSanPham(int soLuong, String tenSp, String maHD, String maPhong, Dialog_ThanhToan thanhToan) {
 		getContentPane().setBackground(Color.WHITE);

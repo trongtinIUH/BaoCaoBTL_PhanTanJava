@@ -2,11 +2,7 @@ package entity;
 
 import java.io.Serializable;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class ChiTietDichVu  implements Serializable{
@@ -15,15 +11,17 @@ public class ChiTietDichVu  implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    private ChiTietDichVuID id;
-	
+//    @EmbeddedId
+//    private ChiTietDichVuID id;
+	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "maHoaDon")
+	@JoinColumn(name = "maHoaDon", columnDefinition = "VARCHAR(20)", nullable = false)
 	private HoaDonDatPhong hoaDon;
+	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maPhong")
 	private Phong phong;
+	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maSanPham")
 	private SanPham sanPham;

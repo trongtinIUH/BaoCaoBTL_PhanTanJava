@@ -50,37 +50,37 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 	Font font = new Font("Arial", Font.BOLD, 16); // khung tittle
 	Font font2 = new Font("Arial", Font.BOLD, 18); // thuộc tính
 	Font font3 = new Font("Arial", Font.PLAIN, 18); // jtexfield
-	private String col[] = { "STT", "Mã khuyến mãi", "Tên khuyến mãi", "Ngày bắt đầu", "Ngày kết thúc",
+	private final String[] col = { "STT", "Mã khuyến mãi", "Tên khuyến mãi", "Ngày bắt đầu", "Ngày kết thúc",
 			"Phần trăm khuyến mãi" };
-	private JPanel pnNorth;
-	private JLabel lblTitle;
-	private JButton btnUser;
-	private JComboBox<String> cbLoaiTim;
-	private JTextField txtTuKhoaTim;
-	private JButton btnTimKiem;
-	private JButton btnXuatExcel;
-	private DefaultTableModel model;
-	private JTable table;
-	private JScrollPane scroll;
-	private JTextField txtMa;
-	private JTextField txtTenKhuyenMai;
-	private JTextField txtPhanTramKM;
-	private JButton btnThem;
-	private JButton btnXoa;
-	private JButton btnSua;
-	private JButton btnLamMoi;
-	private SqlDateModel modelBatDau;
-	private Properties p;
-	private JDatePanelImpl datePanel;
-	private JDatePickerImpl datePicker;
-	private SqlDateModel modelKetThuc;
-	private Properties pkt;
-	private JDatePanelImpl datePanelkt;
-	private JDatePickerImpl datePickerkt;
-	private JComboBox<String> cbLoaiTim1;
-	private KhuyenMai_dao km_dao = new KhuyenMai_dao();
+	private final JPanel pnNorth;
+	private final JLabel lblTitle;
+	private final JButton btnUser;
+	private final JComboBox<String> cbLoaiTim;
+	private final JTextField txtTuKhoaTim;
+	private final JButton btnTimKiem;
+	private final JButton btnXuatExcel;
+	private final DefaultTableModel model;
+	private final JTable table;
+	private final JScrollPane scroll;
+	private final JTextField txtMa;
+	private final JTextField txtTenKhuyenMai;
+	private final JTextField txtPhanTramKM;
+	private final JButton btnThem;
+	private final JButton btnXoa;
+	private final JButton btnSua;
+	private final JButton btnLamMoi;
+	private final SqlDateModel modelBatDau;
+	private final Properties p;
+	private final JDatePanelImpl datePanel;
+	private final JDatePickerImpl datePicker;
+	private final SqlDateModel modelKetThuc;
+	private final Properties pkt;
+	private final JDatePanelImpl datePanelkt;
+	private final JDatePickerImpl datePickerkt;
+	private final JComboBox<String> cbLoaiTim1;
+	private final KhuyenMai_dao km_dao = new KhuyenMai_dao();
 	private XSSFWorkbook wordbook;
-	private Dialog_User dialog_User= new Dialog_User();
+	private final Dialog_User dialog_User= new Dialog_User();
 
 	public GD_KhuyenMai() {
 		// TODO Auto-generated constructor stub
@@ -604,11 +604,7 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 			if (cbLoaiTim.getSelectedItem().equals("Mã khuyến mãi")) {
 				cbLoaiTim1.setSelectedItem("");
 			}
-			if (cbLoaiTim.getSelectedItem().equals("")) {
-				txtTuKhoaTim.setEditable(false);
-			} else {
-				txtTuKhoaTim.setEditable(true);
-			}
+            txtTuKhoaTim.setEditable(!cbLoaiTim.getSelectedItem().equals(""));
 		}
 		if (o.equals(cbLoaiTim1)) {
 			if (!cbLoaiTim1.getSelectedItem().equals("") && cbLoaiTim.getSelectedItem().equals("Mã khuyến mãi")) {

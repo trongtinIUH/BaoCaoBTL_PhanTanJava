@@ -44,38 +44,46 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private JTextField txtSDT;
-	private JButton btn_KiemTraSDT, btn_QuayLai, btn_DatPhong;
-	private JPanel panel_1, panel_2;
-	private JLabel lbl_GioiTinh_1, lbl_GiaTien_1, lbl_TenKH_1, lbl_sdtKH, lbl_GioiTinh, lbl_NgayDatPhong_1;
-	private JTextField txtSoNguoi;
+	private final JTextField txtSDT;
+	private final JButton btn_KiemTraSDT;
+    private final JButton btn_QuayLai;
+    private final JButton btn_DatPhong;
+	private final JPanel panel_1;
+    private final JPanel panel_2;
+	private final JLabel lbl_GioiTinh_1;
+    private final JLabel lbl_GiaTien_1;
+    private final JLabel lbl_TenKH_1;
+    private final JLabel lbl_sdtKH;
+    private final JLabel lbl_GioiTinh;
+    private final JLabel lbl_NgayDatPhong_1;
+	private final JTextField txtSoNguoi;
 
-	private JLabel lbl_TenKH;
-	private LocalDateTime now;
+	private final JLabel lbl_TenKH;
+	private final LocalDateTime now;
 
 	private KhachHang_dao khachHang_dao = new KhachHang_dao();
 
-	private JLabel lbl_Phong;
-	private LocalDateTime now1;
-	private DatePickerSettings dateSettings_1;
-	private TimePickerSettings timeSettings_1;
-	private DateTimePicker dateTimePicker_1;
-	private JLabel lbl_TrangThai;
-	private JLabel lbl_Loai;
-	private JLabel lblTieuDe;
-	private JLabel lbl_GiaTien;
-	private JLabel lbl_SoNguoi;
-	private JLabel lbl_TrangThai_1;
-	private JLabel lbl_loai_1;
-	private JLabel lbl_NgayDatPhong;
-	private JLabel lbl_NgayNhanPhong;
+	private final JLabel lbl_Phong;
+	private final LocalDateTime now1;
+	private final DatePickerSettings dateSettings_1;
+	private final TimePickerSettings timeSettings_1;
+	private final DateTimePicker dateTimePicker_1;
+	private final JLabel lbl_TrangThai;
+	private final JLabel lbl_Loai;
+	private final JLabel lblTieuDe;
+	private final JLabel lbl_GiaTien;
+	private final JLabel lbl_SoNguoi;
+	private final JLabel lbl_TrangThai_1;
+	private final JLabel lbl_loai_1;
+	private final JLabel lbl_NgayDatPhong;
+	private final JLabel lbl_NgayNhanPhong;
 
-	private Phong_dao phong_dao = new Phong_dao();
-	private PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
+	private final Phong_dao phong_dao = new Phong_dao();
+	private final PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
 	private KhachHang kh = new KhachHang();
 	private Date ngayHienTai;
 	private Date date;
-	private GD_TrangChu trangChu;
+	private final GD_TrangChu trangChu;
 	private LocalDateTime ngayGioDatPhong;
 	private LocalDateTime ngay_GioNhanPhong;
 
@@ -313,7 +321,7 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 				DataManager.setMaPhongDatCho("");
 				DataManager.setSoNguoiHatDatCho("");
 
-				Enum_TrangThai trangThai = Enum_TrangThai.Chờ;
+				Enum_TrangThai trangThai = Enum_TrangThai.Cho;
 				Phong phong = new Phong(lbl_Phong.getText(), trangThai);
 				phong_dao.updatePhong(phong, lbl_Phong.getText());
 

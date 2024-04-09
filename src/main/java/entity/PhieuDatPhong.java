@@ -4,11 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class PhieuDatPhong implements Serializable{
@@ -18,18 +14,25 @@ public class PhieuDatPhong implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
+	@Column(name = "maPhieu", columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
 	private String maPhieu;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "maPhong")
+	@JoinColumn(name = "maPhong", columnDefinition = "VARCHAR(10)", nullable = false)
 	private Phong phong;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "maNhanVien")
+	@JoinColumn(name = "maNhanVien", columnDefinition = "VARCHAR(20)", nullable = false)
 	private NhanVien nhanVien;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "maKhachHang")
+	@JoinColumn(name = "maKhachHang", columnDefinition = "VARCHAR(20)", nullable = false)
 	private KhachHang khachHang;
+
+	@Column(name = "ngayGioDatPhong", columnDefinition = "DATETIME", nullable = false)
 	private LocalDateTime ngayGioDatPhong;
+
+	@Column(name = "ngayGioNhanPhong", columnDefinition = "DATETIME", nullable = false)
 	private LocalDateTime ngayGioNhanPhong;
+
+	@Column(name = "soNguoiHat", columnDefinition = "INT", nullable = false)
 	private int soNguoiHat;
 	public PhieuDatPhong() {
 		super();

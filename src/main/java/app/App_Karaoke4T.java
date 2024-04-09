@@ -5,8 +5,8 @@ import java.awt.*;
 public class App_Karaoke4T extends JFrame {
 	
     private static final long serialVersionUID = 1L;
-    private JLabel label;
-    private JProgressBar progressBar;
+    private final JLabel label;
+    private final JProgressBar progressBar;
 
 	public App_Karaoke4T() {
         // Tạo một cửa sổ mới

@@ -12,8 +12,8 @@ public class MonthLabelFormatter extends AbstractFormatter {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String monthPattern = "MM-yyyy";
-    private SimpleDateFormat monthFormatter = new SimpleDateFormat(monthPattern);
+	private final String monthPattern = "MM-yyyy";
+    private final SimpleDateFormat monthFormatter = new SimpleDateFormat(monthPattern);
 
     @Override
     public Object stringToValue(String text) throws ParseException {

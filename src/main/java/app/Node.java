@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
-    private String interfaceName;
-    private List<Node> children;
+    private final String interfaceName;
+    private final List<Node> children;
 
     public Node(String interfaceName) {
         this.interfaceName = interfaceName;

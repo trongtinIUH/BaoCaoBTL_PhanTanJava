@@ -24,11 +24,16 @@ public class Dialog_DoiMatKhau extends JDialog implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel lbl_mkCu,lblMatKhauMoi,lblNhapLaiMatKhauMoi;
-	private JTextField txtPassword,txtPassword_New,txtpass_cu;
-	private JLabel lblTitle;
-	private JButton btnHuy,btnXacNhan;
-	private DangNhap_dao dangNhap_dao = new DangNhap_dao();
+	private final JLabel lbl_mkCu;
+    private final JLabel lblMatKhauMoi;
+    private final JLabel lblNhapLaiMatKhauMoi;
+	private final JTextField txtPassword;
+    private final JTextField txtPassword_New;
+    private final JTextField txtpass_cu;
+	private final JLabel lblTitle;
+	private final JButton btnHuy;
+    private final JButton btnXacNhan;
+	private final DangNhap_dao dangNhap_dao = new DangNhap_dao();
 	private String manv="";
 	public  Dialog_DoiMatKhau(String ma) {
 		setTitle("Đổi Mật Khẩu");

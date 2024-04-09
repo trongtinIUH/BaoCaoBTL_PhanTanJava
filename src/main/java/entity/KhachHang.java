@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -17,9 +18,16 @@ public class KhachHang implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
+	@Column(name = "maKhachHang", columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
 	private String maKhachHang;
+
+	@Column(name = "hoTen", columnDefinition = "NVARCHAR(100)", nullable = false)
 	private String hoTen;
+
+	@Column(name = "soDienThoai", columnDefinition = "VARCHAR(20)", nullable = false)
 	private String soDienThoai;
+
+	@Column(name = "gioiTinh", columnDefinition = "BIT", nullable = false)
 	private boolean gioiTinh;
 	
 	@OneToMany(mappedBy = "khachHang")

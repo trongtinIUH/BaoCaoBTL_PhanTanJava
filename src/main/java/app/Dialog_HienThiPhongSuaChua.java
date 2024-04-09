@@ -17,13 +17,21 @@ public class Dialog_HienThiPhongSuaChua extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel lblPhong, lblLoai, lblSucChua, lblTrangThai, lblGia, lblLoai_1, lblSucChua_1, lbltrangthai_1,
-			lblgia_1, lblPhong_1;
-	private Phong_dao p_dao = new Phong_dao();
-	private LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final JLabel lblPhong;
+    private final JLabel lblLoai;
+    private final JLabel lblSucChua;
+    private final JLabel lblTrangThai;
+    private final JLabel lblGia;
+    private final JLabel lblLoai_1;
+    private final JLabel lblSucChua_1;
+    private final JLabel lbltrangthai_1;
+    private final JLabel lblgia_1;
+    private final JLabel lblPhong_1;
+	private final Phong_dao p_dao = new Phong_dao();
+	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
 
-	private Phong p;
-	private LoaiPhong lp;
+	private final Phong p;
+	private final LoaiPhong lp;
 
 	public Dialog_HienThiPhongSuaChua(String maPhong) {
 		// kích thước

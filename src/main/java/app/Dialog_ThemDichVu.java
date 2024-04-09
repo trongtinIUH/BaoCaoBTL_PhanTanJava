@@ -48,36 +48,48 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private JPanel panel, panel_Phai, panel_Trai, panel_1, pn_dssp, pn_dssp_Phai;
-	private JLabel lblSoLuong, lblTenNV, lblPhong;
-	private JComboBox<String> cbTimKiem;
-	private JTextField txtTenSP, txtSoLuong;
-	private JButton btnTimKiem, btn_DongY, btn_Huy;
+	private final JPanel panel;
+    private final JPanel panel_Phai;
+    private final JPanel panel_Trai;
+    private final JPanel panel_1;
+    private final JPanel pn_dssp;
+    private final JPanel pn_dssp_Phai;
+	private final JLabel lblSoLuong;
+    private final JLabel lblTenNV;
+    private final JLabel lblPhong;
+	private final JComboBox<String> cbTimKiem;
+	private final JTextField txtTenSP;
+    private final JTextField txtSoLuong;
+	private final JButton btnTimKiem;
+    private final JButton btn_DongY;
+    private final JButton btn_Huy;
 
 	// bảng trái
-	private JTable tblThemDv_Trai, tblThemDv_Phai;
-	private DefaultTableModel model_Trai, model_Phai;
-	private JLabel lblNV;
-	private String col_Trai[] = { "Mã Sản Phẩm", "Tên Sản Phẩm", "Số Lượng", "Đơn Giá" };
-	private String col_Phai[] = { "Mã Sản Phẩm", "Tên Sản Phẩm", "Số Lượng", "Đơn Giá", };
-	private JScrollPane sp_phai;
-	private JScrollPane sp;
-	private JButton btn_LamMoi;
-	private JLabel lblTongTien;
-	private JTextField txtTongTien;
+	private final JTable tblThemDv_Trai;
+    private final JTable tblThemDv_Phai;
+	private final DefaultTableModel model_Trai;
+    private final DefaultTableModel model_Phai;
+	private final JLabel lblNV;
+	private final String[] col_Trai = { "Mã Sản Phẩm", "Tên Sản Phẩm", "Số Lượng", "Đơn Giá" };
+	private final String[] col_Phai = { "Mã Sản Phẩm", "Tên Sản Phẩm", "Số Lượng", "Đơn Giá", };
+	private final JScrollPane sp_phai;
+	private final JScrollPane sp;
+	private final JButton btn_LamMoi;
+	private final JLabel lblTongTien;
+	private final JTextField txtTongTien;
 	private SanPham_dao sp_dao;
 //	private JButton btn_XoaDV;
-	private JButton btn_Them;
-	private DecimalFormat df;
-	private String ma;
+	private final JButton btn_Them;
+	private final DecimalFormat df;
+	private final String ma;
 	private double tongTien;
-	private Phong_dao p_dao;
-	private ChiTietDichVu_dao ctdv_dao;
+	private final Phong_dao p_dao;
+	private final ChiTietDichVu_dao ctdv_dao;
 	@SuppressWarnings("unused")
 	private String maHoaDon = "";
-	private ChiTietHoaDon_dao cthd_dao;
+	private final ChiTietHoaDon_dao cthd_dao;
 
-	private JLabel lblPhong1;
+	private final JLabel lblPhong1;
 
 	public Dialog_ThemDichVu(String customer, String employee, String maPhong) {
 		this.ma = maPhong;
@@ -353,7 +365,7 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 		});
 
 		Phong p = p_dao.getPhongTheoMaPhong(ma);
-		if (p.getTrangThai() == Enum_TrangThai.Đang_sử_dụng) {
+		if (p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
 			loadData_DangSD();
 		} else {
 			loadData_DatPhong();
@@ -364,7 +376,7 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 	public void loadDataPDSD() {
 		Phong p = p_dao.getPhongTheoMaPhong(ma);
 		try {
-			if (p.getTrangThai() == Enum_TrangThai.Đang_sử_dụng) {
+			if (p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
 				ChiTietHoaDon cthd_hienTaiCuaPhong1 = null;
 				ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(ma);
 				for (ChiTietHoaDon cthd : dsCTHD) {
@@ -511,7 +523,7 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 		if (o.equals(btn_DongY)) {
 			int flag = 0;
 			Phong p = p_dao.getPhongTheoMaPhong(ma);
-			if (p.getTrangThai() == Enum_TrangThai.Trống || p.getTrangThai() == Enum_TrangThai.Chờ) {
+			if (p.getTrangThai() == Enum_TrangThai.Trong || p.getTrangThai() == Enum_TrangThai.Cho) {
 				if (DataManager.getCtdvTempList() != null) {
 					ArrayList<TempThemDV> ctdvTempList = DataManager.getCtdvTempList();
 					for (int i = 0; i < model_Phai.getRowCount(); i++) {
@@ -557,7 +569,7 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 					DataManager.setCtdvTempList(ctdvTempList);
 					DataManager.setTongTienDV(tongTien);
 				}
-			} else if (p.getTrangThai() == Enum_TrangThai.Đang_sử_dụng) {
+			} else if (p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
 				ArrayList<TempThemDV> ctdvTempList = new ArrayList<TempThemDV>();
 				for (int i = 0; i < model_Phai.getRowCount(); i++) {
 					// Assuming ChiTietDichVu has a constructor that accepts the column values as

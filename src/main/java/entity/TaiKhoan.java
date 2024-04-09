@@ -3,14 +3,7 @@ package entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Setter;
 
 
@@ -22,14 +15,19 @@ public class TaiKhoan implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	//@GeneratedValue(strategy = GenerationType.)
+	@Column(name = "maTaiKhoan", columnDefinition = "VARCHAR(20)", unique = true, nullable = false)
 	private String maTaiKhoan;
+
+	@Column(name = "matKhau", columnDefinition = "VARCHAR(255)", nullable = false)
 	private String matKhau;
+	@Column(name = "trangThai", columnDefinition = "BIT", nullable = false)
 	private boolean trangThai;
 
 	@OneToOne
 	@JoinColumn(name = "maNhanVien", unique = true, nullable = false)
 	private NhanVien nhanVien;
+
+	@Column(name = "roleName", columnDefinition = "NVARCHAR(100)", nullable = false)
 	private String roleName;
 	public TaiKhoan(String ma, String matKhau2) {
 		super();

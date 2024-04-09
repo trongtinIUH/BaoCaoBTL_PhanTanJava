@@ -56,41 +56,41 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	Font font2 = new Font("Arial", Font.BOLD, 18); // thuộc tính
 	Font font3 = new Font("Arial", Font.PLAIN, 18); // jtexfield
 
-	private String col[] = { "STT", "Mã nhân viên", "Họ tên", "Số điện thoại", "Giới tính", "Ngày sinh", "Chức vụ",
+	private final String[] col = { "STT", "Mã nhân viên", "Họ tên", "Số điện thoại", "Giới tính", "Ngày sinh", "Chức vụ",
 			"Ảnh"};
-	private JLabel lblTitle;
-	private JPanel pnNorth;
-	private SqlDateModel modelNgaySinh;
-	private Properties p;
-	private JDatePanelImpl datePanel;
-	private JDatePickerImpl datePicker;
-	private JComboBox<String> cbChucVu;
-	private JButton btnThem;
-	private JButton btnXoa;
-	private JButton btnSua;
-	private JButton btnLamMoi;
-	private JComboBox<String> cbLoaiTim;
-	private JTextField txtTuKhoaTim;
-	private JButton btnTimKiem;
-	private JButton btnXuatExcel;
-	private DefaultTableModel model;
-	private JTable table;
-	private JScrollPane scroll;
+	private final JLabel lblTitle;
+	private final JPanel pnNorth;
+	private final SqlDateModel modelNgaySinh;
+	private final Properties p;
+	private final JDatePanelImpl datePanel;
+	private final JDatePickerImpl datePicker;
+	private final JComboBox<String> cbChucVu;
+	private final JButton btnThem;
+	private final JButton btnXoa;
+	private final JButton btnSua;
+	private final JButton btnLamMoi;
+	private final JComboBox<String> cbLoaiTim;
+	private final JTextField txtTuKhoaTim;
+	private final JButton btnTimKiem;
+	private final JButton btnXuatExcel;
+	private final DefaultTableModel model;
+	private final JTable table;
+	private final JScrollPane scroll;
 	private NhanVien_dao nv_dao;
-	private DangNhap_dao dangNhap_dao = new DangNhap_dao();
-	private JTextField txtMa;
-	private JTextField txtHoTen;
-	private JTextField txtSDT;
-	private JRadioButton rdoNam;
-	private JRadioButton rdoNu;
-	private JButton openButton;
-	private JLabel imageLabel;
+	private final DangNhap_dao dangNhap_dao = new DangNhap_dao();
+	private final JTextField txtMa;
+	private final JTextField txtHoTen;
+	private final JTextField txtSDT;
+	private final JRadioButton rdoNam;
+	private final JRadioButton rdoNu;
+	private final JButton openButton;
+	private final JLabel imageLabel;
 	private String absolutePath;
 	private File selectedFile;
 	private XSSFWorkbook wordbook;
 
-	private JButton btnUser;
-	private Dialog_User dialog_user = new Dialog_User();
+	private final JButton btnUser;
+	private final Dialog_User dialog_user = new Dialog_User();
 
 	public GD_NhanVien() {
 		setBackground(new Color(246, 245, 255));
@@ -361,7 +361,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 
 	private String getGT(NhanVien nv) {
 		String gt = "";
-		if (nv.isGioiTinh() == true)
+		if (nv.isGioiTinh())
 			gt = "Nam";
 		else
 			gt = "Nữ";
@@ -390,7 +390,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	private String thuTuNhanVienTrongNam() {
 		int sl = 0;
 		for (NhanVien nv : nv_dao.getAllNhanVien()) {
-			if (nv.getMaNhanVien().substring(0, 2).equals("23"))
+			if (nv.getMaNhanVien().startsWith("23"))
 				sl++;
 		}
 		String slString = String.format("%03d", sl + 1);
@@ -448,10 +448,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 			String hoTen = txtHoTen.getText();
 			String sDT = txtSDT.getText();
 			boolean gt;
-			if (rdoNam.isSelected())
-				gt = true;
-			else
-				gt = false;
+            gt = rdoNam.isSelected();
 			Date ngaySinh = (Date) datePicker.getModel().getValue();
 			Date ngayHienTai = new Date(System.currentTimeMillis());
 
@@ -516,10 +513,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 			String ten = txtHoTen.getText().trim();
 			String sDT = txtSDT.getText().trim();
 			boolean gt;
-			if (rdoNam.isSelected())
-				gt = true;
-			else
-				gt = false;
+            gt = rdoNam.isSelected();
 			Date ngaySinh = (Date) datePicker.getModel().getValue();
 
 			Date ngayHienTai = new Date(System.currentTimeMillis());
@@ -618,7 +612,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 				cell.setCellValue(nv_dao.getAllNhanVien().get(i).getSoDienThoai());
 
 				String gioiTinhInExcel = "";
-				if (nv_dao.getAllNhanVien().get(i).isGioiTinh() == true) {
+				if (nv_dao.getAllNhanVien().get(i).isGioiTinh()) {
 					gioiTinhInExcel = "Nam";
 				} else
 					gioiTinhInExcel = "Nữ";

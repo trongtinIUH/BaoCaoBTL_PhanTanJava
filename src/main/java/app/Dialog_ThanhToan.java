@@ -79,51 +79,51 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel panel;
-	private JLabel lblTieuDe;
-	private JLabel lblSDTKhach;
-	private JLabel lblTenKhach;
-	private JLabel lblTenNV;
-	private JLabel lblGioTraPhong;
-	private JLabel lblTngThiLng;
-	private JLabel lbl_sdtKH_1;
-	private JLabel lbl_tenKH_1;
-	private JLabel lbl_TenNV_1;
-	private JLabel lbl_GioTraPhong_1;
-	private JLabel lbl_TongThoiLuong_1;
+	private final JPanel panel;
+	private final JLabel lblTieuDe;
+	private final JLabel lblSDTKhach;
+	private final JLabel lblTenKhach;
+	private final JLabel lblTenNV;
+	private final JLabel lblGioTraPhong;
+	private final JLabel lblTngThiLng;
+	private final JLabel lbl_sdtKH_1;
+	private final JLabel lbl_tenKH_1;
+	private final JLabel lbl_TenNV_1;
+	private final JLabel lbl_GioTraPhong_1;
+	private final JLabel lbl_TongThoiLuong_1;
 
-	private JTable tblThanhToan;
-	private DefaultTableModel model;
-	private String col[] = { "STT", "Phòng / Tên SP", "Thời gian / SL", "Giá", "Đơn Vị Tính", "Thành tiền" };
-	private JLabel lblTienDV;
-	private JLabel lblTienPhong;
-	private JLabel lblTongCong;
-	private JLabel lblThu;
-	private JLabel lbl_TongThanhTien;
-	private JTextField txtMaGiamGia;
-	private JTextField txtTienNhan;
-	private JTextField txtTienThua;
-	private JLabel lbl_TongThanhTien_1;
-	private JLabel lblThu_1;
-	private JLabel lblVn;
-	private JLabel lblVn_1;
-	private JLabel lblVn_2;
-	private JButton btnThanhToan;
-	private JButton btnQuayLai;
-	private NhanVien_dao nv_dao;
-	private ChiTietHoaDon_dao cthd_dao;
-	private HoaDonDatPhong_dao hd_dao;
-	private KhachHang_dao kh_dao;
-	private JLabel lblMaHD;
-	private JLabel lbl_MaHoaDon_1;
-	private Date ngayTraPhong;
-	private Phong_dao ph_dao;
-	private LoaiPhong_dao loaiPhong_dao;
-	private ChiTietDichVu_dao ctdv_dao;
-	private SanPham_dao sp_dao;
+	private final JTable tblThanhToan;
+	private final DefaultTableModel model;
+	private final String[] col = { "STT", "Phòng / Tên SP", "Thời gian / SL", "Giá", "Đơn Vị Tính", "Thành tiền" };
+	private final JLabel lblTienDV;
+	private final JLabel lblTienPhong;
+	private final JLabel lblTongCong;
+	private final JLabel lblThu;
+	private final JLabel lbl_TongThanhTien;
+	private final JTextField txtMaGiamGia;
+	private final JTextField txtTienNhan;
+	private final JTextField txtTienThua;
+	private final JLabel lbl_TongThanhTien_1;
+	private final JLabel lblThu_1;
+	private final JLabel lblVn;
+	private final JLabel lblVn_1;
+	private final JLabel lblVn_2;
+	private final JButton btnThanhToan;
+	private final JButton btnQuayLai;
+	private final NhanVien_dao nv_dao;
+	private final ChiTietHoaDon_dao cthd_dao;
+	private final HoaDonDatPhong_dao hd_dao;
+	private final KhachHang_dao kh_dao;
+	private final JLabel lblMaHD;
+	private final JLabel lbl_MaHoaDon_1;
+	private final Date ngayTraPhong;
+	private final Phong_dao ph_dao;
+	private final LoaiPhong_dao loaiPhong_dao;
+	private final ChiTietDichVu_dao ctdv_dao;
+	private final SanPham_dao sp_dao;
 	private int tongTienDichVu;
 	private double tongTienPhong;
-	private JCheckBox chckbx_XuatHoaDon;
+	private final JCheckBox chckbx_XuatHoaDon;
 	private Date tgHT;
 	private Date gioHienTai;
 	private Date phutHienTai;
@@ -133,26 +133,26 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private double tongSoPhutHat;
 	private double soGioHat_Item;
 	private double soPhutHat_Item;
-	private KhuyenMai_dao km_dao;
-	private JButton btnKiemTra;
+	private final KhuyenMai_dao km_dao;
+	private final JButton btnKiemTra;
 	private int xacNhan;
-	private JTextField txtPhanTramKM;
+	private final JTextField txtPhanTramKM;
 	private Date date_HT;
-	private DecimalFormat f;
-	private JButton btnTraLaiSP;
+	private final DecimalFormat f;
+	private final JButton btnTraLaiSP;
 	private int TienDichVu_item;
 	private double tienDichVu_update;
 	PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
-	private TempThanhToan_dao tempTT_dao;
+	private final TempThanhToan_dao tempTT_dao;
 	private int gioThua_Item;
 	private double phutChinhXac_Item;
-	private Date date;
+	private final Date date;
 	private double thoiGianHat;
 	private double thoiGian_Item;
-	private TempPhongBiChuyen_dao temChuyen_dao;
+	private final TempPhongBiChuyen_dao temChuyen_dao;
 	@SuppressWarnings("unused")
-	private String maPh;
-	private JTextField txtTienGiam;
+	private final String maPh;
+	private final JTextField txtTienGiam;
 
 	public Dialog_ThanhToan(String maPhong) {
 		this.maPh = maPhong;
@@ -629,7 +629,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 					TienDichVu_item += ctdv.getSoLuong() * ctdv.getGia();
 				}
 
-				String col_temp[] = {"","","","","",""};
+				String[] col_temp = {"","","","","",""};
 				model.addRow(col_temp);
 //				tblThanhToan.setRowHeight(i, 18);
 				tongTienDichVu += TienDichVu_item;
@@ -643,8 +643,8 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		else {
 			for (TempThanhToan tmp : tempTT_dao.getAllTemp()) {
 				
-				if (!tmp.getMaPhong().equals("000")) {;
-				ChiTietHoaDon cthd_hienTaiCuaPhong = null;
+				if (!tmp.getMaPhong().equals("000")) {
+                    ChiTietHoaDon cthd_hienTaiCuaPhong = null;
 				ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(tmp.getMaPhong());
 				for (ChiTietHoaDon cthd : dsCTHD) {
 					cthd_hienTaiCuaPhong = cthd;
@@ -814,7 +814,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 					model.addRow(rowSanPham);
 					TienDichVu_item += ctdv.getSoLuong() * ctdv.getGia();
 				}
-				String col_temp[] = {"","","","","",""};
+				String[] col_temp = {"","","","","",""};
 				model.addRow(col_temp);
 //				tblThanhToan.setRowHeight(i, 18);
 				tongTienDichVu += TienDichVu_item;
@@ -889,7 +889,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		try {
 			ImageIcon ii = new ImageIcon(img);
 			bi = new BufferedImage(WIDTH, HEIGHT - 73, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2d = (Graphics2D) bi.createGraphics();
+			Graphics2D g2d = bi.createGraphics();
 			g2d.addRenderingHints(
 					new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
 			g2d.drawImage(ii.getImage(), 0, 0, WIDTH, HEIGHT, null);
@@ -918,11 +918,11 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 					// Update Phòng
 					for (int row = 0; row < tblThanhToan.getRowCount(); row++) {
 						String maPhong_Item = model.getValueAt(row, 1).toString().replaceAll(" (Bị chuyển)", "");
-						Enum_TrangThai trangThaiPhong = Enum_TrangThai.Trống;
+						Enum_TrangThai trangThaiPhong = Enum_TrangThai.Trong;
 
 						PhieuDatPhong pdp = pdp_dao.getPhieuDatPhongPhongCho(maPhong_Item);
 						if (pdp != null)
-							trangThaiPhong = Enum_TrangThai.Chờ;
+							trangThaiPhong = Enum_TrangThai.Cho;
 
 						Phong phong = new Phong(maPhong_Item, trangThaiPhong);
 						ph_dao.updatePhong(phong, maPhong_Item);

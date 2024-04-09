@@ -91,7 +91,7 @@ public class PanelGradient extends JComponent {
         repaint();
     }
 
-    public static enum GradientType {
+    public enum GradientType {
         VERTICAL, HORIZONTAL, DIAGONAL_1, DIAGONAL_2
     }
 }

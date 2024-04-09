@@ -119,7 +119,7 @@ public class BlankPlotChart extends JComponent {
         double spaceText = 5;
         for (int i = 0; i <= niceScale.getMaxTicks(); i++) {
             int y = (int) (getHeight() - locationY);
-            g2.drawLine((int) (insets.left + textWidth + spaceText), y, (int) getWidth() - insets.right, y);
+            g2.drawLine((int) (insets.left + textWidth + spaceText), y, getWidth() - insets.right, y);
             locationY += space;
         }
 

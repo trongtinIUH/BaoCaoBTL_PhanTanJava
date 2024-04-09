@@ -45,32 +45,40 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel lblPhong, lblGia, lblThoiGianHat, lblSoNguoi, lblLoai, lblLoai_1, lblPhong_1, lblgia_1;
-	private JButton btnNhanPhong, btn_HuyPhong;
+	private final JLabel lblPhong;
+    private final JLabel lblGia;
+    private final JLabel lblThoiGianHat;
+    private final JLabel lblSoNguoi;
+    private final JLabel lblLoai;
+    private final JLabel lblLoai_1;
+    private final JLabel lblPhong_1;
+    private final JLabel lblgia_1;
+	private final JButton btnNhanPhong;
+    private final JButton btn_HuyPhong;
 
-	private Phong_dao p_dao = new Phong_dao();
-	private LoaiPhong_dao lp_dao = new LoaiPhong_dao();
-	private PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
-	private KhachHang_dao kh_dao = new KhachHang_dao();
+	private final Phong_dao p_dao = new Phong_dao();
+	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
+	private final KhachHang_dao kh_dao = new KhachHang_dao();
 	private Phong p;
 	private LoaiPhong lp;
 	private PhieuDatPhong pdp;
 	private KhachHang kh;
-	private GD_TrangChu trangChu;
+	private final GD_TrangChu trangChu;
 
-	private JLabel lblThoiGianHat_1;
+	private final JLabel lblThoiGianHat_1;
 
-	private DateTimePicker dateTimePicker;
-	private TimePickerSettings timeSettings;
-	private DatePickerSettings dateSettings;
-	private DatePickerSettings dateSettings_1;
+	private final DateTimePicker dateTimePicker;
+	private final TimePickerSettings timeSettings;
+	private final DatePickerSettings dateSettings;
+	private final DatePickerSettings dateSettings_1;
 
-	private TimePickerSettings timeSettings_1;
-	private DateTimePicker dateTimePicker_1;
-	private JLabel lbl_KhachHang;
-	private JLabel lbl_KhachHang_1;
-	private JLabel lbl_SoNguoi_1;
-	private TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TimePickerSettings timeSettings_1;
+	private final DateTimePicker dateTimePicker_1;
+	private final JLabel lbl_KhachHang;
+	private final JLabel lbl_KhachHang_1;
+	private final JLabel lbl_SoNguoi_1;
+	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
 
 	private LocalDateTime ngayGioDatPhong;
 	private LocalDateTime ngayGioNhanPhong;
@@ -81,7 +89,7 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
 	private Dialog_HienThiPhong dialog_HienThiPhong;
-	private JButton btnDatPhong;
+	private final JButton btnDatPhong;
 
 	public Dialog_PhongCho(String maPhong, GD_TrangChu trangChu) {
 		this.trangChu = trangChu;
@@ -331,11 +339,7 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 		pdp = pdp_dao.getPDPDatTruocTheoMaPhong(maPhong);
 		//Trước 90p để hát tối thiểu 60p -> Vì trước 90p khó demo đổi sang 30p
 		LocalDateTime check = pdp.getNgayGioNhanPhong().minusMinutes(30);
-		if (check.isBefore(LocalDateTime.now())) {
-			btnDatPhong.setEnabled(false);
-		} else {
-			btnDatPhong.setEnabled(true);
-		}
+        btnDatPhong.setEnabled(!check.isBefore(LocalDateTime.now()));
 	}
 
 	@Override
@@ -390,7 +394,7 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 					JOptionPane.showMessageDialog(this, "Phòng hủy do đến trễ quá 30 phút vui lòng đặt phòng khác để sử dụng phòng karaoke!");
 					pdp_dao.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
 					DataManager.setDatPhongCho(true);
-					Enum_TrangThai trangThai = Enum_TrangThai.Trống;
+					Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 					Phong phong = new Phong(lblPhong_1.getText(), trangThai);
 					p_dao.updatePhong(phong, lblPhong_1.getText());
 					setVisible(false);
@@ -409,7 +413,7 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Phòng hủy do đến trễ quá 30 phút!");
 				pdp_dao.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
 				DataManager.setDatPhongCho(true);
-				Enum_TrangThai trangThai = Enum_TrangThai.Trống;
+				Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 				Phong phong = new Phong(lblPhong_1.getText(), trangThai);
 				p_dao.updatePhong(phong, lblPhong_1.getText());
 				setVisible(false);
@@ -430,7 +434,7 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Phòng hủy thành công!");
 				pdp_dao.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
 				DataManager.setDatPhongCho(true);
-				Enum_TrangThai trangThai = Enum_TrangThai.Trống;
+				Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 				Phong phong = new Phong(lblPhong_1.getText(), trangThai);
 				p_dao.updatePhong(phong, lblPhong_1.getText());
 				setVisible(false);

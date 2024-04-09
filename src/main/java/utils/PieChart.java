@@ -293,7 +293,7 @@ public class PieChart extends JComponent {
         models.add(data);
     }
 
-    public static enum PeiChartType {
+    public enum PeiChartType {
         DEFAULT, DONUT_CHART
     }
 }

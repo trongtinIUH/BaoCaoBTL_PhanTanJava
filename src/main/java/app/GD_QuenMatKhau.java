@@ -24,11 +24,19 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel lblSDT,lblOTP,lblMatKhauMoi,lblNhapLaiMatKhauMoi;
-	private JTextField txtSDT, txtPassword,txtPassword_New,txtOTP;
-	private JLabel lblTitle;
-	private JButton btnHuy,btnXacNhan,btnOTP;
-	private DangNhap_dao dangNhap_dao = new DangNhap_dao();
+	private final JLabel lblSDT;
+    private final JLabel lblOTP;
+    private final JLabel lblMatKhauMoi;
+    private final JLabel lblNhapLaiMatKhauMoi;
+	private final JTextField txtSDT;
+    private final JTextField txtPassword;
+    private final JTextField txtPassword_New;
+    private final JTextField txtOTP;
+	private final JLabel lblTitle;
+	private final JButton btnHuy;
+    private final JButton btnXacNhan;
+    private final JButton btnOTP;
+	private final DangNhap_dao dangNhap_dao = new DangNhap_dao();
 	
 	// Thay thế bằng Account SID và Auth Token của bạn
     public static final String ACCOUNT_SID = "AC7f55b2559cf6d868c6c92f6733eafb65";
@@ -159,7 +167,7 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 			String mk_moi=new String(mk2);
 			
 
-				if(dangNhap_dao.TimkiemSDT(sdt)==true) {
+				if(dangNhap_dao.TimkiemSDT(sdt)) {
 					if(mk_cu.equalsIgnoreCase(mk_moi)) {
 						JOptionPane.showMessageDialog(null, "Mật khẩu mới của bạn đã được cập nhật !");
 						dangNhap_dao.doiMatKhau(sdt, mk_moi);

@@ -47,34 +47,34 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 	Font font = new Font("Arial", Font.BOLD, 16); // khung tittle
 	Font font2 = new Font("Arial", Font.BOLD, 18); // thuộc tính
 	Font font3 = new Font("Arial", Font.PLAIN, 18); // jtexfield
-	private String col[] = { "STT", "Mã khách hàng", "Tên khách hàng", "Số điện thoại", "Giới tính" };
-	private JLabel lblTitle;
-	private JTextField txtTimKiem;
-	private JComboBox<String> cbLoaiTimKiem;
-	private JButton btnTimKiem;
-	private JLabel lblSDT;
-	private JTextField txtSDT;
-	private JButton btnXoa;
-	private JButton btnSua;
-	private JButton btnLamMoi;
-	private DefaultTableModel model;
-	private JTable table;
-	private JScrollPane scroll;
-	private JButton btnXuatExcel;
-	private JRadioButton radNam;
-	private ButtonGroup grSex;
-	private JRadioButton radNu;
-	private JButton btnThem;
-	private JLabel lblGioiTinh;
-	private KhachHang_dao kh_dao;
-	private JTextField txtHoTen;
-	private JTextField txtMa;
+	private final String[] col = { "STT", "Mã khách hàng", "Tên khách hàng", "Số điện thoại", "Giới tính" };
+	private final JLabel lblTitle;
+	private final JTextField txtTimKiem;
+	private final JComboBox<String> cbLoaiTimKiem;
+	private final JButton btnTimKiem;
+	private final JLabel lblSDT;
+	private final JTextField txtSDT;
+	private final JButton btnXoa;
+	private final JButton btnSua;
+	private final JButton btnLamMoi;
+	private final DefaultTableModel model;
+	private final JTable table;
+	private final JScrollPane scroll;
+	private final JButton btnXuatExcel;
+	private final JRadioButton radNam;
+	private final ButtonGroup grSex;
+	private final JRadioButton radNu;
+	private final JButton btnThem;
+	private final JLabel lblGioiTinh;
+	private final KhachHang_dao kh_dao;
+	private final JTextField txtHoTen;
+	private final JTextField txtMa;
 	private XSSFWorkbook wordbook;
 	private Date ngayHienTai;
 	private Date date;
 
-	private JButton btnUser;
-	private Dialog_User dialog_User = new Dialog_User();
+	private final JButton btnUser;
+	private final Dialog_User dialog_User = new Dialog_User();
 
 	public GD_KhachHang() {
 		setBackground(new Color(242, 240, 255));
@@ -179,12 +179,12 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if (DataManager.isLoadSDT() == true) {
+				if (DataManager.isLoadSDT()) {
 					txtSDT.setText(DataManager.getSoDienThoaiKHDat());
 					DataManager.setLoadSDT(false);
 
 				}
-				if(DataManager.isLoadSDTCho() == true) {
+				if(DataManager.isLoadSDTCho()) {
 					txtSDT.setText(DataManager.getSoDienThoaiKHDatCho());
 					DataManager.setLoadSDTCho(false);
 				}
@@ -332,7 +332,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 		String gioiTinh = "";
 		for (KhachHang kh : kh_dao.getallKhachHangs()) {
 			i++;
-			if (kh.isGioiTinh() == true) {
+			if (kh.isGioiTinh()) {
 				gioiTinh = "Nam";
 			} else {
 				gioiTinh = "Nữ";
@@ -366,14 +366,10 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 			String sdt = txtSDT.getText().trim();
 			Boolean gioiTinh;
 			String hienThiGioiTinh;
-			if (radNam.isSelected()) {
-				gioiTinh = true;
-			} else {
-				gioiTinh = false;
-			}
+            gioiTinh = radNam.isSelected();
 			KhachHang kh = new KhachHang(ma, ten, sdt, gioiTinh);
 			if (kh_dao.addKhachHang(kh)) {
-				if (gioiTinh == true) {
+				if (gioiTinh) {
 					hienThiGioiTinh = "Nam";
 				} else
 					hienThiGioiTinh = "Nữ";
@@ -419,11 +415,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 			String ten = txtHoTen.getText().trim();
 			String sdt = txtSDT.getText().trim();
 			Boolean gioiTinh;
-			if (radNam.isSelected()) {
-				gioiTinh = true;
-			} else {
-				gioiTinh = false;
-			}
+            gioiTinh = radNam.isSelected();
 			KhachHang kh = new KhachHang(ma, ten, sdt, gioiTinh);
 			if (kh_dao.updateKhachHang(kh)) {
 				clearTable();
@@ -443,7 +435,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 				if (kh != null) {
 					btnTimKiem.setText("Hủy tìm");
 					clearTable();
-					if (kh.isGioiTinh() == true) {
+					if (kh.isGioiTinh()) {
 						gioitinh = "Nam";
 					} else
 						gioitinh = "Nữ";
@@ -458,7 +450,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 					btnTimKiem.setText("Hủy tìm");
 					clearTable();
 					for (KhachHang kh : dsKhachHang) {
-						if (kh.isGioiTinh() == true) {
+						if (kh.isGioiTinh()) {
 							gioitinh = "Nam";
 						} else
 							gioitinh = "Nữ";
@@ -472,7 +464,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 				KhachHang kh = null;
 				kh = kh_dao.getKhachHangTheoSDT(txtTimKiem.getText());
 				if (kh != null) {
-					if (kh.isGioiTinh() == true) {
+					if (kh.isGioiTinh()) {
 						gioitinh = "Nam";
 					} else
 						gioitinh = "Nữ";
@@ -523,7 +515,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 				cell.setCellValue(kh_dao.getallKhachHangs().get(i).getSoDienThoai());
 
 				String gioiTinhInExcel = "";
-				if (kh_dao.getallKhachHangs().get(i).isGioiTinh() == true) {
+				if (kh_dao.getallKhachHangs().get(i).isGioiTinh()) {
 					gioiTinhInExcel = "Nam";
 				} else
 					gioiTinhInExcel = "Nữ";
@@ -582,8 +574,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 			radNam.setSelected(true);
 		} else if (model.getValueAt(row, 4).toString().equals("Nữ")) {
 			radNu.setSelected(true);
-			;
-		}
+        }
 	}
 
 	@Override

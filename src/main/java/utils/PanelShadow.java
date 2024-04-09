@@ -177,11 +177,11 @@ public class PanelShadow extends JPanel {
         repaint();
     }
 
-    public static enum GradientType {
+    public enum GradientType {
         VERTICAL, HORIZONTAL, DIAGONAL_1, DIAGONAL_2
     }
 
-    public static enum ShadowType {
+    public enum ShadowType {
         CENTER, TOP_RIGHT, TOP_LEFT, BOT_RIGHT, BOT_LEFT, BOT, TOP
     }
 }

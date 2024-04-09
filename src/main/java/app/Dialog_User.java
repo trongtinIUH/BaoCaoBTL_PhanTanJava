@@ -31,21 +31,23 @@ public class Dialog_User extends JDialog implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField txt_HoTen;
-	private JButton btnThot;
-	private JButton btnDoiMK;
-	private JLabel lbl_HoTen,lbl_TrangThai;
-	private JLabel lbl_ChucVu;
-	private JTextField txtQunL;
-	private JLabel hinhNV;
-	private JLabel lbl_nen;
-	private NhanVien_dao nv_dao;
+	private final JTextField txt_HoTen;
+	private final JButton btnThot;
+	private final JButton btnDoiMK;
+	private final JLabel lbl_HoTen;
+    private final JLabel lbl_TrangThai;
+	private final JLabel lbl_ChucVu;
+	private final JTextField txtQunL;
+	private final JLabel hinhNV;
+	private final JLabel lbl_nen;
+	private final NhanVien_dao nv_dao;
 	private Dialog_DoiMatKhau Dialog_Doi_mk;
 	private String ma;
-	private JLabel lbl_TrangThai_1;
+	private final JLabel lbl_TrangThai_1;
 	@SuppressWarnings("unused")
-	private DangNhap_dao dangNhap_dao= new DangNhap_dao();
-	private String trangthaidangnhap,hinhanh_url;
+	private final DangNhap_dao dangNhap_dao= new DangNhap_dao();
+	private final String trangthaidangnhap;
+    private String hinhanh_url;
 //	private GD_TrangDangNhap gd_dangNhap = new GD_TrangDangNhap(); 
 	public Dialog_User() {
 		setTitle("User");

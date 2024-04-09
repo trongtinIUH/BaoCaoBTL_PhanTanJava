@@ -35,31 +35,43 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel lblPhong,lblGia,lblTrangThai, lblThoiGianHat, lblSoNguoi, lblLoai,lblLoai_1,lblPhong_1,lblgia_1,lbltrangthai_1,lblSoNguoi_1, lblTenKH, lblTenKH_1;
+	private final JLabel lblPhong;
+    private final JLabel lblGia;
+    private final JLabel lblTrangThai;
+    private JLabel lblThoiGianHat;
+    private final JLabel lblSoNguoi;
+    private final JLabel lblLoai;
+    private final JLabel lblLoai_1;
+    private final JLabel lblPhong_1;
+    private final JLabel lblgia_1;
+    private final JLabel lbltrangthai_1;
+    private final JLabel lblSoNguoi_1;
+    private final JLabel lblTenKH;
+    private final JLabel lblTenKH_1;
 
 
-	private Phong_dao p_dao = new Phong_dao();
-	private LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final Phong_dao p_dao = new Phong_dao();
+	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
 	private Phong p;
 	private LoaiPhong lp;
-	private PhieuDatPhong_dao phieuDatPhong_dao;
-	private Phong_dao phong_dao= new Phong_dao();
-	private ChiTietHoaDon_dao cthd_dao;
-	private Date gioHienTai;
-	private Date phutHienTai;
+	private final PhieuDatPhong_dao phieuDatPhong_dao;
+	private final Phong_dao phong_dao= new Phong_dao();
+	private final ChiTietHoaDon_dao cthd_dao;
+	private final Date gioHienTai;
+	private final Date phutHienTai;
 	private double soGioHat;
 	private double soPhutHat;
-	private KhachHang_dao kh_dao;
-	private JLabel lbl_ngayThanhToan;
-	private JLabel lbl_TongTien;
+	private final KhachHang_dao kh_dao;
+	private final JLabel lbl_ngayThanhToan;
+	private final JLabel lbl_TongTien;
 		
 	private HoaDonDatPhong hd= new HoaDonDatPhong();
-	private HoaDonDatPhong_dao hd_dao= new HoaDonDatPhong_dao();
-	private JLabel lblngaytt;
-	private JLabel lbl_Tongtien_1;
-	private KhuyenMai_dao khuyenmai_dao= new KhuyenMai_dao();
+	private final HoaDonDatPhong_dao hd_dao= new HoaDonDatPhong_dao();
+	private final JLabel lblngaytt;
+	private final JLabel lbl_Tongtien_1;
+	private final KhuyenMai_dao khuyenmai_dao= new KhuyenMai_dao();
 
-	private ChiTietDichVu_dao chitietdichvu_dao= new ChiTietDichVu_dao();
+	private final ChiTietDichVu_dao chitietdichvu_dao= new ChiTietDichVu_dao();
 	
 
 	public Dialog_TimPDP_DaThanhToan(String maPhong, String maPDP) {

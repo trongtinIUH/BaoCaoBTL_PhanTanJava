@@ -5,16 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Phong implements Serializable {
@@ -24,15 +15,15 @@ public class Phong implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
+	@Column(name = "maPhong", columnDefinition = "VARCHAR(10)", nullable = false, unique = true)
 	private String maPhong;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "maLoaiPhong")
-	private LoaiPhong loaiPhong;
 
-//	public enum TrangThai {
-//		Trống, Chờ, Đang_sử_dụng, Đang_sửa_chữa
-//	}
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "maLoaiPhong", columnDefinition = "VARCHAR(20)", nullable = false)
+	private LoaiPhong loaiPhong;
+	
 	@Enumerated(EnumType.STRING)
+	@Column(name = "trangThai", columnDefinition = "VARCHAR(50)", nullable = false)
 	private Enum_TrangThai trangThai;
 	
 	

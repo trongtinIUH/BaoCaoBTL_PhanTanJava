@@ -12,8 +12,8 @@ public class DateLabelFormatter extends AbstractFormatter {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String datePattern = "dd-MM-yyyy";
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+	private final String datePattern = "dd-MM-yyyy";
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 
     @Override
     public Object stringToValue(String text) throws ParseException {

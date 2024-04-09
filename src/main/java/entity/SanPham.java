@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -19,13 +20,22 @@ public class SanPham implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
+	@Column(name="maSanPham", columnDefinition = "NVARCHAR(50)", nullable = false, unique = true)
 	private String maSanPham;
+	@Column(name = "tenSanPham", columnDefinition = "NVARCHAR(100)", nullable = false)
 	private String tenSanPham;
+	@Column(name = "ngaySanXuat", columnDefinition = "Date", nullable = false)
 	private Date ngaySanXuat;
+	@Column(name = "loaiSanPham", columnDefinition = "NVARCHAR(100)", nullable = false)
 	private String loaiSanPham;
+
+	@Column(name = "donGia", columnDefinition = "Money", nullable = false)
 	private double donGia;
+	@Column(name = "donViTinh", columnDefinition = "NVARCHAR(20)", nullable = false)
 	private String donViTinh;
+	@Column(name = "soLuongTon", columnDefinition = "int", nullable = false)
 	private int soLuongTon;
+	@Column(name = "hinhAnh", columnDefinition = "NVARCHAR(200)", nullable = false)
 	private String hinhAnh;
 	
 	@OneToMany(mappedBy = "sanPham")

@@ -185,14 +185,14 @@ public class CurveLineChart extends JComponent {
     }
 
     private void draw(Graphics2D g2, Rectangle2D rec, int index, double maxValue) {
-        SplinePoint points[];
+        SplinePoint[] points;
         if (lastPoint == null || !animatorChange.isRunning()) {
             points = toPoint(rec, index, maxValue);
         } else {
             points = copyPoint(lastPoint);
         }
         if (animatorChange.isRunning()) {
-            SplinePoint pointsNew[] = toPoint(rec, index, maxValue);
+            SplinePoint[] pointsNew = toPoint(rec, index, maxValue);
             for (int i = 0; i < points.length; i++) {
                 double b = pointsNew[i].getY() - points[i].getY();
                 points[i].setY(points[i].getY() + (b * animateChange));
@@ -275,7 +275,7 @@ public class CurveLineChart extends JComponent {
     }
 
     private SplinePoint[] toPoint(Rectangle2D rec, int index, double maxValue) {
-        SplinePoint points[] = new SplinePoint[model.size() + 2];
+        SplinePoint[] points = new SplinePoint[model.size() + 2];
         for (int i = 0; i < model.size(); i++) {
             points[i + 1] = toPoint(rec, i, model.size(), model.get(i).getValues()[index], maxValue);
         }

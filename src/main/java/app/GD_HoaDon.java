@@ -57,34 +57,56 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private DefaultTableModel modelOrderList, modelOrderDetail, modelServiceDetail;
-	private JTable tableOrderList, tableOrderDetail, tableServiceDetail;
-	private JScrollPane scrollOrderList, scrollOrderDetail, scrollServiceDetail;
-	private String colOrderList[] = { "STT", "Mã hóa đơn", "Tên khách hàng", "Mã nhân viên", "Ngày lập hóa đơn",
+	private final DefaultTableModel modelOrderList;
+    private final DefaultTableModel modelOrderDetail;
+    private final DefaultTableModel modelServiceDetail;
+	private final JTable tableOrderList;
+    private final JTable tableOrderDetail;
+    private final JTable tableServiceDetail;
+	private final JScrollPane scrollOrderList;
+    private final JScrollPane scrollOrderDetail;
+    private final JScrollPane scrollServiceDetail;
+	private final String[] colOrderList = { "STT", "Mã hóa đơn", "Tên khách hàng", "Mã nhân viên", "Ngày lập hóa đơn",
 			"Trạng thái", "Mã khuyến mãi", "Tổng tiền" };
-	private String colOrderDetail[] = { "Mã hóa đơn", "Mã phòng", "Số giờ hát" };
-	private String colServiceDetail[] = { "Mã hóa đơn", "Tên dịch vụ", "Đơn giá", "Số lượng" };
-	private JLabel lblTitle, lblMaHD, lblTenKH, lblMaNV, lblNgayLapHD, lblTrangThai, lblKhuyenMai, lblTongTien,
-			lblTimKiem, lblKeyword;
-	private JButton btnTimKiem, btnXuatDSHD, btnProfile;
+	private final String[] colOrderDetail = { "Mã hóa đơn", "Mã phòng", "Số giờ hát" };
+	private final String[] colServiceDetail = { "Mã hóa đơn", "Tên dịch vụ", "Đơn giá", "Số lượng" };
+	private final JLabel lblTitle;
+    private final JLabel lblMaHD;
+    private final JLabel lblTenKH;
+    private final JLabel lblMaNV;
+    private final JLabel lblNgayLapHD;
+    private final JLabel lblTrangThai;
+    private final JLabel lblKhuyenMai;
+    private final JLabel lblTongTien;
+    private final JLabel lblTimKiem;
+    private final JLabel lblKeyword;
+	private final JButton btnTimKiem;
+    private final JButton btnXuatDSHD;
+    private final JButton btnProfile;
 	public JButton btnXoa;
 	public JButton btnSua;
-	private JComboBox<String> cbTrangThai, cbTimKiem;
-	private JTextField txtMaHD, txtTenKH, txtMaNV, txtKhuyenMai, txtTongTien, txtTimKiem;
-	private HoaDonDatPhong_dao hoadon_dao;
-	private KhachHang_dao khachhang_dao;
-	private Phong_dao phong_dao;
-	private ChiTietDichVu_dao chitietdichvu_dao;
-	private KhuyenMai_dao khuyenmai_dao;
-	private ChiTietHoaDon_dao chitiethoadon_dao;
-	private SanPham_dao sanpham_dao;
+	private final JComboBox<String> cbTrangThai;
+    private final JComboBox<String> cbTimKiem;
+	private final JTextField txtMaHD;
+    private final JTextField txtTenKH;
+    private final JTextField txtMaNV;
+    private final JTextField txtKhuyenMai;
+    private final JTextField txtTongTien;
+    private final JTextField txtTimKiem;
+	private final HoaDonDatPhong_dao hoadon_dao;
+	private final KhachHang_dao khachhang_dao;
+	private final Phong_dao phong_dao;
+	private final ChiTietDichVu_dao chitietdichvu_dao;
+	private final KhuyenMai_dao khuyenmai_dao;
+	private final ChiTietHoaDon_dao chitiethoadon_dao;
+	private final SanPham_dao sanpham_dao;
 	private XSSFWorkbook wordbook;
-	private DecimalFormat df;
-	private Dialog_User dialog_user = new Dialog_User();
-	private LocalDateTime now;
-	private DateTimePicker dateTimePicker;
-	private TimePickerSettings timeSettings;
-	private DatePickerSettings dateSettings;
+	private final DecimalFormat df;
+	private final Dialog_User dialog_user = new Dialog_User();
+	private final LocalDateTime now;
+	private final DateTimePicker dateTimePicker;
+	private final TimePickerSettings timeSettings;
+	private final DatePickerSettings dateSettings;
 
 	public GD_HoaDon() {
 		df = new DecimalFormat("#,###,### VNĐ");

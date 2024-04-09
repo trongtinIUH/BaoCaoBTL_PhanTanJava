@@ -509,7 +509,7 @@ public class Phong_dao {
 		Connection con = ConnectDB.getConnection();
 		try {
 			String sql = "select * from Phong join LoaiPhong on Phong.maLoaiPhong = LoaiPhong.maLoaiPhong where trangThai = N'"
-					+ trangThai + "' and sucChua >= " + soNguoi + "";
+					+ trangThai + "' and sucChua >= " + soNguoi;
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
@@ -536,7 +536,7 @@ public class Phong_dao {
 		Connection con = ConnectDB.getConnection();
 		try {
 			String sql = "select * from Phong join LoaiPhong on Phong.maLoaiPhong = LoaiPhong.maLoaiPhong where tenLoaiPhong = N'"
-					+ loaiPhong + "' and sucChua >= " + soNguoi + "";
+					+ loaiPhong + "' and sucChua >= " + soNguoi;
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
@@ -590,7 +590,7 @@ public class Phong_dao {
 		Connection con = ConnectDB.getConnection();
 		try {
 			String sql = "select * from Phong join LoaiPhong on Phong.maLoaiPhong = LoaiPhong.maLoaiPhong where sucChua >= "
-					+ soNguoi + "";
+					+ soNguoi;
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {

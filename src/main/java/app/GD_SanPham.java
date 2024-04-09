@@ -48,39 +48,39 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 	Font font = new Font("Arial", Font.BOLD, 16); // SPung tittle
 	Font font2 = new Font("Arial", Font.BOLD, 18); // thuộc tính
 	Font font3 = new Font("Arial", Font.PLAIN, 18); // jtexfield
-	private String col[] = { "STT", "Mã sản phẩm", "Tên sản phẩm", "Ngày sản xuất", "Loại", "Số lượng tồn",
+	private final String[] col = { "STT", "Mã sản phẩm", "Tên sản phẩm", "Ngày sản xuất", "Loại", "Số lượng tồn",
 			"Đơn vị tính", "Đơn giá", "Hình ảnh" };
-	private JLabel lblTitle;
-	private JTextField txtTimKiem;
-	private JComboBox<String> cbLoaiTimKiem;
-	private JButton btnTimKiem;
-	private JTextField txtMa;
-	private JButton btnXoa;
-	private JButton btnSua;
-	private JButton btnLamMoi;
-	private DefaultTableModel model;
-	private JTable table;
-	private JScrollPane scroll;
-	private JButton btnXuatExcel;
-	private JButton btnThem;
-	private JComboBox<String> cbLoaiSanPham;
-	private SqlDateModel modelNgaylap;
-	private JDatePanelImpl datePanel;
-	private Properties p;
-	private JDatePickerImpl datePicker;
-	private JComboBox<String> cbDonViTinh;
-	private SanPham_dao sp_dao;
+	private final JLabel lblTitle;
+	private final JTextField txtTimKiem;
+	private final JComboBox<String> cbLoaiTimKiem;
+	private final JButton btnTimKiem;
+	private final JTextField txtMa;
+	private final JButton btnXoa;
+	private final JButton btnSua;
+	private final JButton btnLamMoi;
+	private final DefaultTableModel model;
+	private final JTable table;
+	private final JScrollPane scroll;
+	private final JButton btnXuatExcel;
+	private final JButton btnThem;
+	private final JComboBox<String> cbLoaiSanPham;
+	private final SqlDateModel modelNgaylap;
+	private final JDatePanelImpl datePanel;
+	private final Properties p;
+	private final JDatePickerImpl datePicker;
+	private final JComboBox<String> cbDonViTinh;
+	private final SanPham_dao sp_dao;
 	private XSSFWorkbook wordbook;
-	private JTextField txtDonGia;
-	private JTextField txtTen;
-	private JTextField txtSoLuong;
-	private JButton openButton;
-	private JLabel imageLabel;
+	private final JTextField txtDonGia;
+	private final JTextField txtTen;
+	private final JTextField txtSoLuong;
+	private final JButton openButton;
+	private final JLabel imageLabel;
 	private File selectedFile;
 	private String absolutePath;
 
-	private JButton btnUser;
-	private Dialog_User dialog_User= new Dialog_User();
+	private final JButton btnUser;
+	private final Dialog_User dialog_User= new Dialog_User();
 	public GD_SanPham() {
 		sp_dao = new SanPham_dao();
 		setBackground(new Color(242, 240, 255));

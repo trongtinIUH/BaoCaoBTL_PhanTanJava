@@ -5,21 +5,26 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class LoaiPhong  implements Serializable {
+public class LoaiPhong implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
+	@Column(name = "maLoaiPhong", columnDefinition = "VARCHAR(20)", unique = true, nullable = false)
 	private String maLoaiPhong;
+	@Column(name = "tenLoaiPhong", columnDefinition = "NVARCHAR(100)", nullable = false)
 	private String tenLoaiPhong;
+	@Column(name = "sucChua", columnDefinition = "INT", nullable = false)
 	private int sucChua;
+	@Column(name = "donGiaTheoGio", columnDefinition = "Money", nullable = false)
 	private double donGiaTheoGio;
 	@OneToMany(mappedBy = "loaiPhong")
 	private Set<Phong> phongs = new HashSet<Phong>();

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -18,10 +19,18 @@ public class KhuyenMai implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
+	@Column(name = "maKhuyenMai", columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
 	private String maKhuyenMai;
+	@Column(name = "tenKhuyenMai", columnDefinition = "NVARCHAR(50)", nullable = false)
 	private String tenKhuyenMai;
+
+	@Column(name = "ngayBatDau", columnDefinition = "DATE", nullable = false)
 	private Date ngayBatDau;
+
+	@Column(name = "ngayKetThuc", columnDefinition = "DATE", nullable = false)
 	private Date ngayKetThuc;
+
+	@Column(name = "phanTramKhuyenMai", columnDefinition = "FLOAT", nullable = false)
 	private float phanTramKhuyenMai;
 	
 	@OneToMany(mappedBy = "khuyenMai")

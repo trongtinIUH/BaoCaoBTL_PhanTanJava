@@ -29,7 +29,7 @@ public class Spline {
     public List<SplinePoint> createSpline(float f, SplinePoint... point) {
         this.points = point;
         List<SplinePoint> list = new ArrayList<>();
-        for (float t = 0f; t < (float) (point.length - 3.0f) * f; t += 0.01f) {
+        for (float t = 0f; t < (point.length - 3.0f) * f; t += 0.01f) {
             list.add(getSpline(t));
         }
         return list;

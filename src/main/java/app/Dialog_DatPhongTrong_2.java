@@ -76,46 +76,55 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 	/**
 	 * 
 	 */
-	private GD_TrangChu trangChu;
+	private final GD_TrangChu trangChu;
 	private static final long serialVersionUID = 1L;
-	private JTextField txtSDT;
-	private JButton btn_KiemTraSDT, btn_ThemDV, btn_Sua, btn_DatPhong;
-	private JPanel panel_1, panel_2;
-	private JCheckBox checkBox_KH;
-	private JLabel lbl_GioiTinh_1, lbl_GiaTien_1, lbl_TenKH_1;
-	private JTextField txtSoNguoi;
-	private JButton btn_DatThemPhong;
-	private NhanVien_dao nv_dao;
+	private final JTextField txtSDT;
+	private final JButton btn_KiemTraSDT;
+    private final JButton btn_ThemDV;
+    private final JButton btn_Sua;
+    private final JButton btn_DatPhong;
+	private final JPanel panel_1;
+    private final JPanel panel_2;
+	private final JCheckBox checkBox_KH;
+	private final JLabel lbl_GioiTinh_1;
+    private final JLabel lbl_GiaTien_1;
+    private final JLabel lbl_TenKH_1;
+	private final JTextField txtSoNguoi;
+	private final JButton btn_DatThemPhong;
+	private final NhanVien_dao nv_dao;
 	private NhanVien nv;
-	private HoaDonDatPhong_dao hddp_dao;
-	private ChiTietHoaDon_dao cthd_dao;
-	private ChiTietDichVu_dao ctdv_dao;
+	private final HoaDonDatPhong_dao hddp_dao;
+	private final ChiTietHoaDon_dao cthd_dao;
+	private final ChiTietDichVu_dao ctdv_dao;
 
-	private JTable tblThemPhongMoi, tblDV;
-	private DefaultTableModel model, modelDV;
-	private String col[] = { "STT", "Mã Phòng", "Loại Phòng", "Số người", "Đơn Giá" };
-	private String colDV[] = { "STT", "Mã sản phẩm", "Tên sản phẩm", "Số lượng", "Đơn giá", "Tổng tiền" };
+	private final JTable tblThemPhongMoi;
+    private final JTable tblDV;
+	private final DefaultTableModel model;
+    private final DefaultTableModel modelDV;
+	private final String[] col = { "STT", "Mã Phòng", "Loại Phòng", "Số người", "Đơn Giá" };
+	private final String[] colDV = { "STT", "Mã sản phẩm", "Tên sản phẩm", "Số lượng", "Đơn giá", "Tổng tiền" };
 
 	private Dialog_ThemDichVu dialog_ThemDichVu;
-	private JLabel lbl_TenKH;
+	private final JLabel lbl_TenKH;
 
-	private TimePickerSettings timeSettings;
-	private DatePickerSettings dateSettings;
-	private JButton btn_XoaPhongDat, btnXoaDV;
+	private final TimePickerSettings timeSettings;
+	private final DatePickerSettings dateSettings;
+	private final JButton btn_XoaPhongDat;
+    private final JButton btnXoaDV;
 
 	private KhachHang_dao khachHang_dao;
-	private JLabel lblTieuDe;
-	private TempDatPhong_dao tmpDatPhong_dao;
-	private Phong_dao p_dao;
-	private LoaiPhong_dao lp_dao;
-	private JLabel lbl_Loai;
-	private JLabel lblMaPhong;
-	private PhieuDatPhong_dao pdp_dao;
+	private final JLabel lblTieuDe;
+	private final TempDatPhong_dao tmpDatPhong_dao;
+	private final Phong_dao p_dao;
+	private final LoaiPhong_dao lp_dao;
+	private final JLabel lbl_Loai;
+	private final JLabel lblMaPhong;
+	private final PhieuDatPhong_dao pdp_dao;
 	private Date ngayHienTai;
 	private Date date;
-	private KhachHang_dao kh_dao;
-	private DecimalFormat df;
-	private SanPham_dao sp_dao = new SanPham_dao();
+	private final KhachHang_dao kh_dao;
+	private final DecimalFormat df;
+	private final SanPham_dao sp_dao = new SanPham_dao();
 
 	public Dialog_DatPhongTrong_2(String maPhong, Phong p, LoaiPhong lp, int soNguoi, GD_TrangChu trangChu) {
 		df = new DecimalFormat("#,###,### VNĐ");
@@ -560,7 +569,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 				for (TempDatPhong tmpDatPhong : tmpDatPhong_dao.getAllTemp()) {
 					// Sửa trống -> Đang sử dụng
 					Phong p = p_dao.getPhongTheoMaPhong(tmpDatPhong.getMaPhong());
-					if (p != null && p.getTrangThai() == Enum_TrangThai.Đang_sử_dụng) {
+					if (p != null && p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
 						checkPSD = 1;
 						ArrayList<ChiTietHoaDon> dsChiTietHoaDon = cthd_dao
 								.getChiTietHoaDonTheoMaPhong(tmpDatPhong.getMaPhong());
@@ -569,7 +578,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 						}
 					}
 
-					if (!tmpDatPhong.getMaPhong().equals("000") && !(p.getTrangThai() == Enum_TrangThai.Đang_sử_dụng)) {
+					if (!tmpDatPhong.getMaPhong().equals("000") && !(p.getTrangThai() == Enum_TrangThai.Dang_su_dung)) {
 
 						// Thêm phiếu đặt phòng
 						NhanVien nv = new NhanVien(DataManager.getUserName());
@@ -581,15 +590,15 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 
 						PhieuDatPhong pdb = new PhieuDatPhong(TaoMaPDP(), p, nv, kh, ngayGioHT, ngayGioHT,
 								tmpDatPhong.getSoNguoiHat());
-						if (p.getTrangThai() != Enum_TrangThai.Chờ) {
+						if (p.getTrangThai() != Enum_TrangThai.Cho) {
 							pdp_dao.addPhieuDatPhong(pdb);
 							// Nếu là chờ thì sửa lại.
 						}
-						if (p.getTrangThai() == Enum_TrangThai.Chờ) {
+						if (p.getTrangThai() == Enum_TrangThai.Cho) {
 							pdp_dao.addPhieuDatPhong(pdb);
 						}
 
-						p.setTrangThai(Enum_TrangThai.Đang_sử_dụng);
+						p.setTrangThai(Enum_TrangThai.Dang_su_dung);
 						p_dao.updatePhong(p, p.getMaPhong());
 
 						// Thêm vào HoaDonDatPhong
@@ -725,7 +734,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 						ds.remove(temp);
 						JOptionPane.showMessageDialog(this, "Xóa thành công!");
 						chk = 1;
-						break flag;
+						break;
 					}
 				}
 				if (chk == 1) {

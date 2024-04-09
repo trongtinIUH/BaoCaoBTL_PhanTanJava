@@ -2,5 +2,5 @@ package entity;
 
 
 public enum Enum_TrangThai {
-	Trống, Chờ, Đang_sử_dụng, Đang_sửa_chữa
+	Trong, Cho, Dang_su_dung, Dang_sua_chua
 }

@@ -58,38 +58,45 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String col[] = {"STT", "Mã hóa đơn","Ngày lập hóa đơn", "Tên khách hàng", 
+	private final String[] col = {"STT", "Mã hóa đơn","Ngày lập hóa đơn", "Tên khách hàng",
 			"Số điện thoại", "Khuyến mãi", "Tổng tiền", "Tên nhân viên"};
-	private String colKH[] = {"STT", "Mã khách hàng","Họ tên", "Số điện thoại", "Giới tính",
+	private final String[] colKH = {"STT", "Mã khách hàng","Họ tên", "Số điện thoại", "Giới tính",
 			"Số giờ hát"};
-	private DefaultTableModel model, modelKH;
-	private JTable table, tblKH;
-	private JScrollPane scroll, scrollKH;
+	private final DefaultTableModel model;
+    private final DefaultTableModel modelKH;
+	private final JTable table;
+    private final JTable tblKH;
+	private final JScrollPane scroll;
+    private final JScrollPane scrollKH;
 	JLabel lblTitle, lblThongKe, lblLoaihinhTK, lblDate, lblTongDoanhThu, lblChartTitle,
 	lblTongHoaDon, lblDoanhThuPhongThuong, lblDoanhThuPhongVIP, lblTongSoGioHat, lblDoanhThuDichVu, lblYearStart, lblYearEnd;
 	JComboBox<String> cbThongKe, cbDate, cbYearStart, cbYearEnd, cbYear, cbMonth, cbMonthKH, cbYearKH;
 	JButton btnThongKe, btnLamMoi, btnProfile;
-	private HoaDonDatPhong_dao hoadon_dao;
-	private KhachHang_dao khachhang_dao;
-	private Phong_dao phong_dao;
-	private ChiTietDichVu_dao chitietdichvu_dao;
-	private ChiTietHoaDon_dao chitiethoadon_dao;
-	private KhuyenMai_dao khuyenmai_dao;
-	private JPanel pnTable, pnContent, pnPieChart, pnCurveLineChart, pnTableKH;
-	private DecimalFormat df;
-	private PieChart pieChart;
-	private CurveLineChart lineChart;
-	private ThongKe_dao thongke_dao;
-	private NhanVien_dao nhanvien_dao;
-	private Dialog_User dialog_user;
+	private final HoaDonDatPhong_dao hoadon_dao;
+	private final KhachHang_dao khachhang_dao;
+	private final Phong_dao phong_dao;
+	private final ChiTietDichVu_dao chitietdichvu_dao;
+	private final ChiTietHoaDon_dao chitiethoadon_dao;
+	private final KhuyenMai_dao khuyenmai_dao;
+	private final JPanel pnTable;
+    private final JPanel pnContent;
+    private final JPanel pnPieChart;
+    private final JPanel pnCurveLineChart;
+    private final JPanel pnTableKH;
+	private final DecimalFormat df;
+	private final PieChart pieChart;
+	private final CurveLineChart lineChart;
+	private final ThongKe_dao thongke_dao;
+	private final NhanVien_dao nhanvien_dao;
+	private final Dialog_User dialog_user;
 
-	private LocalDateTime now;
-	private DateTimePicker dateTimePicker;
-	private TimePickerSettings timeSettings;
-	private DatePickerSettings dateSettings;
+	private final LocalDateTime now;
+	private final DateTimePicker dateTimePicker;
+	private final TimePickerSettings timeSettings;
+	private final DatePickerSettings dateSettings;
 	private CategoryDataset dataset;
 	private JFreeChart barChart;
-	private ChartPanel pnBarChart;
+	private final ChartPanel pnBarChart;
 	public GD_ThongKe() {
 		dialog_user = new Dialog_User();
 		df = new DecimalFormat("#,###,### VNĐ");

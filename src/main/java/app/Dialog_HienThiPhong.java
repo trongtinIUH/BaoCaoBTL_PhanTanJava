@@ -33,22 +33,30 @@ public class Dialog_HienThiPhong extends JDialog implements ActionListener {
 	/**
 	 * 
 	 */
-	private GD_TrangChu trangChu;
+	private final GD_TrangChu trangChu;
 	private static final long serialVersionUID = 1L;
-	private JLabel lblPhong, lblLoai, lblSucChua, lblTrangThai, lblGia, lblLoai_1, lblSucChua_1, lbltrangthai_1,
-			lblgia_1, lblPhong_1;
-	private JButton btnDatPhong;
-	private Phong_dao p_dao = new Phong_dao();
-	private LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final JLabel lblPhong;
+    private final JLabel lblLoai;
+    private final JLabel lblSucChua;
+    private final JLabel lblTrangThai;
+    private final JLabel lblGia;
+    private final JLabel lblLoai_1;
+    private final JLabel lblSucChua_1;
+    private final JLabel lbltrangthai_1;
+    private final JLabel lblgia_1;
+    private final JLabel lblPhong_1;
+	private final JButton btnDatPhong;
+	private final Phong_dao p_dao = new Phong_dao();
+	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
 
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
 	private Dialog_DatPhongCho dialog_DatPhongCho;
-	private Phong p;
-	private LoaiPhong lp;
-	private JLabel lblSoNguoi;
-	private JTextField txtSoNguoi;
-	private TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
-	private JButton btn_DatPhongCho;
+	private final Phong p;
+	private final LoaiPhong lp;
+	private final JLabel lblSoNguoi;
+	private final JTextField txtSoNguoi;
+	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final JButton btn_DatPhongCho;
 
 	public Dialog_HienThiPhong(String maPhong, GD_TrangChu trangChu) {
 		this.trangChu = trangChu;

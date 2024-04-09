@@ -65,39 +65,48 @@ import java.awt.SystemColor;
 import java.awt.Window;
 
 public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, MouseListener {
-	private JPanel panel;
-	private JLabel lblTieuDe, lblTrangThai, lblMaPDP, lblSDTKhach;
-	private Phong_dao p_dao = new Phong_dao();
-	private JComboBox<String> comboBox_TrangThai, comboBox_TrangThai_1;
-	private JButton btnTimKiem, btnLamMoi, btn_XuatPhong, btn_XemPhong, btn_HuyPhong, btn_NhanPhong;
+	private final JPanel panel;
+	private final JLabel lblTieuDe;
+    private final JLabel lblTrangThai;
+    private final JLabel lblMaPDP;
+    private final JLabel lblSDTKhach;
+	private final Phong_dao p_dao = new Phong_dao();
+	private final JComboBox<String> comboBox_TrangThai;
+    private final JComboBox<String> comboBox_TrangThai_1;
+	private final JButton btnTimKiem;
+    private final JButton btnLamMoi;
+    private final JButton btn_XuatPhong;
+    private final JButton btn_XemPhong;
+    private final JButton btn_HuyPhong;
+    private final JButton btn_NhanPhong;
 
 	private JTable tblPhieuDatPhong;
 	private DefaultTableModel model;
-	private String col[] = { "Mã PDP", "Phòng", "Tên NV", "Tên KH", "   Ngày Giờ Đặt   ", "   Ngày Giờ Nhận   ",
+	private final String[] col = { "Mã PDP", "Phòng", "Tên NV", "Tên KH", "   Ngày Giờ Đặt   ", "   Ngày Giờ Nhận   ",
 			"Số Người", "Hình Thức", "Trạng Thái" };
-	private JButton btn_QuayLai;
+	private final JButton btn_QuayLai;
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField txtLoaiTimKiem;
-	private PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();;
-	private KhachHang_dao kh_dao = new KhachHang_dao();
+	private final JTextField txtLoaiTimKiem;
+	private final PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
+    private final KhachHang_dao kh_dao = new KhachHang_dao();
 	private KhachHang kh = new KhachHang();
 	private NhanVien nv = new NhanVien();
-	private NhanVien_dao nv_dao = new NhanVien_dao();
+	private final NhanVien_dao nv_dao = new NhanVien_dao();
 
 	private PhieuDatPhong pdp = new PhieuDatPhong();
 	private HoaDonDatPhong hd = new HoaDonDatPhong();
-	private HoaDonDatPhong_dao hd_dao = new HoaDonDatPhong_dao();
+	private final HoaDonDatPhong_dao hd_dao = new HoaDonDatPhong_dao();
 	private Phong p = new Phong();
 	private Dialog_PhongCho dialog_PhongCho;
 	private XSSFWorkbook wordbook;
-	private TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
 	private GD_TrangChu trangChu;
-	private LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
 	private LoaiPhong lp;
 	private Dialog_PhongDangSD dialog_PhongDangSD;
 	private Dialog_TimPDP_DaThanhToan dialog_TimPDP_DaThanhToan;
@@ -317,9 +326,9 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			nv = nv_dao.getNhanVienTheoMa(x.getNhanVien().getMaNhanVien());
 
 			hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
-			if (hd != null && hd.isTrangThai() == false) {
+			if (hd != null && !hd.isTrangThai()) {
 				trangthai = "Chưa TT";
-			} else if (hd != null && hd.isTrangThai() == true) {
+			} else if (hd != null && hd.isTrangThai()) {
 				trangthai = "Đã TT";
 			} else {
 				trangthai = "Chưa TT";
@@ -381,9 +390,9 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			    nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
 
 			    hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
-			    if (hd != null && hd.isTrangThai() == false ) {
+			    if (hd != null && !hd.isTrangThai()) {
 			        trangthai = "Chưa TT";
-			    } else if (hd != null && hd.isTrangThai() == true) {
+			    } else if (hd != null && hd.isTrangThai()) {
 			        trangthai = "Đã TT";
 			    } else {
 			        return; // Skip this record if it doesn't match the selected payment status
@@ -426,9 +435,9 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			            nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
 
 			            hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
-			            if (hd != null && hd.isTrangThai() == false ) {
+			            if (hd != null && !hd.isTrangThai()) {
 			                trangthai = "Chưa TT";
-			            } else if (hd != null && hd.isTrangThai() == true ) {
+			            } else if (hd != null && hd.isTrangThai()) {
 			                trangthai = "Đã TT";
 			            } else {
 			                continue; // Skip this record if it doesn't match the selected payment status
@@ -474,9 +483,9 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 								nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
 
 								hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
-								if (hd != null && hd.isTrangThai() == false) {
+								if (hd != null && !hd.isTrangThai()) {
 									trangthai = "Chưa TT";
-								} else if (hd != null && hd.isTrangThai() == true) {
+								} else if (hd != null && hd.isTrangThai()) {
 									trangthai = "Đã TT";
 								}
 
@@ -526,9 +535,9 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 					                String maHoaDon = hd_dao.getMaHDTheoMaPhieuDP(pdp.getMaPhieu());
 					                nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
 					                hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
-					                if (hd != null && hd.isTrangThai() == false) {
+					                if (hd != null && !hd.isTrangThai()) {
 					                    trangthai = "Chưa TT";
-					                } else if (hd != null && hd.isTrangThai() == true) {
+					                } else if (hd != null && hd.isTrangThai()) {
 					                    trangthai = "Đã TT";
 					                } else {
 					                    trangthai = "Chưa TT";
@@ -572,9 +581,9 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				                String maHoaDon = hd_dao.getMaHDTheoMaPhieuDP(pdp.getMaPhieu());
 				                nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
 				                hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
-				                if (hd != null && hd.isTrangThai() == false) {
+				                if (hd != null && !hd.isTrangThai()) {
 				                    trangthai = "Chưa TT";
-				                } else if (hd != null && hd.isTrangThai() == true) {
+				                } else if (hd != null && hd.isTrangThai()) {
 				                    trangthai = "Đã TT";
 				                } else {
 				                    trangthai = "Chưa TT";
@@ -618,9 +627,9 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				                String maHoaDon = hd_dao.getMaHDTheoMaPhieuDP(pdp.getMaPhieu());
 				                nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
 				                hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
-				                if (hd != null && hd.isTrangThai() == false) {
+				                if (hd != null && !hd.isTrangThai()) {
 				                    trangthai = "Chưa TT";
-				                } else if (hd != null && hd.isTrangThai() == true) {
+				                } else if (hd != null && hd.isTrangThai()) {
 				                    trangthai = "Đã TT";
 				                } else {
 				                    trangthai = "Chưa TT";
@@ -888,9 +897,9 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 		String trangthai = "";
         String maHoaDon = hd_dao.getMaHDTheoMaPhieuDP(mp);
         hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
-        if (hd != null && hd.isTrangThai() == false) {
+        if (hd != null && !hd.isTrangThai()) {
             trangthai = "Chưa TT";
-        } else if (hd != null && hd.isTrangThai() == true) {
+        } else if (hd != null && hd.isTrangThai()) {
             trangthai = "Đã TT";
         } else {
             trangthai = "Chưa TT";
@@ -903,7 +912,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 					JOptionPane.showMessageDialog(this, "Phòng hủy thành công!");
 					pdp_dao.xoaPhieuDatPhongTheoMa(maphong);
 					DataManager.setDatPhongCho(true);
-					Enum_TrangThai trangThai = Enum_TrangThai.Trống;
+					Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 					Phong phong = new Phong(maphong, trangThai);
 					p_dao.updatePhong(phong, maphong);
 					model.removeRow(row);
@@ -932,18 +941,18 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 		p = p_dao.getPhongTheoMaPhong(maphong);
 
 		if (row != -1) {
-			if (hinhthuc.equals("Đặt trước") && p.getTrangThai() == Enum_TrangThai.Chờ) {
+			if (hinhthuc.equals("Đặt trước") && p.getTrangThai() == Enum_TrangThai.Cho) {
 				dialog_PhongCho = new Dialog_PhongCho(maphong, trangChu);
 				DataManager.setDatPhongCho(true);
 				dialog_PhongCho.setModal(true);
 				dialog_PhongCho.setVisible(true);
-			} else if (hinhthuc.equals("Đặt trước") && p.getTrangThai() == Enum_TrangThai.Đang_sử_dụng) {
+			} else if (hinhthuc.equals("Đặt trước") && p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
 				dialog_PhongDangSD = new Dialog_PhongDangSD(maphong, null);
 				DataManager.setDatPhong(true);
 				dialog_PhongDangSD.setModal(true);
 				dialog_PhongDangSD.setVisible(true);
 			} else if (hinhthuc.equals("Đặt trực tiếp") && trangthai.equals("Chưa TT")
-					&& p.getTrangThai() == Enum_TrangThai.Đang_sử_dụng) {
+					&& p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
 				dialog_PhongDangSD = new Dialog_PhongDangSD(maphong, null);
 				DataManager.setDatPhong(true);
 				dialog_PhongDangSD.setModal(true);
@@ -963,8 +972,8 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 
 	public void nhanPhong() {
 		int row = tblPhieuDatPhong.getSelectedRow();
-		String maphong = (String) tblPhieuDatPhong.getValueAt(row, 1).toString();
-		String songuoi = (String) tblPhieuDatPhong.getValueAt(row, 6).toString();
+		String maphong = tblPhieuDatPhong.getValueAt(row, 1).toString();
+		String songuoi = tblPhieuDatPhong.getValueAt(row, 6).toString();
 		pdp = pdp_dao.getPDPDatTruocTheoMaPhong(maphong);
 		p = p_dao.getPhongTheoMaPhong(maphong);
 		lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
@@ -973,7 +982,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 //		String trangthai = (String) tblPhieuDatPhong.getValueAt(row, 8);
 
 		if (row != 1) {
-			if (hinhthuc.equals("Đặt trước") && p.getTrangThai() == Enum_TrangThai.Chờ) {
+			if (hinhthuc.equals("Đặt trước") && p.getTrangThai() == Enum_TrangThai.Cho) {
 
 				// giờ phút hiện tại
 				int gio_ht = LocalDateTime.now().getHour();
@@ -1011,7 +1020,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 						JOptionPane.showMessageDialog(this, "Phòng hủy do đến trễ quá 30 phút!");
 						pdp_dao.xoaPhieuDatPhongTheoMa(maphong);
 						DataManager.setDatPhongCho(true);
-						Enum_TrangThai trangThai = Enum_TrangThai.Trống;
+						Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 						Phong phong = new Phong(maphong, trangThai);
 						p_dao.updatePhong(phong, maphong);
 						setVisible(false);
@@ -1030,7 +1039,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 					JOptionPane.showMessageDialog(this, "Phòng hủy do đến trễ quá 30 phút!");
 					pdp_dao.xoaPhieuDatPhongTheoMa(maphong);
 					DataManager.setDatPhongCho(true);
-					Enum_TrangThai trangThai = Enum_TrangThai.Trống;
+					Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 					Phong phong = new Phong(maphong, trangThai);
 					p_dao.updatePhong(phong, maphong);
 				}

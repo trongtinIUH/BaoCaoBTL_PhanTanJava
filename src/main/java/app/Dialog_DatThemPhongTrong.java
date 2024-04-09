@@ -39,31 +39,34 @@ public class Dialog_DatThemPhongTrong extends JDialog implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JButton btn_ThemDV, btn_QuayLai, btn_DatPhong;
-	private JPanel panel_1;
-	private JLabel lbl_SucChua_1,lbl_GiaTien_1;
+	private final JButton btn_ThemDV;
+    private final JButton btn_QuayLai;
+    private final JButton btn_DatPhong;
+	private final JPanel panel_1;
+	private final JLabel lbl_SucChua_1;
+    private final JLabel lbl_GiaTien_1;
 	
-	private JTable tblThemPhongMoi;
-	private DefaultTableModel model;
-	private String col[] = { "Mã Phòng", "Loại Phòng", "Sức Chứa", "Đơn Giá", "Trạng Thái" };
-	private JLabel lbl_SoNguoi;
-	private JTextField txt_SoNguoi;
-	private JTextArea txtThemDV;
-	private JButton btn_LamMoi;
+	private final JTable tblThemPhongMoi;
+	private final DefaultTableModel model;
+	private final String[] col = { "Mã Phòng", "Loại Phòng", "Sức Chứa", "Đơn Giá", "Trạng Thái" };
+	private final JLabel lbl_SoNguoi;
+	private final JTextField txt_SoNguoi;
+	private final JTextArea txtThemDV;
+	private final JButton btn_LamMoi;
 
 	private Dialog_ThemDichVu dialog_ThemDichVu;
-	private JLabel lbl_TrangThai;
-	private JLabel lbl_Loai;
-	private JLabel lbl_GiaTien;
-	private JLabel lbl_SucChua;
+	private final JLabel lbl_TrangThai;
+	private final JLabel lbl_Loai;
+	private final JLabel lbl_GiaTien;
+	private final JLabel lbl_SucChua;
 	
-	private LocalDateTime now;
-	private DateTimePicker dateTimePicker;
-	private TimePickerSettings timeSettings;
-	private DatePickerSettings dateSettings;
-	private JLabel lbl_TrangThai_1;
-	private JLabel lbl_Loai_1;
-	private JTextField txtHoten;
+	private final LocalDateTime now;
+	private final DateTimePicker dateTimePicker;
+	private final TimePickerSettings timeSettings;
+	private final DatePickerSettings dateSettings;
+	private final JLabel lbl_TrangThai_1;
+	private final JLabel lbl_Loai_1;
+	private final JTextField txtHoten;
 	private Phong_dao phong_dao ;
 	public Dialog_DatThemPhongTrong(String hoten) {
 		//màn hình******************************************************************************

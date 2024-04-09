@@ -55,17 +55,17 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 	private JButton btnTroGiup;
 	private JLabel lblKaraoke;
 	private JLabel lblCurrentTime;
-	private GD_DatPhong datPhong;
-	private GD_DanhSachPhong danhSachPhong = new GD_DanhSachPhong();
-	private GD_NhanVien nhanVien = new GD_NhanVien();
-	private GD_KhachHang khachHang = new GD_KhachHang();
-	private GD_HoaDon hoaDon = new GD_HoaDon();
-	private GD_SanPham sanPham = new GD_SanPham();
-	private GD_ThongKe thongKe = new GD_ThongKe();
-	private GD_KhuyenMai khuyenMai = new GD_KhuyenMai();
-	private GD_TroGiup troGiup = new GD_TroGiup(this);
+	private final GD_DatPhong datPhong;
+	private final GD_DanhSachPhong danhSachPhong = new GD_DanhSachPhong();
+	private final GD_NhanVien nhanVien = new GD_NhanVien();
+	private final GD_KhachHang khachHang = new GD_KhachHang();
+	private final GD_HoaDon hoaDon = new GD_HoaDon();
+	private final GD_SanPham sanPham = new GD_SanPham();
+	private final GD_ThongKe thongKe = new GD_ThongKe();
+	private final GD_KhuyenMai khuyenMai = new GD_KhuyenMai();
+	private final GD_TroGiup troGiup = new GD_TroGiup(this);
 	private JPanel panel_chuaTime;
-	private TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
 	private Dialog_User dialog_User= new Dialog_User();
 
 	public GD_TrangChu() {

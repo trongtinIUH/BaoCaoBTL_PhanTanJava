@@ -6,12 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 
 @Entity
@@ -22,20 +17,27 @@ public class HoaDonDatPhong implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
+	@Column(name = "maHoaDon", columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
 	private String maHoaDon;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "maKhachHang")
+	@JoinColumn(name = "maKhachHang", columnDefinition = "VARCHAR(20)", nullable = false)
 	private KhachHang khachHang;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "maNhanVien")
+	@JoinColumn(name = "maNhanVien", columnDefinition = "VARCHAR(20)", nullable = false)
 	private NhanVien nhanVien;
+
+	@Column(name = "ngayLapHoaDon", columnDefinition = "DATE", nullable = false)
 	private Date ngayLapHoaDon;
+
+	@Column(name = "trangThai", columnDefinition = "BIT", nullable = false)
 	private boolean trangThai;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "maKhuyenMai")
+	@JoinColumn(name = "maKhuyenMai", columnDefinition = "VARCHAR(20)", nullable = true)
 	private KhuyenMai khuyenMai;
+
+	@Column(name = "tienKhachDua", columnDefinition = "MONEY", nullable = false)
 	private double tienKhachDua;
 	
 	@OneToMany(mappedBy = "hoaDon")

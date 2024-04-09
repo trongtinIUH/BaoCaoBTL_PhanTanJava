@@ -6,14 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "NhanVien")
@@ -24,18 +17,21 @@ public class NhanVien implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "maNhanVien", columnDefinition = "varchar(20)", nullable = false, unique = true)
 	private String maNhanVien;
+	@Column(name = "hoTen", columnDefinition = "nvarchar(100)", nullable = false)
 	private String hoTen;
+	@Column(name = "soDienThoai", columnDefinition = "varchar(20)", nullable = false)
 	private String soDienThoai;
+	@Column(name = "gioiTinh", columnDefinition = "bit", nullable = false)
 	private boolean gioiTinh;
+	@Column(name = "ngaySinh", columnDefinition = "date", nullable = false)
 	private Date ngaySinh;
+	@Column(name = "chucVu", columnDefinition = "nvarchar(255)", nullable = false, unique = false)
 	private String chucVu;
+	@Column(name = "anhDaiDien", columnDefinition = "nvarchar(50)", nullable = true)
 	private String anhDaiDien;
-	@OneToOne
-	@JoinColumn(name = "maTaiKhoan", unique = true, nullable = false)
-	private TaiKhoan taiKhoan;
-	
+
 	@OneToMany(mappedBy = "nhanVien")
 	private Set<HoaDonDatPhong> hoaDonDatPhongs = new HashSet<HoaDonDatPhong>();
 	
@@ -51,13 +47,6 @@ public class NhanVien implements Serializable {
 		this.phieuDatPhongs = phieuDatPhongs;
 	}
 
-	public TaiKhoan getTaiKhoan() {
-		return taiKhoan;
-	}
-
-	public void setTaiKhoan(TaiKhoan taiKhoan) {
-		this.taiKhoan = taiKhoan;
-	}
 
 	public Set<HoaDonDatPhong> getHoaDonDatPhongs() {
 		return hoaDonDatPhongs;

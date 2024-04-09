@@ -2,8 +2,10 @@ package entity;
 
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
+
 @Embeddable
-public class ChiTietDichVuID {
+public class ChiTietDichVuID implements Serializable {
 		private String hoaDonDatPhongId;
 	    private String sanPhamId;
 	    private String phongId;

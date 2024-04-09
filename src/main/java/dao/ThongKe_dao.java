@@ -71,7 +71,7 @@ public class ThongKe_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
-				lists.add(new ModelThongKe(rs.getString(1) + "", rs.getDouble(2), rs.getDouble(3), rs.getDouble(4)));
+				lists.add(new ModelThongKe(rs.getString(1), rs.getDouble(2), rs.getDouble(3), rs.getDouble(4)));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -90,8 +90,7 @@ public class ThongKe_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "DECLARE @namBatDau int = "+yearStart+""
-					+ "DECLARE @namKetThuc int = "+yearEnd+" "
+			String sql = "DECLARE @namBatDau int = "+yearStart+ "DECLARE @namKetThuc int = "+yearEnd+" "
 					+ "SELECT "
 					+ "    YEAR(ngayLapHoaDon) AS nam, "
 					+ "    COUNT(DISTINCT maHoaDon) AS tongSoHoaDon,"
@@ -176,7 +175,7 @@ public class ThongKe_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
-				yearLists.add(new ModelThongKe(rs.getString(1) + ""));
+				yearLists.add(new ModelThongKe(rs.getString(1)));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -320,8 +319,7 @@ public class ThongKe_dao {
 					+ "HoaDonDatPhong hddp ON kh.maKhachHang = hddp.maKhachHang "
 					+ "JOIN "
 					+ "ChiTietHoaDon cthd ON hddp.maHoaDon = cthd.maHoaDon "
-					+ "where YEAR(hddp.ngayLapHoaDon) = "+year+" and MONTH(hddp.ngayLapHoaDon) = "+month+""
-					+ "GROUP BY  "
+					+ "where YEAR(hddp.ngayLapHoaDon) = "+year+" and MONTH(hddp.ngayLapHoaDon) = "+month+ "GROUP BY  "
 					+ "YEAR(hddp.ngayLapHoaDon), "
 					+ "MONTH(hddp.ngayLapHoaDon), "
 					+ "kh.maKhachHang, "

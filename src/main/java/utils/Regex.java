@@ -35,7 +35,7 @@ public class Regex implements Serializable{
 	public boolean kiemTraTuoi(SqlDateModel modelNgay) {
 		long millis = System.currentTimeMillis();
 		Date today = new Date(millis);
-		Date ngaySinh = (Date) modelNgay.getValue();
+		Date ngaySinh = modelNgay.getValue();
 		if (ngaySinh.compareTo(today) > 0) {
 			JOptionPane.showMessageDialog(null, "Dữ liệu tuổi không hợp lệ phải trước ngày hiện tại");
 			return true;
@@ -47,7 +47,7 @@ public class Regex implements Serializable{
 	public boolean kiemTraNgaySX(SqlDateModel modelNgay) {
 		long millis = System.currentTimeMillis();
 		Date today = new Date(millis);
-		Date ngaySinh = (Date) modelNgay.getValue();
+		Date ngaySinh = modelNgay.getValue();
 		if (ngaySinh.compareTo(today) > 0) {
 			JOptionPane.showMessageDialog(null, "Dữ liệu Ngày sản xuất không hợp lệ phải trước ngày hiện tại");
 			return true;
@@ -59,7 +59,7 @@ public class Regex implements Serializable{
 	public boolean kiemTraHanSD(SqlDateModel modelNgay) {
 		long millis = System.currentTimeMillis();
 		Date today = new Date(millis);
-		Date ngaySinh = (Date) modelNgay.getValue();
+		Date ngaySinh = modelNgay.getValue();
 		if (ngaySinh.compareTo(today) < 0) {
 			JOptionPane.showMessageDialog(null, "Dữ liệu Ngày hết hạn sữ dụng không hợp lệ phải sau ngày hiện tại");
 			return true;

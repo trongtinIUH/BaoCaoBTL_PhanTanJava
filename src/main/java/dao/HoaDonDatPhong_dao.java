@@ -275,7 +275,7 @@ public class HoaDonDatPhong_dao {
 			psmt = con.prepareStatement(
 					"update HoaDonDatPhong set maNhanVien=?, ngayLapHoaDon=?, trangThai=? where maHoaDon=?");
 			psmt.setString(1, maNV);
-			psmt.setDate(2, (java.sql.Date) ngayLap);
+			psmt.setDate(2, ngayLap);
 			psmt.setBoolean(3, status);
 			psmt.setString(4, maHD);
 			n = psmt.executeUpdate();
@@ -307,7 +307,7 @@ public class HoaDonDatPhong_dao {
 					"update HoaDonDatPhong set maKhachHang=?, maNhanVien=?, ngayLapHoaDon=?, trangThai=?, tienKhachDua=? where maHoaDon=?");
 			psmt.setString(1, hd.getKhachHang().getMaKhachHang());
 			psmt.setString(2, hd.getNhanVien().getMaNhanVien());
-			psmt.setDate(3, (java.sql.Date) hd.getNgayLapHoaDon());
+			psmt.setDate(3, hd.getNgayLapHoaDon());
 			psmt.setBoolean(4, hd.isTrangThai());
 			psmt.setDouble(5, hd.getTienKhachDua());
 			psmt.setString(6, hd.getMaHoaDon());
@@ -341,7 +341,7 @@ public class HoaDonDatPhong_dao {
 					"update HoaDonDatPhong set maKhachHang=?, maNhanVien=?, ngayLapHoaDon=?, trangThai=?, maKhuyenMai=?, tienKhachDua=? where maHoaDon=?");
 			psmt.setString(1, hd.getKhachHang().getMaKhachHang());
 			psmt.setString(2, hd.getNhanVien().getMaNhanVien());
-			psmt.setDate(3, (java.sql.Date) hd.getNgayLapHoaDon());
+			psmt.setDate(3, hd.getNgayLapHoaDon());
 			psmt.setBoolean(4, hd.isTrangThai());
 			psmt.setString(5, hd.getKhuyenMai().getMaKhuyenMai());
 			psmt.setDouble(6, hd.getTienKhachDua());

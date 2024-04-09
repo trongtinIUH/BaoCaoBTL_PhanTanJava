@@ -44,33 +44,33 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 	Font font = new Font("Arial", Font.BOLD, 16); // khung tittle
 	Font font2 = new Font("Arial", Font.BOLD, 18); // thuộc tính
 	Font font3 = new Font("Arial", Font.PLAIN, 18); // jtexfield
-	private String col[] = { "STT", "Mã phòng", "Loại phòng", "Trạng thái", "Sức chứa", "Đơn giá" };
-	private JPanel pnNorth;
-	private JLabel lblTitle;
-	private JComboBox<String> cbLoaiTim;
-	private JTextField txtTuKhoaTim;
-	private JButton btnTimKiem;
-	private JButton btnXuatExcel;
-	private DefaultTableModel model;
-	private JTable table;
-	private JScrollPane scroll;
-	private JComboBox<String> cbLoaiPhong;
-	private JComboBox<String> cbTrangThai;
-	private JTextField txtSucChua;
-	private JTextField txtDonGia;
-	private JButton btnThem;
-	private JButton btnXoa;
-	private JButton btnSua;
-	private JButton btnLamMoi;
+	private final String[] col = { "STT", "Mã phòng", "Loại phòng", "Trạng thái", "Sức chứa", "Đơn giá" };
+	private final JPanel pnNorth;
+	private final JLabel lblTitle;
+	private final JComboBox<String> cbLoaiTim;
+	private final JTextField txtTuKhoaTim;
+	private final JButton btnTimKiem;
+	private final JButton btnXuatExcel;
+	private final DefaultTableModel model;
+	private final JTable table;
+	private final JScrollPane scroll;
+	private final JComboBox<String> cbLoaiPhong;
+	private final JComboBox<String> cbTrangThai;
+	private final JTextField txtSucChua;
+	private final JTextField txtDonGia;
+	private final JButton btnThem;
+	private final JButton btnXoa;
+	private final JButton btnSua;
+	private final JButton btnLamMoi;
 	private Phong_dao p_dao;
-	private LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
 	private XSSFWorkbook wordbook;
-	private JComboBox<String> cbLau;
-	private JTextField txtMa;
-	private JComboBox<String> cbSoPhong;
+	private final JComboBox<String> cbLau;
+	private final JTextField txtMa;
+	private final JComboBox<String> cbSoPhong;
 
-	private JButton btnUser;
-	private Dialog_User dialog_user = new Dialog_User();
+	private final JButton btnUser;
+	private final Dialog_User dialog_user = new Dialog_User();
 
 	public GD_DanhSachPhong() {
 		setBackground(new Color(246, 245, 255));
@@ -370,9 +370,9 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			i++;
 			LoaiPhong loaiPhong = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
 			String trThai;
-			if (p.getTrangThai().toString().equals("Đang_sử_dụng")) {
+			if (p.getTrangThai().toString().equals("Dang_su_dung")) {
 				trThai = "Đang sử dụng";
-			} else if (p.getTrangThai().toString().contentEquals("Đang_sửa_chữa"))
+			} else if (p.getTrangThai().toString().contentEquals("Dang_sua_chua"))
 				trThai = "Đang sửa chữa";
 			else
 				trThai = p.getTrangThai().toString();
@@ -429,13 +429,13 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			String maLP = loadMaLP();
 			Enum_TrangThai trangThai = null;
 			if (cbTrangThai.getSelectedItem().equals("Trống"))
-				trangThai = Enum_TrangThai.Trống;
+				trangThai = Enum_TrangThai.Trong;
 			if (cbTrangThai.getSelectedItem().equals("Chờ"))
-				trangThai = Enum_TrangThai.Chờ;
+				trangThai = Enum_TrangThai.Cho;
 			if (cbTrangThai.getSelectedItem().equals("Đang sử dụng"))
-				trangThai = Enum_TrangThai.Đang_sử_dụng;
+				trangThai = Enum_TrangThai.Dang_su_dung;
 			if (cbTrangThai.getSelectedItem().equals("Đang sửa chữa"))
-				trangThai = Enum_TrangThai.Đang_sửa_chữa;
+				trangThai = Enum_TrangThai.Dang_sua_chua;
 			int sucChua = Integer.parseInt(txtSucChua.getText());
 			String tenLoaiPhong = (String) cbLoaiPhong.getSelectedItem();
 			double donGia = Double.parseDouble(txtDonGia.getText());
@@ -482,13 +482,13 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			String maLP = loadMaLP();
 			Enum_TrangThai trangThai = null;
 			if (cbTrangThai.getSelectedItem().equals("Trống"))
-				trangThai = Enum_TrangThai.Trống;
+				trangThai = Enum_TrangThai.Trong;
 			if (cbTrangThai.getSelectedItem().equals("Chờ"))
-				trangThai = Enum_TrangThai.Chờ;
+				trangThai = Enum_TrangThai.Cho;
 			if (cbTrangThai.getSelectedItem().equals("Đang sử dụng"))
-				trangThai = Enum_TrangThai.Đang_sử_dụng;
+				trangThai = Enum_TrangThai.Dang_su_dung;
 			if (cbTrangThai.getSelectedItem().equals("Đang sửa chữa"))
-				trangThai = Enum_TrangThai.Đang_sửa_chữa;
+				trangThai = Enum_TrangThai.Dang_sua_chua;
 			int sucChua = Integer.parseInt(txtSucChua.getText());
 			String tenLoaiPhong = (String) cbLoaiPhong.getSelectedItem();
 			double donGia = Double.parseDouble(txtDonGia.getText());

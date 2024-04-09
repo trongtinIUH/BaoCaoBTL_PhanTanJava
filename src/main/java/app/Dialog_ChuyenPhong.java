@@ -57,45 +57,49 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JComboBox<String> comboBox_LoaiPhong;
-	private JTextField txtMaPhong;
-	private JButton btnTimKiem, btn_ChuyenPhong, btn_QuayLai;
-	private JPanel panel_2, panel, panel_3;
-	private JTable tblChuyenPhong;
-	private DefaultTableModel model;
-	private String col[] = { "Mã Phòng", "Loại Phòng", "Sức Chứa", "Đơn Giá", "Trạng Thái" };
-	private Phong_dao ph_dao;
-	private LoaiPhong_dao loaiPhong_dao;
-	private JLabel lblPhongHienTai_1_1;
-	private JPanel panel_1;
-	private JLabel lblPhongHT;
-	private JTextField txtMa;
-	private JLabel lblSoNguoi;
-	private JLabel lblTGHat;
-	private JTextField txtNguoi;
-	private JTextField txtTGHat;
-	private Date gioHienTai;
-	private Date phutHienTai;
+	private final JComboBox<String> comboBox_LoaiPhong;
+	private final JTextField txtMaPhong;
+	private final JButton btnTimKiem;
+    private final JButton btn_ChuyenPhong;
+    private final JButton btn_QuayLai;
+	private final JPanel panel_2;
+    private final JPanel panel;
+    private final JPanel panel_3;
+	private final JTable tblChuyenPhong;
+	private final DefaultTableModel model;
+	private final String[] col = { "Mã Phòng", "Loại Phòng", "Sức Chứa", "Đơn Giá", "Trạng Thái" };
+	private final Phong_dao ph_dao;
+	private final LoaiPhong_dao loaiPhong_dao;
+	private final JLabel lblPhongHienTai_1_1;
+	private final JPanel panel_1;
+	private final JLabel lblPhongHT;
+	private final JTextField txtMa;
+	private final JLabel lblSoNguoi;
+	private final JLabel lblTGHat;
+	private final JTextField txtNguoi;
+	private final JTextField txtTGHat;
+	private final Date gioHienTai;
+	private final Date phutHienTai;
 	private Date tgHT;
 	private double soGioHat;
 	private double soPhutHat;
-	private ChiTietHoaDon_dao cthd_dao;
-	private PhieuDatPhong_dao pdp_dao;
+	private final ChiTietHoaDon_dao cthd_dao;
+	private final PhieuDatPhong_dao pdp_dao;
 	private Date ngayHienTai;
 	private Date date;
-	private JLabel lblMaNV;
-	private JTextField txtMaNV;
-	private JLabel lblMaKH;
-	private JTextField txtMaKH;
-	private NhanVien_dao nv_dao;
-	private HoaDonDatPhong_dao hd_dao;
-	private KhachHang_dao kh_dao;
+	private final JLabel lblMaNV;
+	private final JTextField txtMaNV;
+	private final JLabel lblMaKH;
+	private final JTextField txtMaKH;
+	private final NhanVien_dao nv_dao;
+	private final HoaDonDatPhong_dao hd_dao;
+	private final KhachHang_dao kh_dao;
 	private LocalDateTime ngayGioDatPhong;
 	private LocalDateTime ngay_GioNhanPhong;
 	private String loaiPhong;
-	private JLabel lblPhongHienTai_1;
-	private TempPhongBiChuyen_dao tempChuyen_dao;
-	private ChiTietDichVu_dao ctdv_dao;
+	private final JLabel lblPhongHienTai_1;
+	private final TempPhongBiChuyen_dao tempChuyen_dao;
+	private final ChiTietDichVu_dao ctdv_dao;
 	public Dialog_ChuyenPhong(String maPhong, String soNguoi) {
 		getContentPane().setBackground(Color.WHITE);
 		setSize(800, 480);
@@ -353,7 +357,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 		for (Phong ph : ph_dao.getallPhongs()) {
 			if (Integer.parseInt(txtNguoi.getText().trim()) <= loaiPhong_dao
 					.getSucChuaTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong())
-					&& (ph.getTrangThai() == Enum_TrangThai.Trống)) {
+					&& (ph.getTrangThai() == Enum_TrangThai.Trong)) {
 				Object[] row = { ph.getMaPhong(),
 						loaiPhong_dao.getTenLoaiPhongTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong()),
 						loaiPhong_dao.getSucChuaTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong()),
@@ -365,45 +369,44 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 
 	@SuppressWarnings("unused")
 	private void timKiemPhong() {
-		thoat: if(btnTimKiem.getText().equals("Tìm kiếm")) {
-			ArrayList<Phong> dsPhong = new ArrayList<Phong>();
-			loaiPhong = comboBox_LoaiPhong.getSelectedItem().toString();
-			if (txtMaPhong.getText().trim().equals("") && comboBox_LoaiPhong.getSelectedItem().equals("")) {
-				JOptionPane.showMessageDialog(this, "Bạn chưa nhập bất kì thông tin nào để tìm");
-			} else {
-				if (!txtMaPhong.getText().trim().equals("")) {
-					if (ph_dao.getPhongTheoMaPhong(txtMaPhong.getText()) != null) {
-						dsPhong.add(ph_dao.getPhongTheoMaPhong(txtMaPhong.getText()));
-					}
-				}else if (!comboBox_LoaiPhong.getSelectedItem().toString().equals("")) {
-					dsPhong = ph_dao.getPhongTheoLoaiPhong(loaiPhong);
-				}
-			}
-			
-			// Kiểm tra điều kiện tìm thấy hay không
-			if (dsPhong != null && dsPhong.size() != 0) {
-				clearTable();
-				for (Phong ph2 : dsPhong) {
-					if (Integer.parseInt(txtNguoi.getText().trim()) <= loaiPhong_dao.getSucChuaTheoMaLoaiPhong(ph2.getLoaiPhong().getMaLoaiPhong())
-							&& ph2.getTrangThai() == Enum_TrangThai.Trống){
-						Object[] row = { ph2.getMaPhong(),
-								loaiPhong_dao.getTenLoaiPhongTheoMaLoaiPhong(ph2.getLoaiPhong().getMaLoaiPhong()),
-								loaiPhong_dao.getSucChuaTheoMaLoaiPhong(ph2.getLoaiPhong().getMaLoaiPhong()),
-								loaiPhong_dao.getDonGiaTheoMaLoaiPhong(ph2.getLoaiPhong().getMaLoaiPhong()),
-								ph2.getTrangThai() };
-						model.addRow(row);
-					}
-				}
-				btnTimKiem.setText("Hủy tìm");
-			} else {
-				JOptionPane.showMessageDialog(this, "Không tìm thấy phòng phù hợp");
-			}
-		}
-		else {
-			clearTable();
-			loadData_Phong();
-			btnTimKiem.setText("Tìm kiếm");
-		}
+        if (btnTimKiem.getText().equals("Tìm kiếm")) {
+            ArrayList<Phong> dsPhong = new ArrayList<Phong>();
+            loaiPhong = comboBox_LoaiPhong.getSelectedItem().toString();
+            if (txtMaPhong.getText().trim().equals("") && comboBox_LoaiPhong.getSelectedItem().equals("")) {
+                JOptionPane.showMessageDialog(this, "Bạn chưa nhập bất kì thông tin nào để tìm");
+            } else {
+                if (!txtMaPhong.getText().trim().equals("")) {
+                    if (ph_dao.getPhongTheoMaPhong(txtMaPhong.getText()) != null) {
+                        dsPhong.add(ph_dao.getPhongTheoMaPhong(txtMaPhong.getText()));
+                    }
+                } else if (!comboBox_LoaiPhong.getSelectedItem().toString().equals("")) {
+                    dsPhong = ph_dao.getPhongTheoLoaiPhong(loaiPhong);
+                }
+            }
+
+            // Kiểm tra điều kiện tìm thấy hay không
+            if (dsPhong != null && dsPhong.size() != 0) {
+                clearTable();
+                for (Phong ph2 : dsPhong) {
+                    if (Integer.parseInt(txtNguoi.getText().trim()) <= loaiPhong_dao.getSucChuaTheoMaLoaiPhong(ph2.getLoaiPhong().getMaLoaiPhong())
+                            && ph2.getTrangThai() == Enum_TrangThai.Trong) {
+                        Object[] row = {ph2.getMaPhong(),
+                                loaiPhong_dao.getTenLoaiPhongTheoMaLoaiPhong(ph2.getLoaiPhong().getMaLoaiPhong()),
+                                loaiPhong_dao.getSucChuaTheoMaLoaiPhong(ph2.getLoaiPhong().getMaLoaiPhong()),
+                                loaiPhong_dao.getDonGiaTheoMaLoaiPhong(ph2.getLoaiPhong().getMaLoaiPhong()),
+                                ph2.getTrangThai()};
+                        model.addRow(row);
+                    }
+                }
+                btnTimKiem.setText("Hủy tìm");
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy phòng phù hợp");
+            }
+        } else {
+            clearTable();
+            loadData_Phong();
+            btnTimKiem.setText("Tìm kiếm");
+        }
 	}
 
 	private void chuyenPhong() {
@@ -440,11 +443,11 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 						"Bạn có chắc chắn muốn chuyển sang Phòng " + model.getValueAt(tblChuyenPhong.getSelectedRow(), 0),
 						"Thông báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 					String maPhongCu1 = txtMa.getText().trim();
-					Enum_TrangThai trangThaiPhongCu = Enum_TrangThai.Trống;
+					Enum_TrangThai trangThaiPhongCu = Enum_TrangThai.Trong;
 					Phong phongCu = new Phong(maPhongCu1, trangThaiPhongCu);
 
 					String maPhongMoi1 = model.getValueAt(tblChuyenPhong.getSelectedRow(), 0).toString();
-					Enum_TrangThai trangThaiPhongMoi = Enum_TrangThai.Đang_sử_dụng;
+					Enum_TrangThai trangThaiPhongMoi = Enum_TrangThai.Dang_su_dung;
 					Phong phongMoi = new Phong(maPhongMoi1, trangThaiPhongMoi);
 
 					ph_dao.updatePhong(phongCu, maPhongCu1);

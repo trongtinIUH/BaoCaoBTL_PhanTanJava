@@ -179,7 +179,7 @@ public class ChiTietHoaDon_dao {
 			String sql = "SELECT SUM(CTHD.soGioHat) AS TongSoGioHat "
 					+ "FROM HoaDonDatPhong HDP "
 					+ "INNER JOIN ChiTietHoaDon CTHD ON HDP.maHoaDon = CTHD.maHoaDon "
-					+ "WHERE YEAR(ngayLapHoaDon) BETWEEN "+nambt+" AND "+namkt+"";
+					+ "WHERE YEAR(ngayLapHoaDon) BETWEEN "+nambt+" AND "+namkt;
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {

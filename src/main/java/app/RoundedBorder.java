@@ -14,12 +14,12 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.border.Border;
 
 public class RoundedBorder implements Border {
-    private int radius;
-    private int thickness;
-    private int strokePad;
-    private double radii;
-    private Color color;
-    private Stroke stroke;
+    private final int radius;
+    private final int thickness;
+    private final int strokePad;
+    private final double radii;
+    private final Color color;
+    private final Stroke stroke;
 
     public RoundedBorder(int radius) {
         this.radius = radius;
@@ -43,8 +43,8 @@ public class RoundedBorder implements Border {
         Graphics2D g2 = (Graphics2D) g;
 
         RoundRectangle2D.Double bubble = new RoundRectangle2D.Double(
-            0 + strokePad,
-            0 + strokePad,
+                strokePad,
+                strokePad,
             width - thickness,
             height - thickness,
             radii,

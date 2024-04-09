@@ -48,38 +48,52 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel lblPhong, lblGia, lblTrangThai, lblThoiGianHat, lblSoNguoi, lblLoai, lblLoai_1, lblPhong_1, lblgia_1,
-			lbltrangthai_1, lblSoNguoi_1, lblTenKH, lblTenKH_1;
-	private JButton btnThemDV, btnChuyenPhong, btnThanhToan, btnThemPhong;
+	private final JLabel lblPhong;
+    private final JLabel lblGia;
+    private final JLabel lblTrangThai;
+    private JLabel lblThoiGianHat;
+    private final JLabel lblSoNguoi;
+    private final JLabel lblLoai;
+    private final JLabel lblLoai_1;
+    private final JLabel lblPhong_1;
+    private final JLabel lblgia_1;
+    private final JLabel lbltrangthai_1;
+    private final JLabel lblSoNguoi_1;
+    private final JLabel lblTenKH;
+    private final JLabel lblTenKH_1;
+	private final JButton btnThemDV;
+    private final JButton btnChuyenPhong;
+    private final JButton btnThanhToan;
+    private final JButton btnThemPhong;
 
 	private Dialog_ChuyenPhong dialog_ChuyenPhong;
 	private Dialog_ThemDichVu dialog_ThemDichVu;
 	private Dialog_ThanhToan dialog_ThanhToan;
-	private Phong_dao p_dao = new Phong_dao();
-	private LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final Phong_dao p_dao = new Phong_dao();
+	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
 	private Phong p;
 	private LoaiPhong lp;
-	private PhieuDatPhong_dao phieuDatPhong_dao;
+	private final PhieuDatPhong_dao phieuDatPhong_dao;
 	@SuppressWarnings("unused")
-	private PhieuDatPhong_dao phieuDatPhong_dao_1= new PhieuDatPhong_dao();
-	private ChiTietHoaDon_dao cthd_dao;
-	private Date gioHienTai;
-	private Date phutHienTai;
+	private final PhieuDatPhong_dao phieuDatPhong_dao_1= new PhieuDatPhong_dao();
+	private final ChiTietHoaDon_dao cthd_dao;
+	private final Date gioHienTai;
+	private final Date phutHienTai;
 	private double soGioHat;
 	private double soPhutHat;
-	private KhachHang_dao kh_dao;
-	private PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
+	private final KhachHang_dao kh_dao;
+	private final PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
 	private PhieuDatPhong pdp_of_room;
-	private TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
-	private HoaDonDatPhong_dao hd_dao = new HoaDonDatPhong_dao();
+	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final HoaDonDatPhong_dao hd_dao = new HoaDonDatPhong_dao();
 	private GD_TrangChu trangChu;
-	private TempThanhToan_dao tempTT_dao;
-	private Phong_dao ph_dao;
+	private final TempThanhToan_dao tempTT_dao;
+	private final Phong_dao ph_dao;
 	@SuppressWarnings("unused")
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
-	private String maP;
-	private TempPhongBiChuyen_dao tempChuyen_dao;
-	private GD_DatPhong datPhong;
+	private final String maP;
+	private final TempPhongBiChuyen_dao tempChuyen_dao;
+	private final GD_DatPhong datPhong;
 
 	public Dialog_PhongDangSD(String maPhong, GD_DatPhong datPhong) {
 		// kích thước giao diện
@@ -499,7 +513,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 			for (PhieuDatPhong pdp : DsPDP) {
 				Phong p = p_dao.getPhongTheoMaPhong(pdp.getPhong().getMaPhong());
 				HoaDonDatPhong hd = hd_dao.getHoaDonDatPhongTheoMaPDP(pdp.getMaPhieu());
-				if (p.getTrangThai() == Enum_TrangThai.Đang_sử_dụng && hd.getMaHoaDon().equals(maHD_PhongHT)) {
+				if (p.getTrangThai() == Enum_TrangThai.Dang_su_dung && hd.getMaHoaDon().equals(maHD_PhongHT)) {
 					tmp = new TempDatPhong(pdp.getPhong().getMaPhong(), pdp.getSoNguoiHat());
 					tmp_dao.addTemp(tmp);
 				}

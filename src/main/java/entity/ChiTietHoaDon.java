@@ -4,11 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class ChiTietHoaDon implements Serializable {
@@ -17,11 +13,13 @@ public class ChiTietHoaDon implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@EmbeddedId
-	private ChiTietHoaDonID chiTietHoaDonID;
+//	@EmbeddedId
+//	private ChiTietHoaDonID chiTietHoaDonID;
+	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "maHoaDon")
+	@JoinColumn(name = "maHoaDon", columnDefinition = "VARCHAR(20)", nullable = false)
 	private HoaDonDatPhong hoaDon;
+	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maPhong")
 	private Phong phong;
