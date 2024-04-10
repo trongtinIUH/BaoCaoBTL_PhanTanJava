@@ -20,7 +20,7 @@ public class LoaiPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from LoaiPhong";
+			String sql = "select maLoaiPhong, tenLoaiPhong, sucChua, donGiaTheoGio from LoaiPhong";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
@@ -43,7 +43,7 @@ public class LoaiPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from LoaiPhong where maLoaiPhong = '" + maLoaiPhong + "'";
+			String sql = "select maLoaiPhong, tenLoaiPhong, sucChua, donGiaTheoGio from LoaiPhong where maLoaiPhong = '" + maLoaiPhong + "'";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
@@ -66,7 +66,7 @@ public class LoaiPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from LoaiPhong where sucChua = '" + sucChua + "'";
+			String sql = "select maLoaiPhong, tenLoaiPhong, sucChua, donGiaTheoGio from LoaiPhong where sucChua = '" + sucChua + "'";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
@@ -89,7 +89,7 @@ public class LoaiPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from LoaiPhong where donGia = '" + donGia + "'";
+			String sql = "select maLoaiPhong, tenLoaiPhong, sucChua, donGiaTheoGio from LoaiPhong where donGia = '" + donGia + "'";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
