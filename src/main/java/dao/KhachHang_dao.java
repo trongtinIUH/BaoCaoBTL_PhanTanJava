@@ -20,7 +20,7 @@ public class KhachHang_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from KhachHang";
+			String sql = "select maKhachHang, hoTen, soDienThoai, gioiTinh from KhachHang";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
@@ -43,7 +43,7 @@ public class KhachHang_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from KhachHang where maKhachHang = '" + maKhachHang + "'";
+			String sql = "select maKhachHang, hoTen, soDienThoai, gioiTinh from KhachHang where maKhachHang = '" + maKhachHang + "'";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
@@ -66,7 +66,7 @@ public class KhachHang_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "SELECT * FROM KhachHang WHERE hoTen LIKE N'%" + tenKhachHang + "%'";
+			String sql = "SELECT maKhachHang, hoTen, soDienThoai, gioiTinh FROM KhachHang WHERE hoTen LIKE N'%" + tenKhachHang + "%'";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
@@ -89,7 +89,7 @@ public class KhachHang_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from KhachHang where soDienThoai = '" + sdt + "'";
+			String sql = "select maKhachHang, hoTen, soDienThoai, gioiTinh from KhachHang where soDienThoai = '" + sdt + "'";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
