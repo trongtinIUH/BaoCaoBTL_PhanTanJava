@@ -32,6 +32,7 @@ import javax.swing.JComponent;
 import java.awt.SystemColor;
 import javax.swing.UIManager;
 
+import dao.impl.TempDatPhongImpl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -43,7 +44,7 @@ import entity.NhanVien;
 import entity.PhieuDatPhong;
 import entity.Phong;
 import entity.SanPham;
-import utils.TempDatPhong;
+import entity.TempDatPhong;
 import utils.TempThemDV;
 
 import javax.swing.table.DefaultTableModel;
@@ -141,7 +142,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 		hddp_dao = new HoaDonDatPhong_dao();
 		cthd_dao = new ChiTietHoaDon_dao();
 		ctdv_dao = new ChiTietDichVu_dao();
-		tmpDatPhong_dao = new TempDatPhong_dao();
+		tmpDatPhong_dao = new TempDatPhongImpl();
 		p_dao = new Phong_dao();
 		lp_dao = new LoaiPhong_dao();
 		pdp_dao = new PhieuDatPhong_dao();

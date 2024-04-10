@@ -32,12 +32,13 @@ import dao.LoaiPhong_dao;
 import dao.PhieuDatPhong_dao;
 import dao.Phong_dao;
 import dao.TempDatPhong_dao;
+import dao.impl.TempDatPhongImpl;
 import entity.Enum_TrangThai;
 import entity.KhachHang;
 import entity.LoaiPhong;
 import entity.PhieuDatPhong;
 import entity.Phong;
-import utils.TempDatPhong;
+import entity.TempDatPhong;
 
 public class Dialog_PhongCho extends JDialog implements ActionListener {
 
@@ -78,7 +79,7 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 	private final JLabel lbl_KhachHang;
 	private final JLabel lbl_KhachHang_1;
 	private final JLabel lbl_SoNguoi_1;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TempDatPhong_dao tmp_dao = new TempDatPhongImpl();
 
 	private LocalDateTime ngayGioDatPhong;
 	private LocalDateTime ngayGioNhanPhong;

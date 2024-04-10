@@ -52,6 +52,8 @@ import dao.Phong_dao;
 import dao.SanPham_dao;
 import dao.TempPhongBiChuyen_dao;
 import dao.TempThanhToan_dao;
+import dao.impl.TempPhongBiChuyenImpl;
+import dao.impl.TempThanhToanImpl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -63,8 +65,8 @@ import entity.NhanVien;
 import entity.PhieuDatPhong;
 import entity.Phong;
 import entity.SanPham;
-import utils.TempPhongBiChuyen;
-import utils.TempThanhToan;
+import entity.TempPhongBiChuyen;
+import entity.TempThanhToan;
 
 import java.awt.Dimension;
 import java.awt.Window;
@@ -172,8 +174,8 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		loaiPhong_dao = new LoaiPhong_dao();
 		sp_dao = new SanPham_dao();
 		km_dao = new KhuyenMai_dao();
-		tempTT_dao = new TempThanhToan_dao();
-		temChuyen_dao = new TempPhongBiChuyen_dao();
+		tempTT_dao = new TempThanhToanImpl();
+		temChuyen_dao = new TempPhongBiChuyenImpl();
 
 		this.addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {
@@ -652,7 +654,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 				
 				int flag = 0;
 				for(TempPhongBiChuyen tm_Chuyen : temChuyen_dao.getAllTemp()) {
-					if(tm_Chuyen.getMaPhong().equals(tmp.getMaPhong())) {
+					if(tm_Chuyen.getMaPhongBiChuyen().equals(tmp.getMaPhong())) {
 						flag = 1;
 						break;
 					}

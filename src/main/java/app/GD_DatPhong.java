@@ -32,14 +32,10 @@ import java.awt.SystemColor;
 import dao.Phong_dao;
 import dao.TempDatPhong_dao;
 import dao.TempThanhToan_dao;
-import entity.Enum_TrangThai;
-import entity.KhachHang;
-import entity.LoaiPhong;
-import entity.PhieuDatPhong;
-import entity.Phong;
+import dao.impl.TempDatPhongImpl;
+import dao.impl.TempThanhToanImpl;
+import entity.*;
 import dao.KhachHang_dao;
-import utils.TempDatPhong;
-import utils.TempThanhToan;
 import dao.LoaiPhong_dao;
 import dao.PhieuDatPhong_dao;
 
@@ -110,8 +106,8 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 
 	public GD_DatPhong(GD_TrangChu trangChu) {
 		p_dao = new Phong_dao();
-		tmp_dao = new TempDatPhong_dao();
-		tempTT_dao = new TempThanhToan_dao();
+		tmp_dao = new TempDatPhongImpl();
+		tempTT_dao = new TempThanhToanImpl();
 		this.setSize(1080, 730);
 		this.trangChu = trangChu;
 		setLayout(null);

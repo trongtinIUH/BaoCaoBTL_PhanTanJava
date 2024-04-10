@@ -38,6 +38,7 @@ import dao.NhanVien_dao;
 import dao.PhieuDatPhong_dao;
 import dao.Phong_dao;
 import dao.TempPhongBiChuyen_dao;
+import dao.impl.TempPhongBiChuyenImpl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -47,7 +48,7 @@ import entity.NhanVien;
 import entity.PhieuDatPhong;
 import entity.Phong;
 import entity.SanPham;
-import utils.TempPhongBiChuyen;
+import entity.TempPhongBiChuyen;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -115,7 +116,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 		nv_dao = new NhanVien_dao();
 		hd_dao = new HoaDonDatPhong_dao();
 		kh_dao = new KhachHang_dao();
-		tempChuyen_dao = new TempPhongBiChuyen_dao();
+		tempChuyen_dao = new TempPhongBiChuyenImpl();
 		ctdv_dao = new ChiTietDichVu_dao();
 		this.addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {
@@ -518,7 +519,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 					TempPhongBiChuyen tmp_Chuyen = new TempPhongBiChuyen(lblPhongHienTai_1.getText(), model.getValueAt(tblChuyenPhong.getSelectedRow(), 0).toString());
 					for(TempPhongBiChuyen tmp_BiChuyen : tempChuyen_dao.getAllTemp()) {
 						if(tmp_BiChuyen.getMaPhongMoi().equals(lblPhongHienTai_1.getText())) {
-							tempChuyen_dao.updateTempPhongBiChuyen(tmp_BiChuyen.getMaPhong(), model.getValueAt(tblChuyenPhong.getSelectedRow(), 0).toString());
+							tempChuyen_dao.updateTempPhongBiChuyen(tmp_BiChuyen.getMaPhongBiChuyen(), model.getValueAt(tblChuyenPhong.getSelectedRow(), 0).toString());
 						}
 					}
 					tempChuyen_dao.addTemp(tmp_Chuyen);

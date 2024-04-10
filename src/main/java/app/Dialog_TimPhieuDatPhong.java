@@ -31,6 +31,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import dao.impl.TempDatPhongImpl;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -55,7 +56,7 @@ import entity.LoaiPhong;
 import entity.NhanVien;
 import entity.PhieuDatPhong;
 import entity.Phong;
-import utils.TempDatPhong;
+import entity.TempDatPhong;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -103,7 +104,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 	private Phong p = new Phong();
 	private Dialog_PhongCho dialog_PhongCho;
 	private XSSFWorkbook wordbook;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TempDatPhong_dao tmp_dao = new TempDatPhongImpl();
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
 	private GD_TrangChu trangChu;
 	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();

@@ -32,6 +32,9 @@ import dao.Phong_dao;
 import dao.TempDatPhong_dao;
 import dao.TempPhongBiChuyen_dao;
 import dao.TempThanhToan_dao;
+import dao.impl.TempDatPhongImpl;
+import dao.impl.TempPhongBiChuyenImpl;
+import dao.impl.TempThanhToanImpl;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
 import entity.HoaDonDatPhong;
@@ -39,9 +42,9 @@ import entity.KhachHang;
 import entity.LoaiPhong;
 import entity.PhieuDatPhong;
 import entity.Phong;
-import utils.TempDatPhong;
-import utils.TempPhongBiChuyen;
-import utils.TempThanhToan;
+import entity.TempDatPhong;
+import entity.TempPhongBiChuyen;
+import entity.TempThanhToan;
 
 public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	/**
@@ -84,7 +87,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	private final KhachHang_dao kh_dao;
 	private final PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
 	private PhieuDatPhong pdp_of_room;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TempDatPhong_dao tmp_dao = new TempDatPhongImpl();
 	private final HoaDonDatPhong_dao hd_dao = new HoaDonDatPhong_dao();
 	private GD_TrangChu trangChu;
 	private final TempThanhToan_dao tempTT_dao;
@@ -109,9 +112,9 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 		phieuDatPhong_dao = new PhieuDatPhong_dao();
 		cthd_dao = new ChiTietHoaDon_dao();
 		kh_dao = new KhachHang_dao();
-		tempTT_dao = new TempThanhToan_dao();
+		tempTT_dao = new TempThanhToanImpl();
 		ph_dao = new Phong_dao();
-		tempChuyen_dao = new TempPhongBiChuyen_dao();
+		tempChuyen_dao = new TempPhongBiChuyenImpl();
 
 		// các lbl góc
 		// trái-----------------------------------------------------------------------
@@ -401,12 +404,12 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 						String maCt = "";
 						ArrayList<TempPhongBiChuyen> ds_PhongBiChuyen = tempChuyen_dao.getAllTemp();
 						for(TempPhongBiChuyen tm : ds_PhongBiChuyen) {
-							ArrayList<ChiTietHoaDon> cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhong());
+							ArrayList<ChiTietHoaDon> cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhongBiChuyen());
 							for(ChiTietHoaDon ct : cthd_BiChuyen) {
 								maCt = ct.getHoaDon().getMaHoaDon();
 							}
 							if(maCt.equals(hd_ht.getMaHoaDon()) && tm.getMaPhongMoi().equals(lblPhong_1.getText())) {
-								TempThanhToan tmp2 = new TempThanhToan(tm.getMaPhong());
+								TempThanhToan tmp2 = new TempThanhToan(tm.getMaPhongBiChuyen());
 								tempTT_dao.addTemp(tmp2);
 							}
 //							System.out.println(tm.getMaPhong());
@@ -435,12 +438,12 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 					String maCt = "";
 					ArrayList<TempPhongBiChuyen> ds_PhongBiChuyen = tempChuyen_dao.getAllTemp();
 					for(TempPhongBiChuyen tm : ds_PhongBiChuyen) {
-						ArrayList<ChiTietHoaDon> cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhong());
+						ArrayList<ChiTietHoaDon> cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhongBiChuyen());
 						for(ChiTietHoaDon ct : cthd_BiChuyen) {
 							maCt = ct.getHoaDon().getMaHoaDon();
 						}
 						if(maCt.equals(hd_ht.getMaHoaDon()) && tm.getMaPhongMoi().equals(lblPhong_1.getText())) {
-							TempThanhToan tmp2 = new TempThanhToan(tm.getMaPhong());
+							TempThanhToan tmp2 = new TempThanhToan(tm.getMaPhongBiChuyen());
 							tempTT_dao.addTemp(tmp2);
 						}
 					}

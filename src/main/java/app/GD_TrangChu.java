@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.border.CompoundBorder;
 
 import dao.TempDatPhong_dao;
+import dao.impl.TempDatPhongImpl;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -65,7 +66,7 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 	private final GD_KhuyenMai khuyenMai = new GD_KhuyenMai();
 	private final GD_TroGiup troGiup = new GD_TroGiup(this);
 	private JPanel panel_chuaTime;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TempDatPhong_dao tmp_dao = new TempDatPhongImpl();
 	private Dialog_User dialog_User= new Dialog_User();
 
 	public GD_TrangChu() {
