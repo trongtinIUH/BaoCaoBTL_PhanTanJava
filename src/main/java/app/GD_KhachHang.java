@@ -300,6 +300,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 		for (KhachHang kh : kh_dao.getallKhachHangs()) {
 			maKH = kh.getMaKhachHang(); // Chạy hết vòng for sẽ lấy được mã KH cuối danh sách
 		}
+		
 		int ngayTrenMaKHCuoiDS = Integer.parseInt(maKH.substring(2, 8));
 		DateFormat dateFormat = new SimpleDateFormat("yyMMdd"); // Format yyMMdd sẽ so sánh ngày được
 		ngayHienTai = new Date();

@@ -27,14 +27,17 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dsPhong.add(new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3))));
+				dsPhong.add(new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai"))));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return dsPhong;
+		
+		//------------
+		
 	}
 
 	public Phong getPhongTheoMaPhong(String maPhong) {
@@ -51,8 +54,8 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				ph = new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3)));
+				ph = new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai")));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -75,8 +78,8 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dsPhong.add(new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3))));
+				dsPhong.add(new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai"))));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -101,8 +104,8 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dsPhong.add(new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3))));
+				dsPhong.add(new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai"))));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -128,8 +131,8 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dsPhong.add(new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3))));
+				dsPhong.add(new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai"))));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -157,7 +160,7 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				tongTien = rs.getDouble(1);
+				tongTien = rs.getDouble("tongTien");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -181,8 +184,8 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dsPhong.add(new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3))));
+				dsPhong.add(new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai"))));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -208,8 +211,8 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dsPhong.add(new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3))));
+				dsPhong.add(new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai"))));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -234,8 +237,8 @@ public class Phong_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {
-				dsPhong.add(new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3))));
+				dsPhong.add(new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai"))));
 			}
 
 		} catch (Exception e) {
@@ -267,7 +270,7 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dtlp = new DoanhThuLoaiPhong(rs.getDate(1), rs.getDouble(2), rs.getDouble(3));
+				dtlp = new DoanhThuLoaiPhong(rs.getDate("ngayLapHoaDon"), rs.getDouble("TongTienPhongThuong"), rs.getDouble("TongTienPhongVIP"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -302,7 +305,7 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dtlp = new DoanhThuLoaiPhong(rs.getDouble(2), rs.getDouble(3));
+				dtlp = new DoanhThuLoaiPhong(rs.getDouble("TongTienPhongThuong"), rs.getDouble("TongTienPhongVIP"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -345,7 +348,7 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dtlp = new DoanhThuLoaiPhong(rs.getDouble(2), rs.getDouble(3));
+				dtlp = new DoanhThuLoaiPhong(rs.getDouble("TongTienPhongThuong"), rs.getDouble("TongTienPhongVIP"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -376,7 +379,7 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dtlp = new DoanhThuLoaiPhong(rs.getDouble(1), rs.getDouble(2));
+				dtlp = new DoanhThuLoaiPhong(rs.getDouble("TongTienPhongThuong"), rs.getDouble("TongTienPhongVIP"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -485,11 +488,11 @@ public class Phong_dao {
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
 				Phong phong = new Phong();
-				phong.setMaPhong(rs.getString(1));
-				phong.getLoaiPhong().setTenLoaiPhong(rs.getString(2));
-				phong.getLoaiPhong().setSucChua(rs.getInt(3));
-				phong.getLoaiPhong().setDonGiaTheoGio(rs.getDouble(4));
-				phong.setTrangThai(Enum_TrangThai.valueOf(rs.getString(5)));
+				phong.setMaPhong(rs.getString("maPhong"));
+				phong.getLoaiPhong().setTenLoaiPhong(rs.getString("tenLoaiPhong"));
+				phong.getLoaiPhong().setSucChua(rs.getInt("sucChua"));
+				phong.getLoaiPhong().setDonGiaTheoGio(rs.getDouble("donGiaTheoGio"));
+				phong.setTrangThai(Enum_TrangThai.valueOf(rs.getString("trangThai")));
 				dsPhong.add(phong);
 			}
 		} catch (Exception e) {
@@ -513,8 +516,8 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dsPhong.add(new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3))));
+				dsPhong.add(new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai"))));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -540,8 +543,8 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dsPhong.add(new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3))));
+				dsPhong.add(new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai"))));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -567,8 +570,8 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dsPhong.add(new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3))));
+				dsPhong.add(new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai"))));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -594,8 +597,8 @@ public class Phong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dsPhong.add(new Phong(rs.getString(1), new LoaiPhong(rs.getString(2)),
-						Enum_TrangThai.valueOf(rs.getString(3))));
+				dsPhong.add(new Phong(rs.getString("maPhong"), new LoaiPhong(rs.getString("maLoaiPhong")),
+						Enum_TrangThai.valueOf(rs.getString("trangThai"))));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
