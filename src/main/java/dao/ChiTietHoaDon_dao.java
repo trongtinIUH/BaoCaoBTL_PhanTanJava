@@ -27,8 +27,8 @@ public class ChiTietHoaDon_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {
-				dsChiTietHoaDon.add(new ChiTietHoaDon(new HoaDonDatPhong(rs.getString(1)), new Phong(rs.getString(2)),
-						rs.getTimestamp(3), rs.getTimestamp(4), rs.getDouble(5)));
+				dsChiTietHoaDon.add(new ChiTietHoaDon(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")),
+						rs.getTimestamp("gioNhanPhong"), rs.getTimestamp("gioTraPhong"), rs.getDouble("soGioHat")));
 
 			}
 
@@ -52,8 +52,8 @@ public class ChiTietHoaDon_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {
-				dsChiTietHoaDon.add(new ChiTietHoaDon(new HoaDonDatPhong(rs.getString(1)), new Phong(rs.getString(2)),
-						rs.getTimestamp(3), rs.getTimestamp(4), rs.getDouble(5)));
+				dsChiTietHoaDon.add(new ChiTietHoaDon(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")),
+						rs.getTimestamp("gioNhanPhong"), rs.getTimestamp("gioTraPhong"), rs.getDouble("soGioHat")));
 			}
 
 		} catch (Exception e) {
@@ -76,8 +76,8 @@ public class ChiTietHoaDon_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {
-				dsChiTietHoaDon.add(new ChiTietHoaDon(new HoaDonDatPhong(rs.getString(1)), new Phong(rs.getString(2)),
-						rs.getTimestamp(3), rs.getTimestamp(4), rs.getDouble(5)));
+				dsChiTietHoaDon.add(new ChiTietHoaDon(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")),
+						rs.getTimestamp("gioNhanPhong"), rs.getTimestamp("gioTraPhong"), rs.getDouble("soGioHat")));
 			}
 
 		} catch (Exception e) {
@@ -102,7 +102,7 @@ public class ChiTietHoaDon_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				soGioHat = rs.getDouble(1);
+				soGioHat = rs.getDouble("TongSoGioHat");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -129,7 +129,7 @@ public class ChiTietHoaDon_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				soGioHat = rs.getDouble(2);
+				soGioHat = rs.getDouble("TongSoGioHat");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -157,7 +157,7 @@ public class ChiTietHoaDon_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				soGioHat = rs.getDouble(2);
+				soGioHat = rs.getDouble("TongSoGioHat");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -183,7 +183,7 @@ public class ChiTietHoaDon_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				soGioHat = rs.getDouble(1);
+				soGioHat = rs.getDouble("TongSoGioHat");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -203,12 +203,12 @@ public class ChiTietHoaDon_dao {
 		PreparedStatement stmt = null;
 		int n = 0;
 		try {
-			stmt = con.prepareStatement("insert into ChiTietHoaDon values(?,?,?,?,?)");
-			stmt.setString(1, cthd.getHoaDon().getMaHoaDon());
-			stmt.setString(2, cthd.getPhong().getMaPhong());
-			stmt.setTimestamp(3, cthd.getGioNhanPhong());
-			stmt.setTimestamp(4, cthd.getGioTraPhong());
-			stmt.setDouble(5, cthd.getSoGioHat());
+			stmt = con.prepareStatement("INSERT INTO ChiTietHoaDon (maHoaDon, maPhong, gioNhanPhong, gioTraPhong, soGioHat) VALUES (?, ?, ?, ?, ?)");
+	        stmt.setString(1, cthd.getHoaDon().getMaHoaDon());
+	        stmt.setString(2, cthd.getPhong().getMaPhong());
+	        stmt.setTimestamp(3, cthd.getGioNhanPhong());
+	        stmt.setTimestamp(4, cthd.getGioTraPhong());
+	        stmt.setDouble(5, cthd.getSoGioHat());
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO: handle exception
@@ -329,12 +329,12 @@ public class ChiTietHoaDon_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "SELECT * FROM ChiTietHoaDon JOIN Phong ON ChiTietHoaDon.maPhong = Phong.maPhong where Phong.trangThai = N'Đang_sử_dụng'";
+			String sql = "SELECT * FROM ChiTietHoaDon JOIN Phong ON ChiTietHoaDon.maPhong = Phong.maPhong where Phong.trangThai = N'Dang_su_dung'";
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {
-				dsChiTietHoaDon.add(new ChiTietHoaDon(new HoaDonDatPhong(rs.getString(1)), new Phong(rs.getString(2)),
-						rs.getTimestamp(3), rs.getTimestamp(4), rs.getDouble(5)));
+				dsChiTietHoaDon.add(new ChiTietHoaDon(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")),
+						rs.getTimestamp("gioNhanPhong"), rs.getTimestamp("gioTraPhong"), rs.getDouble("soGioHat")));
 			}
 
 		} catch (Exception e) {
