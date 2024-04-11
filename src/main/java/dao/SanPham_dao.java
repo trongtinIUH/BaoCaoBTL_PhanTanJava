@@ -25,7 +25,9 @@ public class SanPham_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
-				dsSanPham.add(new SanPham(rs.getString(1), rs.getString(2),rs.getDate(3), rs.getString(4), rs.getDouble(5), rs.getString(6), rs.getInt(7), rs.getString(8)));
+				dsSanPham.add(new SanPham(rs.getString("maSanPham"), rs.getString("tenSanPham"),rs.getDate("ngaySanXuat"), 
+						rs.getString("loaiSanPham"), rs.getDouble("donGia"), rs.getString("donViTinh"), 
+						rs.getInt("soLuongTon"), rs.getString("hinhAnh")));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -48,7 +50,9 @@ public class SanPham_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
-				dt = new SanPham(rs.getString(1), rs.getString(2),rs.getDate(3), rs.getString(4), rs.getDouble(5), rs.getString(6), rs.getInt(7), rs.getString(8));
+				dt = new SanPham(rs.getString("maSanPham"), rs.getString("tenSanPham"),rs.getDate("ngaySanXuat"), 
+						rs.getString("loaiSanPham"), rs.getDouble("donGia"), rs.getString("donViTinh"), 
+						rs.getInt("soLuongTon"), rs.getString("hinhAnh"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -94,7 +98,9 @@ public class SanPham_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
-				dt = new SanPham(rs.getString(1), rs.getString(2),rs.getDate(3), rs.getString(4), rs.getDouble(5), rs.getString(6), rs.getInt(7), rs.getString(8));
+				dt = new SanPham(rs.getString("maSanPham"), rs.getString("tenSanPham"),rs.getDate("ngaySanXuat"), 
+						rs.getString("loaiSanPham"), rs.getDouble("donGia"), rs.getString("donViTinh"), 
+						rs.getInt("soLuongTon"), rs.getString("hinhAnh"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -118,7 +124,9 @@ public class SanPham_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
-				dsSanPham.add(new SanPham(rs.getString(1), rs.getString(2),rs.getDate(3), rs.getString(4), rs.getDouble(5), rs.getString(6), rs.getInt(7), rs.getString(8)));
+				dsSanPham.add(new SanPham(rs.getString("maSanPham"), rs.getString("tenSanPham"),rs.getDate("ngaySanXuat"), 
+						rs.getString("loaiSanPham"), rs.getDouble("donGia"), rs.getString("donViTinh"), 
+						rs.getInt("soLuongTon"), rs.getString("hinhAnh")));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -141,7 +149,9 @@ public class SanPham_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
-				dsSanPham.add(new SanPham(rs.getString(1), rs.getString(2),rs.getDate(3), rs.getString(4), rs.getDouble(5), rs.getString(6), rs.getInt(7), rs.getString(8)));
+				dsSanPham.add(new SanPham(rs.getString("maSanPham"), rs.getString("tenSanPham"),rs.getDate("ngaySanXuat"), 
+						rs.getString("loaiSanPham"), rs.getDouble("donGia"), rs.getString("donViTinh"), 
+						rs.getInt("soLuongTon"), rs.getString("hinhAnh")));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -164,7 +174,9 @@ public class SanPham_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while(rs.next()) {
-				dsSP.add(new SanPham(rs.getString(1), rs.getString(2),rs.getDate(3), rs.getString(4), rs.getDouble(5), rs.getString(6), rs.getInt(7), rs.getString(8)));
+				dsSP.add(new SanPham(rs.getString("maSanPham"), rs.getString("tenSanPham"),rs.getDate("ngaySanXuat"), 
+						rs.getString("loaiSanPham"), rs.getDouble("donGia"), rs.getString("donViTinh"), 
+						rs.getInt("soLuongTon"), rs.getString("hinhAnh")));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,7 +198,9 @@ public class SanPham_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while(rs.next()) {
-				dsSP.add(new SanPham(rs.getString(1), rs.getString(2),rs.getDate(3), rs.getString(4), rs.getDouble(5), rs.getString(6), rs.getInt(7), rs.getString(8)));
+				dsSP.add(new SanPham(rs.getString("maSanPham"), rs.getString("tenSanPham"),rs.getDate("ngaySanXuat"), 
+						rs.getString("loaiSanPham"), rs.getDouble("donGia"), rs.getString("donViTinh"), 
+						rs.getInt("soLuongTon"), rs.getString("hinhAnh")));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -324,7 +338,7 @@ public class SanPham_dao {
 	            Statement stm = con.createStatement();
 	            ResultSet rs = stm.executeQuery(sql);
 	            while(rs.next()) {
-	                dsSanPham.add(new SanPham(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getDouble(4)));
+	                dsSanPham.add(new SanPham(rs.getString("maSanPham"), rs.getString("tenSanPham"), rs.getInt("soLuongTon"), rs.getDouble("donGiaNhap")));
 	            }
 	        } catch (SQLException e) {
 	            e.printStackTrace();

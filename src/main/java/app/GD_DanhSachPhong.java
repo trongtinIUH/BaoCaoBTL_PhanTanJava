@@ -376,9 +376,11 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 				trThai = "Đang sửa chữa";
 			else
 				trThai = p.getTrangThai().toString();
+			if(loaiPhong != null) {
 			Object[] row = { i, p.getMaPhong(), loaiPhong.getTenLoaiPhong(), trThai, loaiPhong.getSucChua(),
 					loaiPhong.getDonGiaTheoGio() };
 			model.addRow(row);
+			}
 		}
 	}
 
