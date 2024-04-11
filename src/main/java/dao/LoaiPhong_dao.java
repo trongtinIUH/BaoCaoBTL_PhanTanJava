@@ -43,11 +43,11 @@ public class LoaiPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select maLoaiPhong, tenLoaiPhong, sucChua, donGiaTheoGio from LoaiPhong where maLoaiPhong = '" + maLoaiPhong + "'";
+			String sql = "select * from LoaiPhong where maLoaiPhong = '" + maLoaiPhong + "'";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
-				loaiPh = new LoaiPhong(rs.getString(1), rs.getString(2),rs.getInt(3), rs.getDouble(4));
+				loaiPh = new LoaiPhong(rs.getString("maLoaiPhong"), rs.getString("tenLoaiPhong"),rs.getInt("sucChua"), rs.getDouble("donGiaTheoGio"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
