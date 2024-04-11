@@ -16,12 +16,12 @@ public class ConnectDB {
 	}
 	
 	public void connect(String user, String password) throws SQLException {
-        String url = "jdbc:sqlserver://localhost:1433;databasename=BaiTapLonPTUD_NHOM4";
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=BaiTapLonPTUD_NHOM4";
         con = DriverManager.getConnection(url, user, password);
     }
 	
 	public void connect() throws SQLException {
-		String url = "jdbc:sqlserver://localhost:1433;databasename=BaiTapLonPTUD_NHOM4";
+		String url = "jdbc:sqlserver://localhost:1433;databaseName=BaiTapLonPTUD_NHOM4";
 		String user = "sa";
 		String pass = "sapassword";
 		con = DriverManager.getConnection(url,user,pass);
