@@ -116,7 +116,7 @@ public class ChiTietDichVu_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "SELECT SUM(giaBan * soLuong) AS tongTienDV "
+			String sql = "SELECT SUM(gia * soLuong) AS tongTienDV "
 					+ "FROM ChiTietDichVu ctdv "
 					+ "where ctdv.maHoaDon = '" + maHD + "'"
 					+ "GROUP BY ctdv.maHoaDon";
