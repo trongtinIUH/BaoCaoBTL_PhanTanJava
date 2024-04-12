@@ -49,22 +49,8 @@ class ClientHandler implements Runnable{
 		try {
 			DataInputStream in = new DataInputStream(socket.getInputStream());
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-			
-//			int choice = 0;
-//			
-//			while(true) {
-//				choice = in.readInt();
-//				switch(choice) {
-//				case 1:
-//
-//					break;
-//				case 2:
-//				
-//					
-//					break;
-//				}
-//			}
-			App_Karaoke4T app_Karaoke4T = new App_Karaoke4T();
+		     App_Karaoke4T app_Karaoke4T = new App_Karaoke4T();
+	            app_Karaoke4T.runApp();
 			
 		}catch (Exception e) {
 			e.printStackTrace();
