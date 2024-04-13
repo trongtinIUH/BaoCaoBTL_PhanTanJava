@@ -254,7 +254,7 @@ public class SanPham_dao {
 		PreparedStatement psmt = null;
 		int n = 0;
 		try {
-			psmt = con.prepareStatement("update SanPham set tenSanPham=?, ngaySanXuat=?, loaiSanPham=?, donGiaNhap=?, donViTinh=?, soLuongTon=?, hinhAnh=? where maSanPham=?");
+			psmt = con.prepareStatement("update SanPham set tenSanPham=?, ngaySanXuat=?, loaiSanPham=?, donGia=?, donViTinh=?, soLuongTon=?, hinhAnh=? where maSanPham=?");
 			psmt.setString(1, sp.getTenSanPham());
 			psmt.setDate(2, sp.getNgaySanXuat());
 			psmt.setString(3, sp.getloaiSanPham());
@@ -334,11 +334,11 @@ public class SanPham_dao {
 	        try {
 	            ConnectDB.getInstance();
 	            con = ConnectDB.getConnection();
-	            String sql = "select maSanPham, tenSanPham, soLuongTon, donGiaNhap from SanPham";
+	            String sql = "select maSanPham, tenSanPham, soLuongTon, donGia from SanPham";
 	            Statement stm = con.createStatement();
 	            ResultSet rs = stm.executeQuery(sql);
 	            while(rs.next()) {
-	                dsSanPham.add(new SanPham(rs.getString("maSanPham"), rs.getString("tenSanPham"), rs.getInt("soLuongTon"), rs.getDouble("donGiaNhap")));
+	                dsSanPham.add(new SanPham(rs.getString("maSanPham"), rs.getString("tenSanPham"), rs.getInt("soLuongTon"), rs.getDouble("donGia")));
 	            }
 	        } catch (SQLException e) {
 	            e.printStackTrace();

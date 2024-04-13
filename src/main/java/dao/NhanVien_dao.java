@@ -180,13 +180,14 @@ public class NhanVien_dao {
 		try {
 			ConnectDB.getInstance();
 			Connection con = ConnectDB.getConnection();
-			String sql = "select * from NhanVien where maNhanVien = N'"+maNhanVien+"'";
+			String sql = "select maNhanVien, hoTen, chucVu from NhanVien where maNhanVien = N'"+maNhanVien+"'";
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			if(rs.next()) {
+				String ma = rs.getString("maNhanVien");
 				String hoTen = rs.getString("hoTen");
 				String chucVu = rs.getString("chucVu");
-				nhanVien = new NhanVien(maNhanVien, hoTen, chucVu);
+				nhanVien = new NhanVien(ma, hoTen, chucVu);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
