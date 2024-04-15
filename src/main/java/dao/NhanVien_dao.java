@@ -1,5 +1,7 @@
 package dao;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,8 +11,16 @@ import java.util.ArrayList;
 import connectDB.ConnectDB;
 import entity.NhanVien;
 
-public class NhanVien_dao {
-	public ArrayList<NhanVien> getAllNhanVien() {
+public class NhanVien_dao extends UnicastRemoteObject implements NhanVienDao{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3956292996006239396L;
+	public NhanVien_dao() throws RemoteException {
+		// TODO Auto-generated constructor stub
+	}
+
+	public ArrayList<NhanVien> findAllNhanVien() throws RemoteException{
 		ArrayList<NhanVien> dsNhanVien = new ArrayList<NhanVien>();
 		try {
 			ConnectDB.getInstance();
@@ -34,7 +44,7 @@ public class NhanVien_dao {
 		return dsNhanVien;
 	}
 
-	public boolean addNhanVien(NhanVien nv) {
+	public boolean addNhanVien(NhanVien nv) throws RemoteException{
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
@@ -68,7 +78,7 @@ public class NhanVien_dao {
 		return n > 0;
 	}
 
-	public boolean deleteNhanVien(String maNV) {
+	public boolean deleteNhanVien(String maNV) throws RemoteException{
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
@@ -95,7 +105,7 @@ public class NhanVien_dao {
 		return n > 0;
 	}
 
-	public boolean updateNhanVien(NhanVien nv) {
+	public boolean updateNhanVien(NhanVien nv) throws RemoteException{
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
@@ -127,7 +137,7 @@ public class NhanVien_dao {
 		return n > 0;
 	}
 
-	public NhanVien getNhanVienTheoMa(String maNV) {
+	public NhanVien findByID(String maNV) throws RemoteException{
 		NhanVien nv = null;
 		try {
 			ConnectDB.getInstance();
@@ -151,7 +161,7 @@ public class NhanVien_dao {
 		return nv;
 	}
 	
-	public ArrayList<NhanVien> getNhanVienTheoTen(String tenNV) {
+	public ArrayList<NhanVien> findByName(String tenNV)  throws RemoteException{
 		ArrayList<NhanVien> dsNhanVien = new ArrayList<NhanVien>();
 		try {
 			ConnectDB.getInstance();
@@ -175,7 +185,7 @@ public class NhanVien_dao {
 		return dsNhanVien;
 	}
 	// lấy tên nhân viên 
-	public NhanVien TimkiemMaNhanVien(String maNhanVien){
+	public NhanVien findNhanVienToLogin(String maNhanVien) throws RemoteException{
 		NhanVien nhanVien = null;
 		try {
 			ConnectDB.getInstance();
@@ -193,6 +203,4 @@ public class NhanVien_dao {
 		}
 		return nhanVien;
 	}
-
-
 }

@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -343,7 +344,12 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnChuyenPhong)) {
-			dialog_ChuyenPhong = new Dialog_ChuyenPhong(lblPhong_1.getText(), lblSoNguoi_1.getText());
+			try {
+				dialog_ChuyenPhong = new Dialog_ChuyenPhong(lblPhong_1.getText(), lblSoNguoi_1.getText());
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dialog_ChuyenPhong.setModal(true);
 			dialog_ChuyenPhong.setVisible(true);
 			dispose();
@@ -369,7 +375,12 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				ArrayList<Phong> dsPhongTheoMaHoaDon = ph_dao.getPhongTheoMaCTHD(hd.getMaHoaDon());
 				if(dsPhongTheoMaHoaDon.size() == 1) {
 					DataManager.setMaHD_trongDSThanhToan(hd.getMaHoaDon());
-					dialog_ThanhToan = new Dialog_ThanhToan(lblPhong_1.getText());
+					try {
+						dialog_ThanhToan = new Dialog_ThanhToan(lblPhong_1.getText());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					dialog_ThanhToan.setModal(true);
 					dialog_ThanhToan.setVisible(true);
 					dispose();
@@ -519,8 +530,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				}
 			}
 			DataManager.setSoDienThoaiKHDat(kh.getSoDienThoai());
-			dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
-					pdp_of_room.getSoNguoiHat(), trangChu);
+			try {
+				dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
+						pdp_of_room.getSoNguoiHat(), trangChu);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dispose();
 			JOptionPane.showMessageDialog(this, "Vui lòng chọn thêm phòng cần đặt");
 		}

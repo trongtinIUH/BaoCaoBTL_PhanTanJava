@@ -2,17 +2,20 @@ package app;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
@@ -77,6 +80,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	private final JTable table;
 	private final JScrollPane scroll;
 	private NhanVien_dao nv_dao;
+//	private NhanVienDao nv_dao;
 	private final DangNhap_dao dangNhap_dao = new DangNhap_dao();
 	private final JTextField txtMa;
 	private final JTextField txtHoTen;
@@ -92,7 +96,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	private final JButton btnUser;
 	private final Dialog_User dialog_user = new Dialog_User();
 
-	public GD_NhanVien() {
+	public GD_NhanVien() throws RemoteException{
 		setBackground(new Color(246, 245, 255));
 		setLayout(null);
 
@@ -370,13 +374,19 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 
 	private void loadData() {
 		int i = 0;
-		nv_dao = new NhanVien_dao();
-		for (NhanVien nv : nv_dao.getAllNhanVien()) {
-			i++;
-			Object[] row = { i, nv.getMaNhanVien(), nv.getHoTen(), nv.getSoDienThoai(), getGT(nv), nv.getNgaySinh(),
-					nv.getChucVu(), nv.getAnhDaiDien()};
-			model.addRow(row);
-		}
+			
+			try {
+				nv_dao = new NhanVien_dao();
+				for (NhanVien nv : nv_dao.findAllNhanVien()) {
+					i++;
+					Object[] row = { i, nv.getMaNhanVien(), nv.getHoTen(), nv.getSoDienThoai(), getGT(nv), nv.getNgaySinh(),
+							nv.getChucVu(), nv.getAnhDaiDien()};
+					model.addRow(row);
+				}
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 	private void xoaTrang() {
@@ -389,9 +399,15 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 
 	private String thuTuNhanVienTrongNam() {
 		int sl = 0;
-		for (NhanVien nv : nv_dao.getAllNhanVien()) {
-			if (nv.getMaNhanVien().startsWith("23"))
-				sl++;
+		try {
+			nv_dao = new NhanVien_dao();
+			for (NhanVien nv : nv_dao.findAllNhanVien()) {
+				if (nv.getMaNhanVien().startsWith("23"))
+					sl++;
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		String slString = String.format("%03d", sl + 1);
 		return slString;
@@ -471,14 +487,19 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 					mk=ma;
 				}
 				NhanVien nv = new NhanVien(ma, hoTen, sDT, gt, ngaySinh, chucVu, absolutePath);
-				if (nv_dao.addNhanVien(nv)) {
-					JOptionPane.showMessageDialog(this, "Thêm thành công | Tài Khoản và Mật Khẩu của bạn là: "+ma+"\nVui lòng tiến hành đổi mật khẩu để tăng bảo mật !");
-					TaiKhoan tk= new TaiKhoan(ma, mk, trangthai, nv= new NhanVien(ma, hoTen, sDT, gt, ngaySinh, chucVu, absolutePath), role);
-					dangNhap_dao.Them_taiKhoan_matKhau(tk);
-					clearTable();
-					loadData();
-					xoaTrang();
-					loadMa();
+				try {
+					if (nv_dao.addNhanVien(nv)) {
+						JOptionPane.showMessageDialog(this, "Thêm thành công | Tài Khoản và Mật Khẩu của bạn là: "+ma+"\nVui lòng tiến hành đổi mật khẩu để tăng bảo mật !");
+						TaiKhoan tk= new TaiKhoan(ma, mk, trangthai, nv= new NhanVien(ma, hoTen, sDT, gt, ngaySinh, chucVu, absolutePath), role);
+						dangNhap_dao.Them_taiKhoan_matKhau(tk);
+						clearTable();
+						loadData();
+						xoaTrang();
+						loadMa();
+					}
+				} catch (HeadlessException | RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
@@ -493,7 +514,12 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa nhân viên này không?", "Thông báo",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				int row = table.getSelectedRow();
-				nv_dao.deleteNhanVien(model.getValueAt(row, 1).toString());
+				try {
+					nv_dao.deleteNhanVien(model.getValueAt(row, 1).toString());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				model.removeRow(row);
 				JOptionPane.showMessageDialog(this, "Xóa thành công!!");
 			}
@@ -527,10 +553,15 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 			if (tuoi >= 18) {
 				NhanVien nv = new NhanVien(ma, ten, sDT, gt, ngaySinh, (String) cbChucVu.getSelectedItem(),
 						absolutePath);
-				if (nv_dao.updateNhanVien(nv)) {
-					clearTable();
-					loadData();
-					JOptionPane.showMessageDialog(null, "Sửa thành công!!");
+				try {
+					if (nv_dao.updateNhanVien(nv)) {
+						clearTable();
+						loadData();
+						JOptionPane.showMessageDialog(null, "Sửa thành công!!");
+					}
+				} catch (HeadlessException | RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			} else {
 				JOptionPane.showMessageDialog(this, "Nhân viên phải lớn hơn bằng 18 tuổi");
@@ -543,7 +574,12 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 		if (btnTimKiem.getText().equals("Tìm kiếm")) {
 			if (cbLoaiTim.getSelectedItem().equals("Mã nhân viên")) {
 				NhanVien nv = null;
-				nv = nv_dao.getNhanVienTheoMa(txtTuKhoaTim.getText());
+				try {
+					nv = nv_dao.findByID(txtTuKhoaTim.getText());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if (nv != null) {
 					btnTimKiem.setText("Hủy tìm");
 					clearTable();
@@ -554,7 +590,13 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 					JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin!!");
 				}
 			} else if (cbLoaiTim.getSelectedItem().equals("Tên nhân viên")) {
-				ArrayList<NhanVien> dsNhanVien = nv_dao.getNhanVienTheoTen(txtTuKhoaTim.getText());
+				List<NhanVien> dsNhanVien = null;
+				try {
+					dsNhanVien = nv_dao.findByName(txtTuKhoaTim.getText());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if (dsNhanVien != null) {
 					btnTimKiem.setText("Hủy tìm");
 					clearTable();
@@ -599,20 +641,20 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 			cell = row.createCell(7, CellType.STRING);
 			cell.setCellValue("Hình ảnh");
 
-			for (int i = 0; i < nv_dao.getAllNhanVien().size(); i++) {
+			for (int i = 0; i < nv_dao.findAllNhanVien().size(); i++) {
 				row = sheet.createRow(3 + i); // Bỏ qua 2 dòng trống
 
 				cell = row.createCell(0, CellType.NUMERIC);
 				cell.setCellValue(i + 1);
 				cell = row.createCell(1, CellType.STRING);
-				cell.setCellValue(nv_dao.getAllNhanVien().get(i).getMaNhanVien());
+				cell.setCellValue(nv_dao.findAllNhanVien().get(i).getMaNhanVien());
 				cell = row.createCell(2, CellType.STRING);
-				cell.setCellValue(nv_dao.getAllNhanVien().get(i).getHoTen());
+				cell.setCellValue(nv_dao.findAllNhanVien().get(i).getHoTen());
 				cell = row.createCell(3, CellType.STRING);
-				cell.setCellValue(nv_dao.getAllNhanVien().get(i).getSoDienThoai());
+				cell.setCellValue(nv_dao.findAllNhanVien().get(i).getSoDienThoai());
 
 				String gioiTinhInExcel = "";
-				if (nv_dao.getAllNhanVien().get(i).isGioiTinh()) {
+				if (nv_dao.findAllNhanVien().get(i).isGioiTinh()) {
 					gioiTinhInExcel = "Nam";
 				} else
 					gioiTinhInExcel = "Nữ";
@@ -621,13 +663,13 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 
 				cell = row.createCell(5, CellType.STRING);
 				DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-				String ngay = df.format(nv_dao.getAllNhanVien().get(i).getNgaySinh());
+				String ngay = df.format(nv_dao.findAllNhanVien().get(i).getNgaySinh());
 				cell.setCellValue(ngay);
 
 				cell = row.createCell(6, CellType.STRING);
-				cell.setCellValue(nv_dao.getAllNhanVien().get(i).getChucVu());
+				cell.setCellValue(nv_dao.findAllNhanVien().get(i).getChucVu());
 				cell = row.createCell(7, CellType.STRING);
-				cell.setCellValue(nv_dao.getAllNhanVien().get(i).getAnhDaiDien());
+				cell.setCellValue(nv_dao.findAllNhanVien().get(i).getAnhDaiDien());
 
 			}
 

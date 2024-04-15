@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -97,7 +98,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 	private CategoryDataset dataset;
 	private JFreeChart barChart;
 	private final ChartPanel pnBarChart;
-	public GD_ThongKe() {
+	public GD_ThongKe() throws RemoteException {
 		dialog_user = new Dialog_User();
 		df = new DecimalFormat("#,###,### VNĐ");
 		setLayout(null);
@@ -376,7 +377,12 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 			} else {
 				resetField();
 			    clearDataDoanhThuTheoNgay();
-			    loadDataDoanhThuTheoNgay(); 
+			    try {
+					loadDataDoanhThuTheoNgay();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
 			    try {
 			        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to match your SQL Server date/time format
 			        String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
@@ -421,7 +427,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		lineChart.start();
 	}
 	
-	public void loadDataDoanhThuTheoNgay() {
+	public void loadDataDoanhThuTheoNgay() throws RemoteException {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to match your SQL Server date/time format
 		String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
 		double tongDoanhThu = 0;
@@ -442,7 +448,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 			chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), 
 			khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai())
 			)),
-			nhanvien_dao.getNhanVienTheoMa(hd.getNhanVien().getMaNhanVien()).getHoTen(), hd.getNgayLapHoaDon(),
+			nhanvien_dao.findByID(hd.getNhanVien().getMaNhanVien()).getHoTen(), hd.getNgayLapHoaDon(),
 			};
 			model.addRow(row);
 		}
@@ -739,7 +745,12 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 					if(cbDate.getSelectedItem().toString().equals("Ngày")) {
 						clearDataDoanhThuTheoNgay();
 						resetField();
-						loadDataDoanhThuTheoNgay();
+						try {
+							loadDataDoanhThuTheoNgay();
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						try {
 					        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to match your SQL Server date/time format
 					        String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);

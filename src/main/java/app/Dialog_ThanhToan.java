@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -154,7 +155,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private final String maPh;
 	private final JTextField txtTienGiam;
 
-	public Dialog_ThanhToan(String maPhong) {
+	public Dialog_ThanhToan(String maPhong) throws RemoteException {
 		this.maPh = maPhong;
 		getContentPane().setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
@@ -178,7 +179,12 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		this.addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {
 				NhanVien nv = null;
-				nv = nv_dao.getNhanVienTheoMa(DataManager.getUserName());
+				try {
+					nv = nv_dao.findByID(DataManager.getUserName());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				lbl_TenNV_1.setText(nv.getHoTen());
 			}
 		});

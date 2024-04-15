@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -108,7 +109,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 	private final TimePickerSettings timeSettings;
 	private final DatePickerSettings dateSettings;
 
-	public GD_HoaDon() {
+	public GD_HoaDon() throws RemoteException{
 		df = new DecimalFormat("#,###,### VNĐ");
 		hoadon_dao = new HoaDonDatPhong_dao();
 		khachhang_dao = new KhachHang_dao();

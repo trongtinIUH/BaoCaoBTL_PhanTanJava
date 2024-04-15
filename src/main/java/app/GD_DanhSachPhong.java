@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -72,7 +73,7 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 	private final JButton btnUser;
 	private final Dialog_User dialog_user = new Dialog_User();
 
-	public GD_DanhSachPhong() {
+	public GD_DanhSachPhong() throws RemoteException{
 		setBackground(new Color(246, 245, 255));
 		setLayout(null);
 

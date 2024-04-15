@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -171,7 +172,13 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 					if(mk_cu.equalsIgnoreCase(mk_moi)) {
 						JOptionPane.showMessageDialog(null, "Mật khẩu mới của bạn đã được cập nhật !");
 						dangNhap_dao.doiMatKhau(sdt, mk_moi);
-						GD_TrangDangNhap dn= new GD_TrangDangNhap();
+						GD_TrangDangNhap dn = null;
+						try {
+							dn = new GD_TrangDangNhap();
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						dn.setVisible(true);	
 						dispose();
 					}else {
@@ -183,7 +190,13 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 		}
 		else if(o.equals(btnHuy)) {
 			// thêm joption thông báo rồi nhảy về trang đăng nhập//
-			GD_TrangDangNhap dn= new GD_TrangDangNhap();
+			GD_TrangDangNhap dn = null;
+			try {
+				dn = new GD_TrangDangNhap();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dn.setVisible(true);	
 			dispose();
 		}

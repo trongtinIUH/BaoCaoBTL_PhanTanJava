@@ -32,6 +32,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.awt.event.ActionEvent;
@@ -68,7 +69,7 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
 	private Dialog_User dialog_User= new Dialog_User();
 
-	public GD_TrangChu() {
+	public GD_TrangChu() throws RemoteException{
 		super("Karaoke 4T");
 		datPhong = new GD_DatPhong(this);
 		ImageIcon icon = new ImageIcon("icon\\icon_Karaoke3.jpg");
@@ -76,7 +77,7 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 		initialize();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RemoteException{
 		GD_TrangChu home = new GD_TrangChu();
 		home.setVisible(true);
 	}
@@ -506,7 +507,12 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_F9) {
-                	dialog_User= new Dialog_User();
+                	try {
+						dialog_User= new Dialog_User();
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
                 	dialog_User.setVisible(true);
                 }
                 if (e.getKeyCode() == KeyEvent.VK_F10) {

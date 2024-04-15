@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -100,7 +101,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private final JLabel lblPhongHienTai_1;
 	private final TempPhongBiChuyen_dao tempChuyen_dao;
 	private final ChiTietDichVu_dao ctdv_dao;
-	public Dialog_ChuyenPhong(String maPhong, String soNguoi) {
+	public Dialog_ChuyenPhong(String maPhong, String soNguoi) throws RemoteException {
 		getContentPane().setBackground(Color.WHITE);
 		setSize(800, 480);
 		setLocationRelativeTo(null);
@@ -120,7 +121,12 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 		this.addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {
 				NhanVien nv = null;
-				nv = nv_dao.getNhanVienTheoMa(DataManager.getUserName());
+				try {
+					nv = nv_dao.findByID(DataManager.getUserName());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				txtMaNV.setText(nv.getMaNhanVien());
 			}
 		});

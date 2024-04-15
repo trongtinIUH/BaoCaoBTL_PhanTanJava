@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -126,7 +127,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 	private final DecimalFormat df;
 	private final SanPham_dao sp_dao = new SanPham_dao();
 
-	public Dialog_DatPhongTrong_2(String maPhong, Phong p, LoaiPhong lp, int soNguoi, GD_TrangChu trangChu) {
+	public Dialog_DatPhongTrong_2(String maPhong, Phong p, LoaiPhong lp, int soNguoi, GD_TrangChu trangChu) throws RemoteException {
 		df = new DecimalFormat("#,###,### VNĐ");
 		// màn
 		// hình******************************************************************************
@@ -538,7 +539,12 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 			if (!lbl_TenKH_1.getText().equals("")) {
 				String customer = lbl_TenKH_1.getText();
 				String employee = DataManager.getUserName();
-				nv = nv_dao.TimkiemMaNhanVien(employee);
+				try {
+					nv = nv_dao.findNhanVienToLogin(employee);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				String maPhong = lblMaPhong.getText();
 				String ma = maPhong.substring(maPhong.indexOf(":") + 1).trim();
 				dialog_ThemDichVu = new Dialog_ThemDichVu(customer, nv.getHoTen(), ma);

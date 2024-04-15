@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.rmi.RemoteException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -79,7 +80,7 @@ public class GD_TroGiup extends JPanel implements MouseListener{
 //    private GD_TrangChu home_CardThongKe;
 //    private GD_TrangChu home_CardTroGiup;
 	private final GD_TrangChu trangChu;
-	public GD_TroGiup(GD_TrangChu trangChu) {
+	public GD_TroGiup(GD_TrangChu trangChu) throws RemoteException{
 		this.trangChu = trangChu;
 		setBackground(new Color(242, 240, 255));
 		setLayout(null);
@@ -377,7 +378,7 @@ public class GD_TroGiup extends JPanel implements MouseListener{
         return treeNode;
     }
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RemoteException{
 		 GD_TrangChu trangChuInstance = new GD_TrangChu();
            new GD_TroGiup(trangChuInstance).setVisible(true);
     }
@@ -400,7 +401,13 @@ public class GD_TroGiup extends JPanel implements MouseListener{
 	            // Xử lý logic tương ứng với nút được chọn
 	            switch (selectedInterface) {
 	                case "GD Đăng nhập":
-	                	GD_TrangDangNhap dangNhap = new GD_TrangDangNhap();
+					GD_TrangDangNhap dangNhap = null;
+					try {
+						dangNhap = new GD_TrangDangNhap();
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 	                	dangNhap.setVisible(true);
 	                	setVisible(false);
 	                	trangChu.setVisible(false);
@@ -444,7 +451,13 @@ public class GD_TroGiup extends JPanel implements MouseListener{
 	                	setVisible(false);
 	                    break;
 	                case "GD Tài khoản":
-	                	Dialog_User user = new Dialog_User();
+					Dialog_User user = null;
+					try {
+						user = new Dialog_User();
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 	                	user.setVisible(true);
 	                	setVisible(false);
 //	                	trangChu.setVisible(false);

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 
 import javax.swing.JDialog;
 import java.awt.Color;
@@ -49,7 +50,7 @@ public class Dialog_User extends JDialog implements ActionListener{
 	private final String trangthaidangnhap;
     private String hinhanh_url;
 //	private GD_TrangDangNhap gd_dangNhap = new GD_TrangDangNhap(); 
-	public Dialog_User() {
+	public Dialog_User() throws RemoteException {
 		setTitle("User");
 		setSize(400, 300);
 		setLocationRelativeTo(null);
@@ -60,7 +61,12 @@ public class Dialog_User extends JDialog implements ActionListener{
 		this.addWindowListener(new WindowAdapter() {
 		    public void windowOpened(WindowEvent e) {
 				NhanVien nv = null;
-				nv = nv_dao.getNhanVienTheoMa(DataManager.getUserName());
+				try {
+					nv = nv_dao.findByID(DataManager.getUserName());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				txt_HoTen.setText(nv.getHoTen());
 				txtQunL.setText(nv.getChucVu());
 				ma=nv.getMaNhanVien();
@@ -162,7 +168,13 @@ public class Dialog_User extends JDialog implements ActionListener{
 			for (Window window : windows) {
 				window.dispose();
 			}
-			GD_TrangDangNhap dangNhap = new GD_TrangDangNhap();
+			GD_TrangDangNhap dangNhap = null;
+			try {
+				dangNhap = new GD_TrangDangNhap();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dangNhap.setVisible(true);
 		}else if(o.equals(btnDoiMK)) {		
 			Dialog_Doi_mk= new Dialog_DoiMatKhau(ma);

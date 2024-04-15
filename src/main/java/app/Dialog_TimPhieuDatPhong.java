@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -111,7 +112,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 	private Dialog_PhongDangSD dialog_PhongDangSD;
 	private Dialog_TimPDP_DaThanhToan dialog_TimPDP_DaThanhToan;
 
-	public Dialog_TimPhieuDatPhong() {
+	public Dialog_TimPhieuDatPhong() throws RemoteException{
 		// kích thước
 		getContentPane().setBackground(Color.WHITE);
 		setSize(900, 450);
@@ -323,7 +324,12 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			kh = kh_dao.getKhachHangTheoMaKH(mkh);
 
 			String maHoaDon = hd_dao.getMaHDTheoMaPhieuDP(x.getMaPhieu());
-			nv = nv_dao.getNhanVienTheoMa(x.getNhanVien().getMaNhanVien());
+			try {
+				nv = nv_dao.findByID(x.getNhanVien().getMaNhanVien());
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
 			if (hd != null && !hd.isTrangThai()) {
@@ -387,7 +393,12 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			    pdp = pdp_dao.getPhieuDatPhongTheoMaPDP("PDP"+thongtinTimKiem);
 			    kh = kh_dao.getKhachHangTheoMaKH(pdp.getKhachHang().getMaKhachHang());
 			    String maHoaDon = hd_dao.getMaHDTheoMaPhieuDP(pdp.getMaPhieu());
-			    nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
+			    try {
+					nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			    hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
 			    if (hd != null && !hd.isTrangThai()) {
@@ -432,7 +443,12 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			                hinhthuc = "Đặt trước";
 			            }
 			            String maHoaDon = hd_dao.getMaHDTheoMaPhieuDP(pdp.getMaPhieu());
-			            nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
+			            try {
+							nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
 			            hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
 			            if (hd != null && !hd.isTrangThai()) {
@@ -480,7 +496,12 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 						for (PhieuDatPhong pdp : pdps) {
 							if (kh != null) {
 								String maHoaDon = hd_dao.getMaHDTheoMaPhieuDP(pdp.getMaPhieu());
-								nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
+								try {
+									nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
+								} catch (RemoteException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 
 								hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
 								if (hd != null && !hd.isTrangThai()) {
@@ -533,7 +554,12 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 					            }
 					            if (dsPDPtheoNgay != null) {
 					                String maHoaDon = hd_dao.getMaHDTheoMaPhieuDP(pdp.getMaPhieu());
-					                nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
+					                try {
+										nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
+									} catch (RemoteException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 					                hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
 					                if (hd != null && !hd.isTrangThai()) {
 					                    trangthai = "Chưa TT";
@@ -579,7 +605,12 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				            }
 				            if (dsPDPtheoNgay != null) {
 				                String maHoaDon = hd_dao.getMaHDTheoMaPhieuDP(pdp.getMaPhieu());
-				                nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
+				                try {
+									nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
+								} catch (RemoteException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 				                hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
 				                if (hd != null && !hd.isTrangThai()) {
 				                    trangthai = "Chưa TT";
@@ -625,7 +656,12 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				            }
 				            if (dsPDPtheoNgay != null) {
 				                String maHoaDon = hd_dao.getMaHDTheoMaPhieuDP(pdp.getMaPhieu());
-				                nv = nv_dao.getNhanVienTheoMa(pdp.getNhanVien().getMaNhanVien());
+				                try {
+									nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
+								} catch (RemoteException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 				                hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
 				                if (hd != null && !hd.isTrangThai()) {
 				                    trangthai = "Chưa TT";
@@ -1006,8 +1042,16 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 						// Khách hàng đến đúng giờ
 						TempDatPhong tmp = new TempDatPhong(p.getMaPhong(), Integer.parseInt(songuoi));
 						tmp_dao.addTemp(tmp);
-						dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(maphong, p, lp, Integer.parseInt(songuoi),
-								trangChu);
+						try {
+							dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(maphong, p, lp, Integer.parseInt(songuoi),
+									trangChu);
+						} catch (NumberFormatException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						dispose();
 						JOptionPane.showMessageDialog(this,
 								"Phòng " + p.getMaPhong() + " được thêm vào danh sách đặt phòng thành công.");
@@ -1107,7 +1151,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				String mkh = pdp_dao.getAllsPhieuDatPhong().get(i).getKhachHang().getMaKhachHang();
 				p = pdp.getPhong();
 				kh = kh_dao.getKhachHangTheoMaKH(mkh);
-				nv = nv_dao.getNhanVienTheoMa(pdp_dao.getAllsPhieuDatPhong().get(i).getNhanVien().getMaNhanVien());
+				nv = nv_dao.findByID(pdp_dao.getAllsPhieuDatPhong().get(i).getNhanVien().getMaNhanVien());
 				row = sheet.createRow(3 + i); // Bỏ qua 2 dòng trống
 				cell = row.createCell(0, CellType.NUMERIC);
 				cell.setCellValue(i + 1);
