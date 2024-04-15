@@ -314,7 +314,10 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					ConnectDB.getInstance().connect(DataManager.getRole(), DataManager.getRolePassword());
 				} catch (SQLException e1) {
 					e1.printStackTrace();
+					System.out.println("GetRole:  " + DataManager.getRole());
+					System.out.println("GetRolePass: " + DataManager.getRolePassword());
 				}
+				
 				if (sizeDSTmp != tmp_dao.getAllTemp().size()) {
 					sizeDSTmp = tmp_dao.getAllTemp().size();
 					setEnabledBtnDatPhong();

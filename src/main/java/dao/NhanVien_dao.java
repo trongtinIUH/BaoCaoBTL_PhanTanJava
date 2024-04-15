@@ -24,8 +24,8 @@ public class NhanVien_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				dsNhanVien.add(new NhanVien(rs.getString(1), rs.getString(2), rs.getString(3), rs.getBoolean(4),
-						rs.getDate(5), rs.getString(6), rs.getString(7)));
+				dsNhanVien.add(new NhanVien(rs.getString("maNhanVien"), rs.getString("hoTen"), rs.getString("soDienThoai"), 
+						rs.getBoolean("gioiTinh"), rs.getDate("ngaySinh"), rs.getString("chucVu"), rs.getString("anhDaiDien")));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -141,8 +141,8 @@ public class NhanVien_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				nv = new NhanVien(rs.getString(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getDate(5),
-						rs.getString(6), rs.getString(7));
+				nv = new NhanVien(rs.getString("maNhanVien"), rs.getString("hoTen"), rs.getString("soDienThoai"), 
+						rs.getBoolean("gioiTinh"), rs.getDate("ngaySinh"), rs.getString("chucVu"), rs.getString("anhDaiDien"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -165,8 +165,8 @@ public class NhanVien_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
-				dsNhanVien.add(new NhanVien(rs.getString(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getDate(5),
-						rs.getString(6), rs.getString(7)));
+				dsNhanVien.add(new NhanVien(rs.getString("maNhanVien"), rs.getString("hoTen"), rs.getString("soDienThoai"), 
+						rs.getBoolean("gioiTinh"), rs.getDate("ngaySinh"), rs.getString("chucVu"), rs.getString("anhDaiDien")));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

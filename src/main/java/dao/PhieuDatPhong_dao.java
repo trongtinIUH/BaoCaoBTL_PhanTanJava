@@ -33,13 +33,13 @@ public class PhieuDatPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(3));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
 				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
 				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
 				dspdp.add(
-						new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7)));
+						new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -62,13 +62,12 @@ public class PhieuDatPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngayGioNhanPhong = rs.getTimestamp(6).toLocalDateTime();
-				PhieuDatPhong pdp = new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong,
-						rs.getInt(7));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
+				PhieuDatPhong pdp = new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat"));
 				dsPDP.add(pdp);
 			}
 		} catch (Exception e) {
@@ -93,12 +92,12 @@ public class PhieuDatPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngayGioNhanPhong = rs.getTimestamp(6).toLocalDateTime();
-				pdp = new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
+				pdp = new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -121,12 +120,12 @@ public class PhieuDatPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngayGioNhanPhong = rs.getTimestamp(6).toLocalDateTime();
-				pdp = new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
+				pdp = new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -150,12 +149,12 @@ public class PhieuDatPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngayGioNhanPhong = rs.getTimestamp(6).toLocalDateTime();
-				pdp = new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
+				pdp = new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -178,13 +177,12 @@ public class PhieuDatPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngayGioNhanPhong = rs.getTimestamp(6).toLocalDateTime();
-				PhieuDatPhong pdp = new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong,
-						rs.getInt(7));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
+				PhieuDatPhong pdp = new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat"));
 				dsPDP.add(pdp);
 			}
 		} catch (Exception e) {
@@ -208,13 +206,13 @@ public class PhieuDatPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngayGioNhanPhong = rs.getTimestamp(6).toLocalDateTime();
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
 				dsPDP.add(
-						new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7)));
+						new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -237,13 +235,13 @@ public class PhieuDatPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngayGioNhanPhong = rs.getTimestamp(6).toLocalDateTime();
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
 				dsPDP.add(
-						new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7)));
+						new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -411,12 +409,13 @@ public class PhieuDatPhong_dao {
 				stmCheck.setString(1, maHoaDon);
 				ResultSet rsCheck = stmCheck.executeQuery();
 				if (rsCheck.next()) {
-					Phong p = new Phong(rs.getString(3));
-					NhanVien nv = new NhanVien(rs.getString(3));
-					KhachHang kh = new KhachHang(rs.getString(4));
+					Phong p = new Phong(rs.getString("maPhong"));
+					NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+					KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
 					LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
 					LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
-					dspdp.add(new PhieuDatPhong(maPhieu, p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7)));
+					dspdp.add(
+							new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
 				}
 			}
 		} catch (Exception e) {
@@ -439,14 +438,13 @@ public class PhieuDatPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				String maPhieu = rs.getString(1);
-				String maPhong = rs.getString(3);
-				Phong p = new Phong(maPhong);
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
 				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
 				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
-				dspdp.add(new PhieuDatPhong(maPhieu, p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7)));
+				dspdp.add(
+						new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -470,12 +468,12 @@ public class PhieuDatPhong_dao {
 			stm.setString(1, maPhieu);
 			ResultSet rs = stm.executeQuery();
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngayGioNhanPhong = rs.getTimestamp(6).toLocalDateTime();
-				pdp = new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
+				pdp = new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -499,12 +497,12 @@ public class PhieuDatPhong_dao {
 			stm.setString(1, maPhong);
 			ResultSet rs = stm.executeQuery();
 			while (rs.next()) {
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngayGioNhanPhong = rs.getTimestamp(6).toLocalDateTime();
-				pdp = new PhieuDatPhong(rs.getString(1), new Phong(maPhong), nv, kh, ngayGioDatPhong, ngayGioNhanPhong,
-						rs.getInt(7));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
+				pdp = new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -526,14 +524,13 @@ public class PhieuDatPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				String maPhieu = rs.getString(1);
-				String maPhong = rs.getString(3);
-				Phong p = new Phong(maPhong);
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
 				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
 				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
-				dspdp.add(new PhieuDatPhong(maPhieu, p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7)));
+				dspdp.add(
+						new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -562,12 +559,13 @@ public class PhieuDatPhong_dao {
 				stmCheck.setString(1, maHoaDon);
 				ResultSet rsCheck = stmCheck.executeQuery();
 				if (rsCheck.next()) {
-					Phong p = new Phong(rs.getString(3));
-					NhanVien nv = new NhanVien(rs.getString(3));
-					KhachHang kh = new KhachHang(rs.getString(4));
+					Phong p = new Phong(rs.getString("maPhong"));
+					NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+					KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
 					LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
 					LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
-					dspdp.add(new PhieuDatPhong(maPhieu, p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7)));
+					dspdp.add(
+							new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
 				}
 			}
 		} catch (Exception e) {
@@ -590,13 +588,13 @@ public class PhieuDatPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngayGioNhanPhong = rs.getTimestamp(6).toLocalDateTime();
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
 				dsPDP.add(
-						new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt(7)));
+						new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -619,12 +617,13 @@ public class PhieuDatPhong_dao {
 			stm.setDate(1, Date.valueOf(ngayGioNhanPhong));
 			ResultSet rs = stm.executeQuery();
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngaynhan = rs.getTimestamp(6).toLocalDateTime();
-				dsPDP.add(new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngaynhan, rs.getInt(7)));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayNhan = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
+				dsPDP.add(
+						new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayNhan, rs.getInt("soNguoiHat")));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -647,12 +646,13 @@ public class PhieuDatPhong_dao {
 			stm.setInt(2, thangNhan.getMonthValue());
 			ResultSet rs = stm.executeQuery();
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngaynhan = rs.getTimestamp(6).toLocalDateTime();
-				dsPDP.add(new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngaynhan, rs.getInt(7)));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
+				dsPDP.add(
+						new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -674,12 +674,13 @@ public class PhieuDatPhong_dao {
 			stm.setInt(1, namNhan);
 			ResultSet rs = stm.executeQuery();
 			while (rs.next()) {
-				Phong p = new Phong(rs.getString(2));
-				NhanVien nv = new NhanVien(rs.getString(3));
-				KhachHang kh = new KhachHang(rs.getString(4));
-				LocalDateTime ngayGioDatPhong = rs.getTimestamp(5).toLocalDateTime();
-				LocalDateTime ngaynhan = rs.getTimestamp(6).toLocalDateTime();
-				dsPDP.add(new PhieuDatPhong(rs.getString(1), p, nv, kh, ngayGioDatPhong, ngaynhan, rs.getInt(7)));
+				Phong p = new Phong(rs.getString("maPhong"));
+				NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
+				LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
+				LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
+				dsPDP.add(
+						new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

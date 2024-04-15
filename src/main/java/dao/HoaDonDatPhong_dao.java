@@ -28,9 +28,11 @@ public class HoaDonDatPhong_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {
-				dsHoaDonDatPhong.add(new HoaDonDatPhong(rs.getString(1), new KhachHang(rs.getString(2)),
-						new NhanVien(rs.getString(3)), rs.getDate(4), rs.getBoolean(5),
-						new KhuyenMai(rs.getString(6) != null ? rs.getString(6) : "NULL"), rs.getDouble(7)));
+				dsHoaDonDatPhong.add(new HoaDonDatPhong(rs.getString("maHoaDon"),
+						new KhachHang(rs.getString("maKhachHang")), new NhanVien(rs.getString("maNhanVien")),
+						rs.getDate("ngayLapHoaDon"), rs.getBoolean("trangThai"),
+						new KhuyenMai(rs.getString("maKhuyenMai") != null ? rs.getString("maKhuyenMai") : "NULL"),
+						rs.getDouble("tienKhachDua")));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,9 +54,11 @@ public class HoaDonDatPhong_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {
-				hd = new HoaDonDatPhong(rs.getString(1), new KhachHang(rs.getString(2)), new NhanVien(rs.getString(3)),
-						rs.getDate(4), rs.getBoolean(5),
-						new KhuyenMai(rs.getString(6) != null ? rs.getString(6) : "NULL"), rs.getDouble(7));
+				hd = new HoaDonDatPhong(rs.getString("maHoaDon"), new KhachHang(rs.getString("maKhachHang")),
+						new NhanVien(rs.getString("maNhanVien")), rs.getDate("ngayLapHoaDon"),
+						rs.getBoolean("trangThai"),
+						new KhuyenMai(rs.getString("maKhuyenMai") != null ? rs.getString("maKhuyenMai") : "NULL"),
+						rs.getDouble("tienKhachDua"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -100,9 +104,11 @@ public class HoaDonDatPhong_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {
-				HoaDonDatPhong = new HoaDonDatPhong(rs.getString(1), new KhachHang(rs.getString(2)),
-						new NhanVien(rs.getString(3)), rs.getDate(4), rs.getBoolean(5),
-						new KhuyenMai(rs.getString(6) != null ? rs.getString(6) : "NULL"), rs.getDouble(7));
+				HoaDonDatPhong = new HoaDonDatPhong(rs.getString("maHoaDon"),
+						new KhachHang(rs.getString("maKhachHang")), new NhanVien(rs.getString("maNhanVien")),
+						rs.getDate("ngayLapHoaDon"), rs.getBoolean("trangThai"),
+						new KhuyenMai(rs.getString("maKhuyenMai") != null ? rs.getString("maKhuyenMai") : "NULL"),
+						rs.getDouble("tienKhachDua"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -174,7 +180,8 @@ public class HoaDonDatPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from HoaDonDatPhong where maNhanVien = '" + maNV + "'";
+			String sql = "select maHoaDon, maKhachHang, maNhanVien, ngayLapHoaDon, trangThai, maKhuyenMai, tienKhachDua from HoaDonDatPhong where maNhanVien = '"
+					+ maNV + "'";
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {
@@ -198,7 +205,7 @@ public class HoaDonDatPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from HoaDonDatPhong where ngayLapHoaDon = '" + ngayLapHD + "'";
+			String sql = "select maHoaDon, maKhachHang, maNhanVien, ngayLapHoaDon, trangThai, maKhuyenMai, tienKhachDua from HoaDonDatPhong where ngayLapHoaDon = '" + ngayLapHD + "'";
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {
@@ -222,7 +229,7 @@ public class HoaDonDatPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from HoaDonDatPhong " + "where MONTH(ngayLapHoaDon) = '" + thang
+			String sql = "select maHoaDon, maKhachHang, maNhanVien, ngayLapHoaDon, trangThai, maKhuyenMai, tienKhachDua from HoaDonDatPhong " + "where MONTH(ngayLapHoaDon) = '" + thang
 					+ "' AND YEAR(ngayLapHoaDon) = '" + nam + "'";
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
@@ -247,7 +254,7 @@ public class HoaDonDatPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from HoaDonDatPhong " + "where YEAR(ngayLapHoaDon) = '" + nam + "'";
+			String sql = "select maHoaDon, maKhachHang, maNhanVien, ngayLapHoaDon, trangThai, maKhuyenMai, tienKhachDua from HoaDonDatPhong " + "where YEAR(ngayLapHoaDon) = '" + nam + "'";
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {

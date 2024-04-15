@@ -90,8 +90,6 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 		pnNorth.setBounds(0, 0, 1078, 60);
 		pnNorth.setLayout(null);
 		pnNorth.setBackground(new Color(181, 230, 251));
-		add(pnNorth);
-
 		lblTitle = new JLabel("SẢN PHẨM");
 
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);

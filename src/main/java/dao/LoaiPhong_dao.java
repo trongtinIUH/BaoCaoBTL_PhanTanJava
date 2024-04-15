@@ -20,7 +20,7 @@ public class LoaiPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from LoaiPhong";
+			String sql = "select maLoaiPhong, tenLoaiPhong, sucChua, donGiaTheoGio from LoaiPhong";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
@@ -47,7 +47,7 @@ public class LoaiPhong_dao {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
-				loaiPh = new LoaiPhong(rs.getString(1), rs.getString(2),rs.getInt(3), rs.getDouble(4));
+				loaiPh = new LoaiPhong(rs.getString("maLoaiPhong"), rs.getString("tenLoaiPhong"),rs.getInt("sucChua"), rs.getDouble("donGiaTheoGio"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -66,7 +66,7 @@ public class LoaiPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from LoaiPhong where sucChua = '" + sucChua + "'";
+			String sql = "select maLoaiPhong, tenLoaiPhong, sucChua, donGiaTheoGio from LoaiPhong where sucChua = '" + sucChua + "'";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
@@ -89,7 +89,7 @@ public class LoaiPhong_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "select * from LoaiPhong where donGia = '" + donGia + "'";
+			String sql = "select maLoaiPhong, tenLoaiPhong, sucChua, donGiaTheoGio from LoaiPhong where donGia = '" + donGia + "'";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {

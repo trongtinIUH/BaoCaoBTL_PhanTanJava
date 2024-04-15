@@ -28,7 +28,7 @@ public class ChiTietDichVu_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while(rs.next()) {
-				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString(1)), new Phong(rs.getString(2)), new SanPham(rs.getString(3)), rs.getInt(4),  rs.getDouble(5)));
+				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")), new SanPham(rs.getString("maSanPham")), rs.getInt("soLuong"),  rs.getDouble("gia")));
 			}
 			
 		} catch (Exception e) {
@@ -51,7 +51,7 @@ public class ChiTietDichVu_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while(rs.next()) {
-				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString(1)), new Phong(rs.getString(3)), new SanPham(rs.getString(2)), rs.getInt(4),  rs.getDouble(5)));
+				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")), new SanPham(rs.getString("maSanPham")), rs.getInt("soLuong"),  rs.getDouble("gia")));
 			}
 			
 		} catch (Exception e) {
@@ -74,8 +74,8 @@ public class ChiTietDichVu_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while(rs.next()) {
-				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString(1)), new Phong(rs.getString(3)), new SanPham(rs.getString(2)), rs.getInt(4),  rs.getDouble(5)));
-			}
+				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")), new SanPham(rs.getString("maSanPham")), rs.getInt("soLuong"),  rs.getDouble("gia")));
+				}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -97,8 +97,8 @@ public class ChiTietDichVu_dao {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while(rs.next()) {
-				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString(1)), new Phong(rs.getString(3)), new SanPham(rs.getString(2)), rs.getInt(4),  rs.getDouble(5)));
-			}
+				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")), new SanPham(rs.getString("maSanPham")), rs.getInt("soLuong"),  rs.getDouble("gia")));
+				}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,14 +116,14 @@ public class ChiTietDichVu_dao {
 		}
 		Connection con = ConnectDB.getConnection();
 		try {
-			String sql = "SELECT SUM(giaBan * soLuong) AS tongTienDV "
+			String sql = "SELECT SUM(gia * soLuong) AS tongTienDV "
 					+ "FROM ChiTietDichVu ctdv "
 					+ "where ctdv.maHoaDon = '" + maHD + "'"
 					+ "GROUP BY ctdv.maHoaDon";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {
-				tongTienDV = rs.getDouble(1);
+				tongTienDV = rs.getDouble("tongTienDV");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -143,12 +143,12 @@ public class ChiTietDichVu_dao {
 		PreparedStatement stmt = null;
 		int n = 0;
 		try {
-			stmt = con.prepareStatement("insert into ChiTietDichVu values(?,?,?,?,?)");
-			stmt.setString(1, ctdv.getHoaDon().getMaHoaDon());
-			stmt.setString(2, ctdv.getSanPham().getMaSanPham());
-			stmt.setString(3, ctdv.getPhong().getMaPhong());
-			stmt.setInt(4, ctdv.getSoLuong());
-			stmt.setDouble(5, ctdv.getGia());
+	        stmt = con.prepareStatement("insert into ChiTietDichVu(maHoaDon, maSanPham, maPhong, soLuong, gia) values(?,?,?,?,?)");
+	        stmt.setString(1, ctdv.getHoaDon().getMaHoaDon());
+	        stmt.setString(2, ctdv.getSanPham().getMaSanPham());
+	        stmt.setString(3, ctdv.getPhong().getMaPhong());
+	        stmt.setInt(4, ctdv.getSoLuong());
+	        stmt.setDouble(5, ctdv.getGia());
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO: handle exception
