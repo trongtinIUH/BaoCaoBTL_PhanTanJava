@@ -6,6 +6,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +32,7 @@ import dao.KhachHang_dao;
 import dao.LoaiPhong_dao;
 import dao.PhieuDatPhong_dao;
 import dao.Phong_dao;
-import dao.TempDatPhong_dao;
+import dao.TempDatPhongServices;
 import dao.impl.TempDatPhongImpl;
 import entity.Enum_TrangThai;
 import entity.KhachHang;
@@ -79,7 +80,7 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 	private final JLabel lbl_KhachHang;
 	private final JLabel lbl_KhachHang_1;
 	private final JLabel lbl_SoNguoi_1;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhongImpl();
+	private final TempDatPhongServices tmp_dao;
 
 	private LocalDateTime ngayGioDatPhong;
 	private LocalDateTime ngayGioNhanPhong;
@@ -92,7 +93,8 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 	private Dialog_HienThiPhong dialog_HienThiPhong;
 	private final JButton btnDatPhong;
 
-	public Dialog_PhongCho(String maPhong, GD_TrangChu trangChu) {
+	public Dialog_PhongCho(String maPhong, GD_TrangChu trangChu) throws RemoteException {
+		tmp_dao = new TempDatPhongImpl();
 		this.trangChu = trangChu;
 		// kích thước giao diện
 		getContentPane().setBackground(Color.WHITE);
@@ -354,7 +356,12 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 					"Nếu đặt phòng trực tiếp, chỉ được sử dụng trước " + ngayGioNhan
 							+ " Bạn có muốn tiếp tục đặt không?",
 					"Thông báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				dialog_HienThiPhong = new Dialog_HienThiPhong(lblPhong_1.getText(), trangChu);
+				try {
+					dialog_HienThiPhong = new Dialog_HienThiPhong(lblPhong_1.getText(), trangChu);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				setVisible(false);
 				dialog_HienThiPhong.setVisible(true);
 			}
@@ -381,9 +388,19 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 				} else if (tongsophut_np - tongsophut_ht <= 30 && tongsophut_np - tongsophut_ht > -30) {
 					// Khách hàng đến đúng giờ
 					TempDatPhong tmp = new TempDatPhong(p.getMaPhong(), Integer.parseInt(lbl_SoNguoi_1.getText()));
-					tmp_dao.addTemp(tmp);
-					dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
-							Integer.parseInt(lbl_SoNguoi_1.getText()), trangChu);
+					try {
+						tmp_dao.addTemp(tmp);
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
+								Integer.parseInt(lbl_SoNguoi_1.getText()), trangChu);
+					} catch (NumberFormatException | RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					dispose();
 					JOptionPane.showMessageDialog(this,
 							"Phòng " + p.getMaPhong() + " được thêm vào danh sách đặt phòng thành công.");

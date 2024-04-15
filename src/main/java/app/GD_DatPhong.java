@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Image;
 
 import javax.swing.JButton;
@@ -21,6 +22,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,8 +32,8 @@ import java.util.Date;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 import dao.Phong_dao;
-import dao.TempDatPhong_dao;
-import dao.TempThanhToan_dao;
+import dao.TempDatPhongServices;
+import dao.TempThanhToanServices;
 import dao.impl.TempDatPhongImpl;
 import dao.impl.TempThanhToanImpl;
 import entity.*;
@@ -76,7 +78,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 	private Dialog_HienThiPhongSuaChua dialog_htPhongSuaChua;
 	private Dialog_TimPhieuDatPhong dialog_TimPhieuDatPhong;
 	private final JButton btnBackToBook;
-	private final TempDatPhong_dao tmp_dao;
+	private final TempDatPhongServices tmp_dao;
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
 	private int sizeDSTmp;
 	Font font2 = new Font("Arial", Font.BOLD, 18); // thuộc tính
@@ -90,7 +92,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 	private final ImageIcon resizedIcon_phongchovip;
 	private final ImageIcon resizedIcon_phongsuavip;
 	private final JButton btnBackThanhToan;
-	private final TempThanhToan_dao tempTT_dao;
+	private final TempThanhToanServices tempTT_dao;
 	private int sizeDSTemp_TT;
 	private Dialog_ThanhToan dialog_ThanhToan;
 	private final JButton btnBackHuyThanhToan;
@@ -102,9 +104,10 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 
 	/**
 	 * Create the panel.
+	 * @throws RemoteException 
 	 */
 
-	public GD_DatPhong(GD_TrangChu trangChu) {
+	public GD_DatPhong(GD_TrangChu trangChu) throws RemoteException {
 		p_dao = new Phong_dao();
 		tmp_dao = new TempDatPhongImpl();
 		tempTT_dao = new TempThanhToanImpl();
@@ -318,13 +321,28 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					System.out.println("GetRolePass: " + DataManager.getRolePassword());
 				}
 				
-				if (sizeDSTmp != tmp_dao.getAllTemp().size()) {
-					sizeDSTmp = tmp_dao.getAllTemp().size();
-					setEnabledBtnDatPhong();
+				try {
+					if (sizeDSTmp != tmp_dao.getAllTemp().size()) {
+						sizeDSTmp = tmp_dao.getAllTemp().size();
+						setEnabledBtnDatPhong();
+					}
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-				if (sizeDSTemp_TT != tempTT_dao.getAllTemp().size()) {
-					sizeDSTemp_TT = tempTT_dao.getAllTemp().size();
-					setEnabledBtnDatPhong();
+				try {
+					if (sizeDSTemp_TT != tempTT_dao.getAllTemp().size()) {
+						try {
+							sizeDSTemp_TT = tempTT_dao.getAllTemp().size();
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						setEnabledBtnDatPhong();
+					}
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 
 				if (DataManager.isChuyenPhong()) {
@@ -345,11 +363,26 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					loadData();
 					DataManager.setDatPhong(false);
 				}
-                btnBackToBook.setEnabled(tmp_dao.getAllTemp().size() != 1);
+                try {
+					btnBackToBook.setEnabled(tmp_dao.getAllTemp().size() != 1);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
-                btnBackThanhToan.setEnabled(tempTT_dao.getAllTemp().size() != 0);
+                try {
+					btnBackThanhToan.setEnabled(tempTT_dao.getAllTemp().size() != 0);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
-                btnBackHuyThanhToan.setEnabled(tempTT_dao.getAllTemp().size() != 0);
+                try {
+					btnBackHuyThanhToan.setEnabled(tempTT_dao.getAllTemp().size() != 0);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
                 btnBackPhongCho.setEnabled(!DataManager.getMaPhongDatCho().equals(""));
 
@@ -641,15 +674,25 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		for (JButton btn : btnPhongList) {
 			boolean kiemTra = true;
 			String soPhong = btn.getText().replace("Phòng ", "");
-			for (TempDatPhong tmp : tmp_dao.getAllTemp()) {
-				Phong tmpP = p_dao.getPhongTheoMaPhong(tmp.getMaPhong());
-				if (soPhong.equals(tmp.getMaPhong()) && tmpP.getTrangThai() == Enum_TrangThai.Trong)
-					kiemTra = false;
+			try {
+				for (TempDatPhong tmp : tmp_dao.getAllTemp()) {
+					Phong tmpP = p_dao.getPhongTheoMaPhong(tmp.getMaPhong());
+					if (soPhong.equals(tmp.getMaPhong()) && tmpP.getTrangThai() == Enum_TrangThai.Trong)
+						kiemTra = false;
+				}
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			for (TempThanhToan tmp : tempTT_dao.getAllTemp()) {
-				Phong tmpP = p_dao.getPhongTheoMaPhong(tmp.getMaPhong());
-				if (soPhong.equals(tmp.getMaPhong()) && tmpP.getTrangThai() == Enum_TrangThai.Dang_su_dung)
-					kiemTra = false;
+			try {
+				for (TempThanhToan tmp : tempTT_dao.getAllTemp()) {
+					Phong tmpP = p_dao.getPhongTheoMaPhong(tmp.getMaPhong());
+					if (soPhong.equals(tmp.getMaPhong()) && tmpP.getTrangThai() == Enum_TrangThai.Dang_su_dung)
+						kiemTra = false;
+				}
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
             btn.setEnabled(kiemTra);
@@ -805,33 +848,53 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 			Tim();
 		}
 		if (o.equals(btnTimKiemPDP)) {
-			dialog_TimPhieuDatPhong = new Dialog_TimPhieuDatPhong();
+			try {
+				dialog_TimPhieuDatPhong = new Dialog_TimPhieuDatPhong();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dialog_TimPhieuDatPhong.setModal(true);
 			dialog_TimPhieuDatPhong.setVisible(true);
 
 		}
 		if (o.equals(btnBackToBook)) {
-			if (tmp_dao.getAllTemp().size() == 1) {
-				JOptionPane.showMessageDialog(this, "Chưa phòng nào được thêm vào danh sách đặt");
-			} else {
-				DataManager.setLoadDV(true);
-				dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(TOOL_TIP_TEXT_KEY, null, null, 0, trangChu);
-				dialog_DatPhongTrong_2.setVisible(true);
+			try {
+				if (tmp_dao.getAllTemp().size() == 1) {
+					JOptionPane.showMessageDialog(this, "Chưa phòng nào được thêm vào danh sách đặt");
+				} else {
+					DataManager.setLoadDV(true);
+					dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(TOOL_TIP_TEXT_KEY, null, null, 0, trangChu);
+					dialog_DatPhongTrong_2.setVisible(true);
+				}
+			} catch (HeadlessException | RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
 		if (o.equals(btnBackThanhToan)) {
-			if (tempTT_dao.getAllTemp().size() == 0) {
-				JOptionPane.showMessageDialog(this, "Chưa phòng nào được thêm vào danh sách thanh toán");
-			} else {
-				dialog_ThanhToan = new Dialog_ThanhToan(txtMaPhong.getText());
-				dialog_ThanhToan.setVisible(true);
+			try {
+				if (tempTT_dao.getAllTemp().size() == 0) {
+					JOptionPane.showMessageDialog(this, "Chưa phòng nào được thêm vào danh sách thanh toán");
+				} else {
+					dialog_ThanhToan = new Dialog_ThanhToan(txtMaPhong.getText());
+					dialog_ThanhToan.setVisible(true);
+				}
+			} catch (HeadlessException | RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
 		if (o.equals(btnBackHuyThanhToan)) {
-			if (tempTT_dao.getAllTemp().size() == 0) {
-				JOptionPane.showMessageDialog(this, "Chưa phòng nào được thêm vào danh sách thanh toán");
-			} else {
-				tempTT_dao.deleteALLTempThanhToan();
+			try {
+				if (tempTT_dao.getAllTemp().size() == 0) {
+					JOptionPane.showMessageDialog(this, "Chưa phòng nào được thêm vào danh sách thanh toán");
+				} else {
+					tempTT_dao.deleteALLTempThanhToan();
+				}
+			} catch (HeadlessException | RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
 		if (o.equals(btnBackPhongCho)) {
@@ -852,21 +915,36 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					String maPhong = clickedButton.getText().replace("Phòng ", "");
 					Phong p = p_dao.getPhongTheoMaPhong(maPhong);
 					if (p.getTrangThai() == Enum_TrangThai.Trong) {
-						dialog_htPhong = new Dialog_HienThiPhong(maPhong, trangChu);
+						try {
+							dialog_htPhong = new Dialog_HienThiPhong(maPhong, trangChu);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						// dialog_htPhong.setModal(true);
 						dialog_htPhong.setVisible(true);
 						return;
 					}
 
 					if (p.getTrangThai() == Enum_TrangThai.Cho) {
-						dialog_PhongCho = new Dialog_PhongCho(maPhong, trangChu);
+						try {
+							dialog_PhongCho = new Dialog_PhongCho(maPhong, trangChu);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						// dialog_PhongCho.setModal(true);
 						dialog_PhongCho.setVisible(true);
 						break;
 					}
 
 					if (p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
-						dialog_PhongDangSD = new Dialog_PhongDangSD(maPhong, this);
+						try {
+							dialog_PhongDangSD = new Dialog_PhongDangSD(maPhong, this);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						dialog_PhongDangSD.setModal(true);
 						dialog_PhongDangSD.setVisible(true);
 						return;

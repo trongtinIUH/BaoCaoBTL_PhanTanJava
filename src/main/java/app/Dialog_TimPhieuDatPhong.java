@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -48,7 +49,7 @@ import dao.LoaiPhong_dao;
 import dao.NhanVien_dao;
 import dao.PhieuDatPhong_dao;
 import dao.Phong_dao;
-import dao.TempDatPhong_dao;
+import dao.TempDatPhongServices;
 import entity.Enum_TrangThai;
 import entity.HoaDonDatPhong;
 import entity.KhachHang;
@@ -104,7 +105,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 	private Phong p = new Phong();
 	private Dialog_PhongCho dialog_PhongCho;
 	private XSSFWorkbook wordbook;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhongImpl();
+	private final TempDatPhongServices tmp_dao;
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
 	private GD_TrangChu trangChu;
 	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
@@ -112,7 +113,8 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 	private Dialog_PhongDangSD dialog_PhongDangSD;
 	private Dialog_TimPDP_DaThanhToan dialog_TimPDP_DaThanhToan;
 
-	public Dialog_TimPhieuDatPhong() {
+	public Dialog_TimPhieuDatPhong() throws RemoteException {
+		tmp_dao = new TempDatPhongImpl();
 		// kích thước
 		getContentPane().setBackground(Color.WHITE);
 		setSize(900, 450);
@@ -755,13 +757,23 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			tim();
 		}
 		if (o.equals(btn_XemPhong)) {
-			xemPhong();
+			try {
+				xemPhong();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(btn_XuatPhong)) {
 			xuatExcel();
 		}
 		if (o.equals(btn_NhanPhong)) {
-			nhanPhong();
+			try {
+				nhanPhong();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			clearTable();
 			loadData();
 		}
@@ -933,7 +945,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 
 	}
 
-	public void xemPhong() {
+	public void xemPhong() throws RemoteException {
 		int row = tblPhieuDatPhong.getSelectedRow();
 		String maphong = (String) tblPhieuDatPhong.getValueAt(row, 1);
 		String hinhthuc = (String) tblPhieuDatPhong.getValueAt(row, 7);
@@ -943,12 +955,22 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 
 		if (row != -1) {
 			if (hinhthuc.equals("Đặt trước") && p.getTrangThai() == Enum_TrangThai.Cho) {
-				dialog_PhongCho = new Dialog_PhongCho(maphong, trangChu);
+				try {
+					dialog_PhongCho = new Dialog_PhongCho(maphong, trangChu);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				DataManager.setDatPhongCho(true);
 				dialog_PhongCho.setModal(true);
 				dialog_PhongCho.setVisible(true);
 			} else if (hinhthuc.equals("Đặt trước") && p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
-				dialog_PhongDangSD = new Dialog_PhongDangSD(maphong, null);
+				try {
+					dialog_PhongDangSD = new Dialog_PhongDangSD(maphong, null);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				DataManager.setDatPhong(true);
 				dialog_PhongDangSD.setModal(true);
 				dialog_PhongDangSD.setVisible(true);
@@ -971,7 +993,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			JOptionPane.showMessageDialog(null, "chưa chọn phòng chờ hiển thị!");
 	}
 
-	public void nhanPhong() {
+	public void nhanPhong() throws RemoteException {
 		int row = tblPhieuDatPhong.getSelectedRow();
 		String maphong = tblPhieuDatPhong.getValueAt(row, 1).toString();
 		String songuoi = tblPhieuDatPhong.getValueAt(row, 6).toString();

@@ -3,6 +3,7 @@ package app;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -22,7 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import dao.Phong_dao;
-import dao.TempDatPhong_dao;
+import dao.TempDatPhongServices;
 import dao.impl.TempDatPhongImpl;
 import entity.LoaiPhong;
 import entity.Phong;
@@ -56,10 +57,11 @@ public class Dialog_HienThiPhong extends JDialog implements ActionListener {
 	private final LoaiPhong lp;
 	private final JLabel lblSoNguoi;
 	private final JTextField txtSoNguoi;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhongImpl();
+	private final TempDatPhongServices tmp_dao;
 	private final JButton btn_DatPhongCho;
 
-	public Dialog_HienThiPhong(String maPhong, GD_TrangChu trangChu) {
+	public Dialog_HienThiPhong(String maPhong, GD_TrangChu trangChu) throws RemoteException {
+		tmp_dao = new TempDatPhongImpl();
 		this.trangChu = trangChu;
 		// kích thước
 		// dialog--------------*****************************************************************

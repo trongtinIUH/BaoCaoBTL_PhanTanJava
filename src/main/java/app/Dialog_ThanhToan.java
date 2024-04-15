@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -50,8 +51,8 @@ import dao.NhanVien_dao;
 import dao.PhieuDatPhong_dao;
 import dao.Phong_dao;
 import dao.SanPham_dao;
-import dao.TempPhongBiChuyen_dao;
-import dao.TempThanhToan_dao;
+import dao.TempPhongBiChuyenServices;
+import dao.TempThanhToanServices;
 import dao.impl.TempPhongBiChuyenImpl;
 import dao.impl.TempThanhToanImpl;
 import entity.ChiTietDichVu;
@@ -145,18 +146,18 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private int TienDichVu_item;
 	private double tienDichVu_update;
 	PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
-	private final TempThanhToan_dao tempTT_dao;
+	private final TempThanhToanServices tempTT_dao;
 	private int gioThua_Item;
 	private double phutChinhXac_Item;
 	private final Date date;
 	private double thoiGianHat;
 	private double thoiGian_Item;
-	private final TempPhongBiChuyen_dao temChuyen_dao;
+	private final TempPhongBiChuyenServices temChuyen_dao;
 	@SuppressWarnings("unused")
 	private final String maPh;
 	private final JTextField txtTienGiam;
 
-	public Dialog_ThanhToan(String maPhong) {
+	public Dialog_ThanhToan(String maPhong) throws RemoteException {
 		this.maPh = maPhong;
 		getContentPane().setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
@@ -535,7 +536,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		}
 	}
 
-	public void loadData() {
+	public void loadData() throws NumberFormatException, RemoteException {
 		lbl_TongThoiLuong_1.setText("");
 		int i = 1;
 		tongTienPhong = 0;
@@ -902,7 +903,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		return bi;
 	}
 
-	private void thanhToan() {
+	private void thanhToan() throws RemoteException {
 		double tienThua = -1;
 		try {
 			tienThua = Double.parseDouble(txtTienThua.getText().replaceAll(" VNĐ", "").replaceAll(",", ""));
@@ -1149,7 +1150,12 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnThanhToan)) {
-			thanhToan();
+			try {
+				thanhToan();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 		} else if (o.equals(btnQuayLai)) {
 			setVisible(false);

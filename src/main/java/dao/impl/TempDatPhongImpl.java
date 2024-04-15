@@ -1,28 +1,34 @@
 package dao.impl;
 
-import dao.TempDatPhong_dao;
+import dao.TempDatPhongServices;
 import entity.TempDatPhong;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TempDatPhongImpl implements TempDatPhong_dao {
-    private EntityManager em;
+public class TempDatPhongImpl extends UnicastRemoteObject implements TempDatPhongServices {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7678385181917056336L;
+	private EntityManager em;
 
-    public TempDatPhongImpl() {
+    public TempDatPhongImpl() throws RemoteException {
         em = Persistence.createEntityManagerFactory("BaiTapLonPTUD").createEntityManager();
     }
 
     @Override
-    public ArrayList<TempDatPhong> getAllTemp() {
+    public ArrayList<TempDatPhong> getAllTemp() throws RemoteException {
         List<TempDatPhong> result = em.createNamedQuery("TempDatPhong.getAllTemp", TempDatPhong.class).getResultList();
         return new ArrayList<>(result);
     }
 
     @Override
-    public boolean addTemp(TempDatPhong tempDatPhong) {
+    public boolean addTemp(TempDatPhong tempDatPhong) throws RemoteException {
         em.getTransaction().begin();
         em.persist(tempDatPhong);
         em.getTransaction().commit();
@@ -30,7 +36,7 @@ public class TempDatPhongImpl implements TempDatPhong_dao {
     }
 
     @Override
-    public boolean deleteALLTempDatPhong() {
+    public boolean deleteALLTempDatPhong() throws RemoteException {
         em.getTransaction().begin();
         int deletedCount = em.createNamedQuery("TempDatPhong.deleteALLTempDatPhong").executeUpdate();
         em.getTransaction().commit();
@@ -38,7 +44,7 @@ public class TempDatPhongImpl implements TempDatPhong_dao {
     }
 
     @Override
-    public boolean deleteTempDP(String maDP) {
+    public boolean deleteTempDP(String maDP) throws RemoteException {
         em.getTransaction().begin();
         int deletedCount = em.createNamedQuery("TempDatPhong.deleteTempDP")
                 .setParameter(1, maDP)
@@ -48,7 +54,7 @@ public class TempDatPhongImpl implements TempDatPhong_dao {
     }
 
     @Override
-    public boolean updateTempDP(String maPhong, int soNguoi) {
+    public boolean updateTempDP(String maPhong, int soNguoi) throws RemoteException {
         em.getTransaction().begin();
         int updatedCount = em.createNamedQuery("TempDatPhong.getTempDP")
                 .setParameter(1, soNguoi)

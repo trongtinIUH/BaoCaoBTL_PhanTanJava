@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -87,7 +88,7 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 		
 	}
 	
-	public void dongY() {
+	public void dongY() throws NumberFormatException, RemoteException {
 		HoaDonDatPhong hd = new HoaDonDatPhong(maHD);
 		Phong ph = new Phong(maPhong);
 		SanPham s = sp_dao.getSanPhamTheoTen(tenSp);
@@ -140,7 +141,12 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if(o.equals(btnDongY)){
-			dongY();
+			try {
+				dongY();
+			} catch (NumberFormatException | RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}else if(o.equals(btnHuy)) {
 			setVisible(false);
 		}
