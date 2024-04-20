@@ -47,12 +47,18 @@ import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.KhuyenMai_dao;
 import dao.LoaiPhong_dao;
-import dao.NhanVien_dao;
-import dao.PhieuDatPhong_dao;
-import dao.Phong_dao;
-import dao.SanPham_dao;
-import dao.TempPhongBiChuyen_dao;
-import dao.TempThanhToan_dao;
+import dao.NhanVienService;
+import dao.PhieuDatPhongService;
+import dao.PhongService;
+import dao.SanPhamService;
+import dao.TempPhongBiChuyenServices;
+import dao.TempThanhToanServices;
+import dao.impl.NhanVienImpl;
+import dao.impl.PhieuDatPhongImpl;
+import dao.impl.PhongImpl;
+import dao.impl.SanPhamImpl;
+import dao.impl.TempPhongBiChuyenImpl;
+import dao.impl.TempThanhToanImpl;
 import dao.impl.ChiTietDichVu_dao_impl;
 import dao.impl.ChiTietHoaDon_dao_impl;
 import entity.ChiTietDichVu;
@@ -66,8 +72,8 @@ import entity.NhanVien;
 import entity.PhieuDatPhong;
 import entity.Phong;
 import entity.SanPham;
-import utils.TempPhongBiChuyen;
-import utils.TempThanhToan;
+import entity.TempPhongBiChuyen;
+import entity.TempThanhToan;
 
 import java.awt.Dimension;
 import java.awt.Window;
@@ -113,17 +119,17 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private final JLabel lblVn_2;
 	private final JButton btnThanhToan;
 	private final JButton btnQuayLai;
-	private final NhanVien_dao nv_dao;
-	private  ChiTietHoaDon_dao_impl cthd_dao;
+	private final NhanVienService nv_dao;
+	private  ChiTietHoaDonServices cthd_dao;
 	private final HoaDonDatPhong_dao hd_dao;
 	private final KhachHang_dao kh_dao;
 	private final JLabel lblMaHD;
 	private final JLabel lbl_MaHoaDon_1;
 	private final Date ngayTraPhong;
-	private final Phong_dao ph_dao;
+	private final PhongService p_Service;
 	private final LoaiPhong_dao loaiPhong_dao;
-	private  ChiTietDichVu_dao_impl ctdv_dao;
-	private final SanPham_dao sp_dao;
+	private  ChiTietDichVuServices ctdv_dao;
+	private final SanPhamService sp_Service;
 	private int tongTienDichVu;
 	private double tongTienPhong;
 	private final JCheckBox chckbx_XuatHoaDon;
@@ -145,14 +151,14 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private final JButton btnTraLaiSP;
 	private int TienDichVu_item;
 	private double tienDichVu_update;
-	PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
-	private final TempThanhToan_dao tempTT_dao;
+	PhieuDatPhongService pdp_Service = new PhieuDatPhongImpl();
+	private final TempThanhToanServices tempTT_dao;
 	private int gioThua_Item;
 	private double phutChinhXac_Item;
 	private final Date date;
 	private double thoiGianHat;
 	private double thoiGian_Item;
-	private final TempPhongBiChuyen_dao temChuyen_dao;
+	private final TempPhongBiChuyenServices temChuyen_dao;
 	@SuppressWarnings("unused")
 	private final String maPh;
 	private final JTextField txtTienGiam;
@@ -166,31 +172,27 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 		this.setIconImage(icon.getImage());
 
-		nv_dao = new NhanVien_dao();
-		
-		try {
-			cthd_dao = new ChiTietHoaDon_dao_impl();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		try {
-			ctdv_dao = new ChiTietDichVu_dao_impl ();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		nv_dao = new NhanVienImpl();
+		cthd_dao = new ChiTietHoaDon_dao_impl();
+		ctdv_dao = new ChiTietDichVu_dao_impl ();
 		hd_dao = new HoaDonDatPhong_dao();
 		kh_dao = new KhachHang_dao();
-		ph_dao = new Phong_dao();
+		p_Service = new PhongImpl();
 		loaiPhong_dao = new LoaiPhong_dao();
-		sp_dao = new SanPham_dao();
+		sp_Service = new SanPhamImpl();
 		km_dao = new KhuyenMai_dao();
-		tempTT_dao = new TempThanhToan_dao();
-		temChuyen_dao = new TempPhongBiChuyen_dao();
+		tempTT_dao = new TempThanhToanImpl();
+		temChuyen_dao = new TempPhongBiChuyenImpl();
 
 		this.addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {
 				NhanVien nv = null;
-				nv = nv_dao.getNhanVienTheoMa(DataManager.getUserName());
+				try {
+					nv = nv_dao.findByID(DataManager.getUserName());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				lbl_TenNV_1.setText(nv.getHoTen());
 			}
 		});
@@ -589,7 +591,13 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 				phutChinhXac_Item = soPhutHat_Item % 60;
 				
 				DecimalFormat df3 = new DecimalFormat("#.##");
-				Phong ph = ph_dao.getPhongTheoMaPhong(cthd.getPhong().getMaPhong());
+				Phong ph = null;
+				try {
+					ph = p_Service.getPhongTheoMaPhong(cthd.getPhong().getMaPhong());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				LoaiPhong loaiPhong = loaiPhong_dao.getLoaiPhongTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong());
 				if (cthd.getSoGioHat() != 0)
 					thoiGian_Item = cthd.getSoGioHat();
@@ -633,7 +641,13 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 				
 				TienDichVu_item = 0;
 				for (ChiTietDichVu ctdv : ctdv_dao.getChiTietDichVuTheoMaHDVaMaPhong(lbl_MaHoaDon_1.getText().trim(), cthd.getPhong().getMaPhong())) {
-					SanPham spdv = sp_dao.getSanPhamTheoMaSP(ctdv.getSanPham().getMaSanPham());
+					SanPham spdv = null;
+					try {
+						spdv = sp_Service.getSanPhamTheoMaSP(ctdv.getSanPham().getMaSanPham());
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					DecimalFormat f1 = new DecimalFormat("#.##");
 					Object[] rowSanPham = { i++, spdv.getTenSanPham(), ctdv.getSoLuong(), ctdv.getGia(), spdv.getDonViTinh(),
 							f1.format(ctdv.getSoLuong() *ctdv.getGia())};
@@ -664,7 +678,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 				
 				int flag = 0;
 				for(TempPhongBiChuyen tm_Chuyen : temChuyen_dao.getAllTemp()) {
-					if(tm_Chuyen.getMaPhong().equals(tmp.getMaPhong())) {
+					if(tm_Chuyen.getMaPhongBiChuyen().equals(tmp.getMaPhong())) {
 						flag = 1;
 						break;
 					}
@@ -726,7 +740,13 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 				phutChinhXac_Item = soPhutHat_Item % 60;
 
 				DecimalFormat df3 = new DecimalFormat("#.##");
-				Phong ph = ph_dao.getPhongTheoMaPhong(cthd_hienTaiCuaPhong.getPhong().getMaPhong());
+				Phong ph = null;
+				try {
+					ph = p_Service.getPhongTheoMaPhong(cthd_hienTaiCuaPhong.getPhong().getMaPhong());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				LoaiPhong loaiPhong = loaiPhong_dao.getLoaiPhongTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong());
 				
 
@@ -819,7 +839,13 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 
 				TienDichVu_item = 0;
 				for (ChiTietDichVu ctdv : ctdv_dao.getChiTietDichVuTheoMaHDVaMaPhong(lbl_MaHoaDon_1.getText().trim(), cthd_hienTaiCuaPhong.getPhong().getMaPhong())) {
-					SanPham spdv = sp_dao.getSanPhamTheoMaSP(ctdv.getSanPham().getMaSanPham());
+					SanPham spdv = null;
+					try {
+						spdv = sp_Service.getSanPhamTheoMaSP(ctdv.getSanPham().getMaSanPham());
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					DecimalFormat f1 = new DecimalFormat("#.##");
 					Object[] rowSanPham = { i++, spdv.getTenSanPham(), ctdv.getSoLuong(), ctdv.getGia(), spdv.getDonViTinh(),
 							f1.format(ctdv.getSoLuong() *ctdv.getGia())};
@@ -932,12 +958,18 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 						String maPhong_Item = model.getValueAt(row, 1).toString().replaceAll(" (Bị chuyển)", "");
 						Enum_TrangThai trangThaiPhong = Enum_TrangThai.Trong;
 
-						PhieuDatPhong pdp = pdp_dao.getPhieuDatPhongPhongCho(maPhong_Item);
+						PhieuDatPhong pdp = null;
+						try {
+							pdp = pdp_Service.getPhieuDatPhongPhongCho(maPhong_Item);
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						if (pdp != null)
 							trangThaiPhong = Enum_TrangThai.Cho;
 
 						Phong phong = new Phong(maPhong_Item, trangThaiPhong);
-						ph_dao.updatePhong(phong, maPhong_Item);
+						p_Service.updatePhong(phong, maPhong_Item);
 					}
 
 					// Update lại hóa đơn
@@ -1146,10 +1178,16 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		} else if (tblThanhToan.getSelectedRowCount() > 1) {
 			JOptionPane.showMessageDialog(null, "Chỉ được chọn 1 dịch vụ!!");
 		} else {
-			Dialog_TraSanPham dialog_TraSP = new Dialog_TraSanPham(
-					Integer.parseInt(model.getValueAt(tblThanhToan.getSelectedRow(), 2).toString()),
-					model.getValueAt(tblThanhToan.getSelectedRow(), 1).toString(), lbl_MaHoaDon_1.getText(),
-					maPhongUngVoiSP(), this);
+			Dialog_TraSanPham dialog_TraSP = null;
+			try {
+				dialog_TraSP = new Dialog_TraSanPham(
+						Integer.parseInt(model.getValueAt(tblThanhToan.getSelectedRow(), 2).toString()),
+						model.getValueAt(tblThanhToan.getSelectedRow(), 1).toString(), lbl_MaHoaDon_1.getText(),
+						maPhongUngVoiSP(), this);
+			} catch (NumberFormatException | RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			dialog_TraSP.setModal(true);
 			dialog_TraSP.setVisible(true);
 		}

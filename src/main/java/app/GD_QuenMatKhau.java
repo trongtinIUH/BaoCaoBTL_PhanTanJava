@@ -197,7 +197,13 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 		}
 		else if(o.equals(btnHuy)) {
 			// thêm joption thông báo rồi nhảy về trang đăng nhập//
-			GD_TrangDangNhap dn= new GD_TrangDangNhap();
+			GD_TrangDangNhap dn = null;
+			try {
+				dn = new GD_TrangDangNhap();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dn.setVisible(true);	
 			dispose();
 		}

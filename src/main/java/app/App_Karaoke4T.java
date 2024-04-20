@@ -3,24 +3,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.rmi.RemoteException;
 
-public class App_Karaoke4T extends JFrame implements AppKaraoke_Remote{
+public class App_Karaoke4T extends JFrame{
 	
     private static final long serialVersionUID = 1L;
     private  JLabel label;
     private  JProgressBar progressBar;
 
-	public App_Karaoke4T() {
+	public App_Karaoke4T() throws RemoteException {
 		label = new JLabel();
         progressBar = new JProgressBar();
-    }
-
-    public static void main(String[] args) throws RemoteException {
-        new App_Karaoke4T().runApp();
-    }
-
-	@Override
-	public void runApp() throws RemoteException {
-		  // Tạo một cửa sổ mới
+     // Tạo một cửa sổ mới
         JWindow window = new JWindow();
         window.setLayout(new BorderLayout());
 
@@ -74,5 +66,9 @@ public class App_Karaoke4T extends JFrame implements AppKaraoke_Remote{
         GD_TrangDangNhap trangDangNhap = new GD_TrangDangNhap();
 		trangDangNhap.setVisible(true);
 		
-	}
+    }
+
+    public static void main(String[] args) throws RemoteException {
+        new App_Karaoke4T();
+    }
 }

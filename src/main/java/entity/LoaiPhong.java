@@ -16,7 +16,7 @@ public class LoaiPhong implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6142860253165348219L;
 	@Id
 	@Column(name = "maLoaiPhong", columnDefinition = "VARCHAR(20)", unique = true, nullable = false)
 	private String maLoaiPhong;

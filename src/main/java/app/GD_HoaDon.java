@@ -47,8 +47,10 @@ import dao.ChiTietHoaDonServices;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.KhuyenMai_dao;
-import dao.Phong_dao;
-import dao.SanPham_dao;
+import dao.PhongService;
+import dao.SanPhamService;
+import dao.impl.PhongImpl;
+import dao.impl.SanPhamImpl;
 import dao.impl.ChiTietDichVu_dao_impl;
 import dao.impl.ChiTietHoaDon_dao_impl;
 import entity.ChiTietDichVu;
@@ -98,11 +100,11 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
     private final JTextField txtTimKiem;
 	private final HoaDonDatPhong_dao hoadon_dao;
 	private final KhachHang_dao khachhang_dao;
-	private final Phong_dao phong_dao;
-	private  ChiTietDichVu_dao_impl chitietdichvu_dao;
+	private final PhongService p_Service;
+	private  ChiTietDichVuServices chitietdichvu_dao;
 	private final KhuyenMai_dao khuyenmai_dao;
-	private  ChiTietHoaDon_dao_impl chitiethoadon_dao;
-	private final SanPham_dao sanpham_dao;
+	private  ChiTietHoaDonServices chitiethoadon_dao;
+	private final SanPhamService sp_Service;
 	private XSSFWorkbook wordbook;
 	private final DecimalFormat df;
 	private final Dialog_User dialog_user = new Dialog_User();
@@ -111,25 +113,15 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 	private final TimePickerSettings timeSettings;
 	private final DatePickerSettings dateSettings;
 
-	public GD_HoaDon() throws RemoteException {
+	public GD_HoaDon() throws RemoteException{
 		df = new DecimalFormat("#,###,### VNĐ");
 		hoadon_dao = new HoaDonDatPhong_dao();
 		khachhang_dao = new KhachHang_dao();
-		phong_dao = new Phong_dao();
-		try {
-			chitietdichvu_dao = new ChiTietDichVu_dao_impl();
-		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
-		}
+		p_Service = new PhongImpl();
+		chitietdichvu_dao = new ChiTietDichVu_dao_impl();
 		khuyenmai_dao = new KhuyenMai_dao();
-		try {
-			chitiethoadon_dao = new ChiTietHoaDon_dao_impl();
-		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
-		}
-		sanpham_dao = new SanPham_dao();
+		chitiethoadon_dao = new ChiTietHoaDon_dao_impl();
+		sp_Service = new SanPhamImpl();
 		setBackground(Color.decode("#FAFAFF"));
 		setLayout(null);
 //		Styling header
@@ -458,7 +450,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 		for (ChiTietDichVu ctdv : chitietdichvu_dao.getChiTietDichVuTheoMaHD(maHD)) {
 			if (ctdv.getPhong().getMaPhong().equals(maPhong)) {
 				Object[] row = { ctdv.getHoaDon().getMaHoaDon(),
-						sanpham_dao.getSanPhamTheoMaSP(ctdv.getSanPham().getMaSanPham()).getTenSanPham(), ctdv.getGia(),
+						sp_Service.getSanPhamTheoMaSP(ctdv.getSanPham().getMaSanPham()).getTenSanPham(), ctdv.getGia(),
 						ctdv.getSoLuong() };
 				modelServiceDetail.addRow(row);
 			}
@@ -485,7 +477,12 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 			String maNV = txtMaNV.getText().trim();
 			if (hoadon_dao.updateHoaDon(maHD, sqlDate, status, maNV)) {
 				clearTableOrderList();
-				loadOrderListData();
+				try {
+					loadOrderListData();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				JOptionPane.showMessageDialog(null, "Sửa thành công!");
 			}
 		}
@@ -524,7 +521,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 								hd.getNhanVien().getMaNhanVien(), hd.getNgayLapHoaDon(),
 								hd.isTrangThai() ? "Đã thanh toán" : "Chưa thanh toán",
 								hd.getKhuyenMai().getMaKhuyenMai(),
-								hd.tinhTongTienThanhToan(phong_dao.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+								hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 										chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), khuyenmai_dao
 												.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai())) };
 						modelOrderList.addRow(row);
@@ -545,7 +542,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 									hd.getNhanVien().getMaNhanVien(), hd.getNgayLapHoaDon(),
 									hd.isTrangThai() ? "Đã thanh toán" : "Chưa thanh toán",
 									hd.getKhuyenMai().getMaKhuyenMai(),
-									hd.tinhTongTienThanhToan(phong_dao.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+									hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 											chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
 											khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(
 													hd.getKhuyenMai().getMaKhuyenMai())) };
@@ -566,7 +563,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 									hd.getNhanVien().getMaNhanVien(), hd.getNgayLapHoaDon(),
 									hd.isTrangThai() ? "Đã thanh toán" : "Chưa thanh toán",
 									hd.getKhuyenMai().getMaKhuyenMai(),
-									hd.tinhTongTienThanhToan(phong_dao.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+									hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 											chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
 											khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(
 													hd.getKhuyenMai().getMaKhuyenMai())) };
@@ -587,7 +584,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 									hd.getNhanVien().getMaNhanVien(), hd.getNgayLapHoaDon(),
 									hd.isTrangThai() ? "Đã thanh toán" : "Chưa thanh toán",
 									hd.getKhuyenMai().getMaKhuyenMai(),
-									hd.tinhTongTienThanhToan(phong_dao.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+									hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 											chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
 											khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(
 													hd.getKhuyenMai().getMaKhuyenMai())) };
@@ -655,7 +652,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 				cell.setCellValue(hoadon_dao.getAllHoaDonDatPhong().get(i).getKhuyenMai().getMaKhuyenMai());
 				cell = row.createCell(7, CellType.NUMERIC);
 				cell.setCellValue(hoadon_dao.getAllHoaDonDatPhong().get(i).tinhTongTienThanhToan(
-						phong_dao.tinhTongTienPhongTheoMaHoaDon(hoadon_dao.getAllHoaDonDatPhong().get(i).getMaHoaDon()),
+						p_Service.tinhTongTienPhongTheoMaHoaDon(hoadon_dao.getAllHoaDonDatPhong().get(i).getMaHoaDon()),
 						chitietdichvu_dao
 								.tinhTongTienDVTheoMaHoaDon(hoadon_dao.getAllHoaDonDatPhong().get(i).getMaHoaDon()),
 						khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(
@@ -689,7 +686,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 					khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getHoTen(),
 					hd.getNhanVien().getMaNhanVien(), hd.getNgayLapHoaDon(),
 					hd.isTrangThai() ? "Đã thanh toán" : "Chưa thanh toán", hd.getKhuyenMai().getMaKhuyenMai(),
-					df.format(hd.tinhTongTienThanhToan(phong_dao.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+					df.format(hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 							chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
 							khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()))) };
 			modelOrderList.addRow(row);

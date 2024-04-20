@@ -262,22 +262,22 @@ values('HD2310100001', 'SP001', '305', 50, 9500),
 ('HD2007150001', 'SP018', '306', 20, 180000)
 go
 --thêm tmp
-CREATE TABLE TempDatPhong (
-    maPhong varchar(20) not null,
-	soNguoi int not null
-)
-go
+--CREATE TABLE TempDatPhong (
+--    maPhong varchar(20) not null,
+--	soNguoi int not null
+--)
+--go
 
 
-CREATE TABLE TempThanhToan (
-    maPhong varchar(20) not null
-)
-go
+--CREATE TABLE TempThanhToan (
+--    maPhong varchar(20) not null
+--)
+--go
 
-CREATE TABLE TempPhongBiChuyen (
-    maPhongBiChuyen varchar(20) not null primary key,
-	maPhongMoi varchar(20)
-)
+--CREATE TABLE TempPhongBiChuyen (
+--    maPhongBiChuyen varchar(20) not null primary key,
+--	maPhongMoi varchar(20)
+--)
 go
 
 insert into TempDatPhong values('000','00')

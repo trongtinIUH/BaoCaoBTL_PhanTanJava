@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 import java.util.Locale;
 
@@ -23,7 +24,8 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.DateTimePicker;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 
-import dao.Phong_dao;
+import dao.PhongService;
+import dao.impl.PhongImpl;
 import entity.Phong;
 
 import javax.swing.JTextField;
@@ -67,7 +69,7 @@ public class Dialog_DatThemPhongTrong extends JDialog implements ActionListener{
 	private final JLabel lbl_TrangThai_1;
 	private final JLabel lbl_Loai_1;
 	private final JTextField txtHoten;
-	private Phong_dao phong_dao ;
+	private PhongService p_Service ;
 	public Dialog_DatThemPhongTrong(String hoten) {
 		//màn hình******************************************************************************
 		getContentPane().setBackground(Color.WHITE);
@@ -248,11 +250,21 @@ public class Dialog_DatThemPhongTrong extends JDialog implements ActionListener{
 	}
 	
 	public void loadDataPhongMoi() {
-		phong_dao = new Phong_dao();
-		for (Phong x : phong_dao.laydsPhongMoi()) {
-			Object[] row = { x.getMaPhong(),x.getLoaiPhong().getTenLoaiPhong(),x.getLoaiPhong().getSucChua(),x.getLoaiPhong().getDonGiaTheoGio(),x.getTrangThai()};
-			model.addRow(row);
+		try {
+			p_Service = new PhongImpl();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			for (Phong x : p_Service.laydsPhongMoi()) {
+				Object[] row = { x.getMaPhong(),x.getLoaiPhong().getTenLoaiPhong(),x.getLoaiPhong().getSucChua(),x.getLoaiPhong().getDonGiaTheoGio(),x.getTrangThai()};
+				model.addRow(row);
 
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -274,7 +286,12 @@ public class Dialog_DatThemPhongTrong extends JDialog implements ActionListener{
 		}
 		if(o.equals(btn_ThemDV)) {
 			
-			dialog_ThemDichVu = new Dialog_ThemDichVu(txtHoten.getText(), DataManager.getUserName(), "");
+			try {
+				dialog_ThemDichVu = new Dialog_ThemDichVu(txtHoten.getText(), DataManager.getUserName(), "");
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dialog_ThemDichVu.setVisible(true);
 			}
 		

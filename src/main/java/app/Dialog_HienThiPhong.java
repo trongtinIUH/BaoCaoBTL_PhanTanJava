@@ -3,6 +3,7 @@ package app;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -21,12 +22,14 @@ import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
-import dao.Phong_dao;
-import dao.TempDatPhong_dao;
+import dao.impl.PhongImpl;
+import dao.impl.TempDatPhongImpl;
 import entity.LoaiPhong;
 import entity.Phong;
-import utils.TempDatPhong;
+import entity.TempDatPhong;
 import dao.LoaiPhong_dao;
+import dao.PhongService;
+import dao.TempDatPhongServices;
 
 public class Dialog_HienThiPhong extends JDialog implements ActionListener {
 
@@ -46,7 +49,7 @@ public class Dialog_HienThiPhong extends JDialog implements ActionListener {
     private final JLabel lblgia_1;
     private final JLabel lblPhong_1;
 	private final JButton btnDatPhong;
-	private final Phong_dao p_dao = new Phong_dao();
+	private final PhongService p_Service = new PhongImpl();
 	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
 
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
@@ -55,10 +58,11 @@ public class Dialog_HienThiPhong extends JDialog implements ActionListener {
 	private final LoaiPhong lp;
 	private final JLabel lblSoNguoi;
 	private final JTextField txtSoNguoi;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TempDatPhongServices tmp_dao;
 	private final JButton btn_DatPhongCho;
 
-	public Dialog_HienThiPhong(String maPhong, GD_TrangChu trangChu) {
+	public Dialog_HienThiPhong(String maPhong, GD_TrangChu trangChu) throws RemoteException {
+		tmp_dao = new TempDatPhongImpl();
 		this.trangChu = trangChu;
 		// kích thước
 		// dialog--------------*****************************************************************
@@ -113,7 +117,7 @@ public class Dialog_HienThiPhong extends JDialog implements ActionListener {
 		lblPhong_1.setBounds(130, 10, 120, 30);
 		getContentPane().add(lblPhong_1);
 
-		p = p_dao.getPhongTheoMaPhong(maPhong);
+		p = p_Service.getPhongTheoMaPhong(maPhong);
 		lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
 
 		lblLoai_1 = new JLabel(lp.getTenLoaiPhong());

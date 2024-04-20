@@ -15,7 +15,8 @@ public class HoaDonDatPhong implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1095518865707011712L;
+
 	@Id
 	@Column(name = "maHoaDon", columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
 	private String maHoaDon;
