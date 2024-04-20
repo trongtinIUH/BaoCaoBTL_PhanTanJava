@@ -89,7 +89,7 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 		
 	}
 	
-	public void dongY() {
+	public void dongY() throws NumberFormatException, RemoteException {
 		HoaDonDatPhong hd = new HoaDonDatPhong(maHD);
 		Phong ph = new Phong(maPhong);
 		SanPham s = null;
@@ -153,7 +153,12 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if(o.equals(btnDongY)){
-			dongY();
+			try {
+				dongY();
+			} catch (NumberFormatException | RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}else if(o.equals(btnHuy)) {
 			setVisible(false);
 		}

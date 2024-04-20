@@ -22,13 +22,14 @@ import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
-import dao.TempDatPhong_dao;
 import dao.impl.PhongImpl;
+import dao.impl.TempDatPhongImpl;
 import entity.LoaiPhong;
 import entity.Phong;
-import utils.TempDatPhong;
+import entity.TempDatPhong;
 import dao.LoaiPhong_dao;
 import dao.PhongService;
+import dao.TempDatPhongServices;
 
 public class Dialog_HienThiPhong extends JDialog implements ActionListener {
 
@@ -57,10 +58,11 @@ public class Dialog_HienThiPhong extends JDialog implements ActionListener {
 	private final LoaiPhong lp;
 	private final JLabel lblSoNguoi;
 	private final JTextField txtSoNguoi;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TempDatPhongServices tmp_dao;
 	private final JButton btn_DatPhongCho;
 
-	public Dialog_HienThiPhong(String maPhong, GD_TrangChu trangChu) throws RemoteException{
+	public Dialog_HienThiPhong(String maPhong, GD_TrangChu trangChu) throws RemoteException {
+		tmp_dao = new TempDatPhongImpl();
 		this.trangChu = trangChu;
 		// kích thước
 		// dialog--------------*****************************************************************

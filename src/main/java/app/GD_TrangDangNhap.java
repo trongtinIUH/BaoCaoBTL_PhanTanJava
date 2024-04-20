@@ -160,7 +160,13 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
 	}
 	public static void main(String[] args) throws RemoteException {
 		ImageIcon img = new ImageIcon("icon\\icon_Karaoke3.jpg");
-		GD_TrangDangNhap trangDangNhap = new GD_TrangDangNhap();
+		GD_TrangDangNhap trangDangNhap = null;
+		try {
+			trangDangNhap = new GD_TrangDangNhap();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		trangDangNhap.setVisible(true);
 		trangDangNhap.setIconImage(img.getImage());
 	}

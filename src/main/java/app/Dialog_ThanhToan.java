@@ -51,12 +51,14 @@ import dao.NhanVienService;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
 import dao.SanPhamService;
-import dao.TempPhongBiChuyen_dao;
-import dao.TempThanhToan_dao;
+import dao.TempPhongBiChuyenServices;
+import dao.TempThanhToanServices;
 import dao.impl.NhanVienImpl;
 import dao.impl.PhieuDatPhongImpl;
 import dao.impl.PhongImpl;
 import dao.impl.SanPhamImpl;
+import dao.impl.TempPhongBiChuyenImpl;
+import dao.impl.TempThanhToanImpl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -68,8 +70,8 @@ import entity.NhanVien;
 import entity.PhieuDatPhong;
 import entity.Phong;
 import entity.SanPham;
-import utils.TempPhongBiChuyen;
-import utils.TempThanhToan;
+import entity.TempPhongBiChuyen;
+import entity.TempThanhToan;
 
 import java.awt.Dimension;
 import java.awt.Window;
@@ -148,13 +150,13 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private int TienDichVu_item;
 	private double tienDichVu_update;
 	PhieuDatPhongService pdp_Service = new PhieuDatPhongImpl();
-	private final TempThanhToan_dao tempTT_dao;
+	private final TempThanhToanServices tempTT_dao;
 	private int gioThua_Item;
 	private double phutChinhXac_Item;
 	private final Date date;
 	private double thoiGianHat;
 	private double thoiGian_Item;
-	private final TempPhongBiChuyen_dao temChuyen_dao;
+	private final TempPhongBiChuyenServices temChuyen_dao;
 	@SuppressWarnings("unused")
 	private final String maPh;
 	private final JTextField txtTienGiam;
@@ -177,8 +179,8 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		loaiPhong_dao = new LoaiPhong_dao();
 		sp_Service = new SanPhamImpl();
 		km_dao = new KhuyenMai_dao();
-		tempTT_dao = new TempThanhToan_dao();
-		temChuyen_dao = new TempPhongBiChuyen_dao();
+		tempTT_dao = new TempThanhToanImpl();
+		temChuyen_dao = new TempPhongBiChuyenImpl();
 
 		this.addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {
@@ -543,7 +545,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		}
 	}
 
-	public void loadData() {
+	public void loadData() throws NumberFormatException, RemoteException {
 		lbl_TongThoiLuong_1.setText("");
 		int i = 1;
 		tongTienPhong = 0;
@@ -674,7 +676,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 				
 				int flag = 0;
 				for(TempPhongBiChuyen tm_Chuyen : temChuyen_dao.getAllTemp()) {
-					if(tm_Chuyen.getMaPhong().equals(tmp.getMaPhong())) {
+					if(tm_Chuyen.getMaPhongBiChuyen().equals(tmp.getMaPhong())) {
 						flag = 1;
 						break;
 					}
@@ -934,7 +936,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		return bi;
 	}
 
-	private void thanhToan() {
+	private void thanhToan() throws RemoteException {
 		double tienThua = -1;
 		try {
 			tienThua = Double.parseDouble(txtTienThua.getText().replaceAll(" VNĐ", "").replaceAll(",", ""));
@@ -1193,7 +1195,12 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnThanhToan)) {
-			thanhToan();
+			try {
+				thanhToan();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 		} else if (o.equals(btnQuayLai)) {
 			setVisible(false);

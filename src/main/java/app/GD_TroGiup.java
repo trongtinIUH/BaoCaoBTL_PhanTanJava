@@ -378,9 +378,9 @@ public class GD_TroGiup extends JPanel implements MouseListener{
         return treeNode;
     }
 	
-	public static void main(String[] args) throws RemoteException{
+	public static void main(String[] args) throws RemoteException {
 		 GD_TrangChu trangChuInstance = new GD_TrangChu();
-           new GD_TroGiup(trangChuInstance).setVisible(true);
+         new GD_TroGiup(trangChuInstance).setVisible(true);
     }
 
 	@Override

@@ -28,7 +28,10 @@ public class SanPham implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8873778006362133238L;
+	/**
+	 * 
+	 */
 	@Id
 	@Column(name="maSanPham", columnDefinition = "NVARCHAR(50)", nullable = false, unique = true)
 	private String maSanPham;

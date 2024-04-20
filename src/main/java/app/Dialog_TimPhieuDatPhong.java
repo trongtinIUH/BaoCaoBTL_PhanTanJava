@@ -33,6 +33,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import dao.impl.TempDatPhongImpl;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -49,7 +50,7 @@ import dao.LoaiPhong_dao;
 import dao.NhanVienService;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
-import dao.TempDatPhong_dao;
+import dao.TempDatPhongServices;
 import dao.impl.NhanVienImpl;
 import dao.impl.PhieuDatPhongImpl;
 import dao.impl.PhongImpl;
@@ -60,7 +61,7 @@ import entity.LoaiPhong;
 import entity.NhanVien;
 import entity.PhieuDatPhong;
 import entity.Phong;
-import utils.TempDatPhong;
+import entity.TempDatPhong;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -108,7 +109,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 	private Phong p = new Phong();
 	private Dialog_PhongCho dialog_PhongCho;
 	private XSSFWorkbook wordbook;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TempDatPhongServices tmp_dao;
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
 	private GD_TrangChu trangChu;
 	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
@@ -116,7 +117,8 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 	private Dialog_PhongDangSD dialog_PhongDangSD;
 	private Dialog_TimPDP_DaThanhToan dialog_TimPDP_DaThanhToan;
 
-	public Dialog_TimPhieuDatPhong() throws RemoteException{
+	public Dialog_TimPhieuDatPhong() throws RemoteException {
+		tmp_dao = new TempDatPhongImpl();
 		// kích thước
 		getContentPane().setBackground(Color.WHITE);
 		setSize(900, 450);
@@ -837,13 +839,23 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			tim();
 		}
 		if (o.equals(btn_XemPhong)) {
-			xemPhong();
+			try {
+				xemPhong();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(btn_XuatPhong)) {
 			xuatExcel();
 		}
 		if (o.equals(btn_NhanPhong)) {
-			nhanPhong();
+			try {
+				nhanPhong();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			clearTable();
 			loadData();
 		}
@@ -1015,7 +1027,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 
 	}
 
-	public void xemPhong() {
+	public void xemPhong() throws RemoteException {
 		int row = tblPhieuDatPhong.getSelectedRow();
 		String maphong = (String) tblPhieuDatPhong.getValueAt(row, 1);
 		String hinhthuc = (String) tblPhieuDatPhong.getValueAt(row, 7);
@@ -1078,7 +1090,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			JOptionPane.showMessageDialog(null, "chưa chọn phòng chờ hiển thị!");
 	}
 
-	public void nhanPhong() {
+	public void nhanPhong() throws RemoteException {
 		int row = tblPhieuDatPhong.getSelectedRow();
 		String maphong = tblPhieuDatPhong.getValueAt(row, 1).toString();
 		String songuoi = tblPhieuDatPhong.getValueAt(row, 6).toString();

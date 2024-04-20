@@ -50,7 +50,6 @@ class ClientHandler implements Runnable{
 			DataInputStream in = new DataInputStream(socket.getInputStream());
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 		     App_Karaoke4T app_Karaoke4T = new App_Karaoke4T();
-	            app_Karaoke4T.runApp();
 			
 		}catch (Exception e) {
 			e.printStackTrace();
