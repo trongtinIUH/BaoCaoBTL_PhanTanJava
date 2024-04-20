@@ -74,9 +74,10 @@ public class PhieuDatPhongImpl extends UnicastRemoteObject implements PhieuDatPh
 		return em.createNamedQuery("PDP.getAllsPhieu", PhieuDatPhong.class).getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PhieuDatPhong> getMaPhongDatTruoc() throws RemoteException {
-		return em.createNamedQuery("PhieuDatPhong.getMaPhongDatTruoc", PhieuDatPhong.class).getResultList();
+		return em.createNativeQuery("PhieuDatPhong.getMaPhongDatTruoc", PhieuDatPhong.class).getResultList();
 	}
 
 	@Override

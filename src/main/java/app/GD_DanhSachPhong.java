@@ -2,6 +2,7 @@ package app;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -478,7 +479,12 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa phòng này không?", "Thông báo",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				int row = table.getSelectedRow();
-				p_Service.deletePhong(model.getValueAt(row, 1).toString());
+				try {
+					p_Service.deletePhong(model.getValueAt(row, 1).toString());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				model.removeRow(row);
 				clearTable();
 				loadData();
@@ -488,7 +494,7 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 		}
 	}
 
-	private void sua() {
+	private void sua() throws HeadlessException, RemoteException {
 		if (table.getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(null, "Bạn chưa chọn dòng để sửa!!");
 		} else if (table.getSelectedRowCount() > 1) {
@@ -659,7 +665,15 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 		} else if (obj.equals(btnXoa)) {
 			xoa();
 		} else if (obj.equals(btnSua)) {
-			sua();
+			try {
+				sua();
+			} catch (HeadlessException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnLamMoi)) {
 			xoaTrang();
 			clearTable();

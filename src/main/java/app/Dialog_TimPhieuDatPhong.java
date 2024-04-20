@@ -1009,7 +1009,12 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 					DataManager.setDatPhongCho(true);
 					Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 					Phong phong = new Phong(maphong, trangThai);
-					p_Service.updatePhong(phong, maphong);
+					try {
+						p_Service.updatePhong(phong, maphong);
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					model.removeRow(row);
 				}
 			} else if (hinhthuc.equals("Đặt trước") && trangthai.equals("Đã TT")) {

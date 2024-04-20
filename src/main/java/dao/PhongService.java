@@ -9,8 +9,8 @@ import utils.DoanhThuLoaiPhong;
 
 public interface PhongService extends Remote{
 	public boolean addPhong(Phong ph) throws RemoteException;
-	public boolean updatePhong(Phong ph, String maPhongMoi);
-	public boolean deletePhong(String maPhong);
+	public boolean updatePhong(Phong ph, String maPhongMoi) throws RemoteException;
+	public boolean deletePhong(String maPhong) throws RemoteException;
 	public List<Phong> getallPhongs() throws RemoteException;
 	public Phong getPhongTheoMaPhong(String maPhong) throws RemoteException;
 	public List<Phong> getPhongTheoMaLoaiPhong(String maLoaiPhong) throws RemoteException;

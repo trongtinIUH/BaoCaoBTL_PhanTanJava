@@ -23,7 +23,13 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
 	EntityManager em;
 	
 	public PhongImpl() throws RemoteException {
-		em = Persistence.createEntityManagerFactory("jpa-mssql").createEntityManager();
+		try {
+
+			em = Persistence.createEntityManagerFactory("jpa-mssql").createEntityManager();
+		} catch (Exception e) {
+			System.out.println("Loi: " + e.getMessage());
+			System.out.println("Cause: " + e.getCause());
+		}
 	}
 	
 	@Override
@@ -44,7 +50,7 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
 	}
 
 	@Override
-	public boolean updatePhong(Phong ph, String maPhongMoi) {
+	public boolean updatePhong(Phong ph, String maPhongMoi) throws RemoteException {
 		EntityTransaction tx = em.getTransaction();
 
 		try {
@@ -61,7 +67,7 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
 	}
 
 	@Override
-	public boolean deletePhong(String maPhong) {
+	public boolean deletePhong(String maPhong) throws RemoteException {
 		EntityTransaction tx = em.getTransaction();
 
 		try {
@@ -203,13 +209,13 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
 
 	@Override
 	public DoanhThuLoaiPhong tinhTongDoanhThuLoaiPhongTheoNam(int nam) throws RemoteException {
-		TypedQuery<DoanhThuLoaiPhong> query = em.createNamedQuery("DoanhThuLoaiPhong.tinhTongDoanhThuTheoNam", DoanhThuLoaiPhong.class);
-        query.setParameter("nam", nam);
-        
-        List<DoanhThuLoaiPhong> results = query.getResultList();
-        
-        // Chỉ trả về kết quả nếu có ít nhất một dòng kết quả
-        return results.isEmpty() ? null : results.get(0);
+	    Query query = em.createNativeQuery("Phong.tinhTongDoanhThuLoaiPhongTheoNam", DoanhThuLoaiPhong.class);
+	    query.setParameter("year", nam);
+	    
+	    List<DoanhThuLoaiPhong> results = query.getResultList();
+	    
+	    // Chỉ trả về kết quả nếu có ít nhất một dòng kết quả
+	    return results.isEmpty() ? null : results.get(0);
 	}
 
 	@Override

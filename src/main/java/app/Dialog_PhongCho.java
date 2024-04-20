@@ -459,7 +459,12 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 					DataManager.setDatPhongCho(true);
 					Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 					Phong phong = new Phong(lblPhong_1.getText(), trangThai);
-					p_Service.updatePhong(phong, lblPhong_1.getText());
+					try {
+						p_Service.updatePhong(phong, lblPhong_1.getText());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					setVisible(false);
 					Window[] windows = Window.getWindows();
 					for (Window window : windows) {
@@ -478,7 +483,12 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 				DataManager.setDatPhongCho(true);
 				Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 				Phong phong = new Phong(lblPhong_1.getText(), trangThai);
-				p_Service.updatePhong(phong, lblPhong_1.getText());
+				try {
+					p_Service.updatePhong(phong, lblPhong_1.getText());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				setVisible(false);
 				Window[] windows = Window.getWindows();
 				for (Window window : windows) {
@@ -499,7 +509,12 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 				DataManager.setDatPhongCho(true);
 				Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 				Phong phong = new Phong(lblPhong_1.getText(), trangThai);
-				p_Service.updatePhong(phong, lblPhong_1.getText());
+				try {
+					p_Service.updatePhong(phong, lblPhong_1.getText());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				setVisible(false);
 
 				Window[] windows = Window.getWindows();

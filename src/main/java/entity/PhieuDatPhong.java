@@ -9,33 +9,30 @@ import jakarta.persistence.*;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "PDP.getAllsPhieu", query = "select pdp from PhieuDatPhong pdp"),
-	@NamedQuery(
-		    name = "PhieuDatPhong.getMaPhongDatTruoc",
-		    query = "SELECT pdp FROM PhieuDatPhong pdp WHERE FUNCTION('DATEADD', 'MINUTE', 21, pdp.ngayGioNhanPhong) > CURRENT_TIMESTAMP"
-		),
 	 @NamedQuery(
 		        name = "PhieuDatPhong.getPDPDatTruocTheoMaPhong",
-		        query = "SELECT p FROM PhieuDatPhong p WHERE p.maPhong = :maPhong ORDER BY p.ngayGioNhanPhong DESC limit 1"
+		        query = "SELECT p FROM PhieuDatPhong p INNER JOIN p.phong ph WHERE ph.maPhong = :maPhong ORDER BY p.ngayGioNhanPhong DESC limit 1"
 		    ),
 	 @NamedQuery(
 		        name = "PhieuDatPhong.getPhieuDatPhongPhongCho",
-		        query = "SELECT p FROM PhieuDatPhong p WHERE p.maPhong = :maPhong AND p.ngayGioNhanPhong > CURRENT_TIMESTAMP"
+		        query = "SELECT p FROM PhieuDatPhong p INNER JOIN p.phong ph WHERE ph.maPhong = :maPhong AND p.ngayGioNhanPhong > CURRENT_TIMESTAMP"
 		    ),
 	 @NamedQuery(
 		        name = "PhieuDatPhong.getPhieuDatPhongTheoMaKH",
-		        query = "SELECT p FROM PhieuDatPhong p WHERE p.maKhachHang = :maKhachHang"
+		        query = "SELECT p FROM PhieuDatPhong p INNER JOIN p.khachHang kh WHERE kh.maKhachHang = :maKhachHang"
 		    ),
 	 @NamedQuery(
 		        name = "PhieuDatPhong.getPhieuDatPhongTheoMaPhong",
-		        query = "SELECT p FROM PhieuDatPhong p WHERE p.maPhong = :maPhong"
+		        query = "SELECT p FROM PhieuDatPhong p INNER JOIN p.phong ph WHERE ph.maPhong = :maPhong"
 		    ),
 	 @NamedQuery(
 		        name = "PhieuDatPhong.getPhieuDatPhongInfo",
-		        query = "SELECT NEW PhieuDatPhongInfo(p.maPhong, lp.tenLoaiPhong, pdp.soNguoiHat, pdp.ngayGioDatPhong, pdp.ngayGioNhanPhong, lp.donGiaTheoGio, kh.hoTen) " +
-		                "FROM PhieuDatPhong pdp " +
-		                "JOIN Phong p ON pdp.maPhong = p.maPhong " +
-		                "JOIN LoaiPhong lp ON p.maLoaiPhong = lp.maLoaiPhong " +
-		                "JOIN KhachHang kh ON pdp.maKhachHang = kh.maKhachHang"
+		        query = "SELECT PhieuDatPhongInfo"
+		        		+ "(ph.maPhong, lp.tenLoaiPhong, pdp.soNguoiHat, pdp.ngayGioDatPhong,"
+		        		+ " pdp.ngayGioNhanPhong, lp.donGiaTheoGio, kh.hoTen) " +
+		                "FROM PhieuDatPhong pdp INNER JOIN pdp.phong ph " +
+		                "INNER JOIN ph.loaiPhong lp " +
+		                "INNER JOIN pdp.khachHang kh "
 		    ),
 	 @NamedQuery(
 		        name = "PhieuDatPhong.timThongTinPhieuDatPhongTheoMaPhong",
@@ -64,7 +61,9 @@ import jakarta.persistence.*;
 			),
 	 @NamedQuery(
 			    name = "PhieuDatPhong.getPhieuDatPhongTheoMaPDP_DangSuDung",
-			    query = "SELECT pdp FROM PhieuDatPhong pdp JOIN Phong p ON pdp.maPhong = p.maPhong WHERE pdp.maPhieu = :maPhieu AND p.trangThai = N'Dang_su_dung'"
+			    query = "SELECT pdp FROM PhieuDatPhong pdp "
+			    		+ "INNER JOIN Phong p "
+			    		+ "WHERE pdp.maPhieu = :maPhieu AND p.trangThai = 'Dang_su_dung'"
 			),
 	 @NamedQuery(
 		        name = "PhieuDatPhong.getPhieuDatPhongTheoMaPhong_TrangThaiCho",
@@ -74,6 +73,11 @@ import jakarta.persistence.*;
 			    name = "PhieuDatPhong.getAllsPhieuDatPhong_PhongCho",
 			    query = "SELECT pdp FROM PhieuDatPhong pdp JOIN pdp.phong p WHERE p.trangThai = 'Cho'"
 			)
+})
+
+@NamedNativeQueries({
+		@NamedNativeQuery(name = "PhieuDatPhong.getMaPhongDatTruoc",
+				query = "select * from PhieuDatPhong where DATEADD(MINUTE, 21, ngayGioNhanPhong) > GETDATE()"),
 })
 public class PhieuDatPhong implements Serializable{
 
