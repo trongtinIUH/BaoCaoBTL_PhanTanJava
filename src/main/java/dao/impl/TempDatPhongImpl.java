@@ -18,7 +18,12 @@ public class TempDatPhongImpl extends UnicastRemoteObject implements TempDatPhon
 	private EntityManager em;
 
     public TempDatPhongImpl() throws RemoteException {
-        em = Persistence.createEntityManagerFactory("BaiTapLonPTUD").createEntityManager();
+       try {
+    	   em = Persistence.createEntityManagerFactory("BaiTapLonPTUD").createEntityManager();
+		} catch (Exception e) {
+			System.out.println("Loi: " + e.getMessage());
+//			e.printStackTrace();
+		}
     }
 
     @Override

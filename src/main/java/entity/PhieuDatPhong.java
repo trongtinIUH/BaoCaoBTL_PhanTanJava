@@ -12,7 +12,10 @@ public class PhieuDatPhong implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5724727321097154470L;
+	/**
+	 * 
+	 */
 	@Id
 	@Column(name = "maPhieu", columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
 	private String maPhieu;

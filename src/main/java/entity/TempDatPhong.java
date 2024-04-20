@@ -1,5 +1,7 @@
 package entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.*;
 
 /**
@@ -16,8 +18,13 @@ import jakarta.persistence.*;
         @NamedNativeQuery(name = "TempDatPhong.deleteTempDP", query = "delete TempDatPhong where maPhong=?"),
         @NamedNativeQuery(name = "TempDatPhong.getTempDP", query = "update TempDatPhong set soNguoi=? where maPhong=?")
 })
-public class TempDatPhong {
-    @Id
+public class TempDatPhong implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5749369149719637771L;
+
+	@Id
     @Column(name = "maPhong", columnDefinition = "varchar(20)", nullable = false)
     private String maPhong;
 

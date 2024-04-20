@@ -21,13 +21,19 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 	private EntityManager em;
 
     public ThongKeImpl() throws RemoteException {
-        em = Persistence.createEntityManagerFactory("BaiTapLonPTUD").createEntityManager();
+    	try {
+    		em = Persistence.createEntityManagerFactory("BaiTapLonPTUD").createEntityManager();
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+			System.out.println("Cause: " + e.getCause());
+			e.printStackTrace();
+		}
     }
 
     @Override
     public ArrayList<ModelThongKe> thongKeTheoNam(String yearStart, String yearEnd) throws RemoteException {
-        String sql = "DECLARE @namBatDau int = "+yearStart+" "
-				+ "DECLARE @namKetThuc int = "+yearEnd+" "
+        String sql = "DECLARE @namBatDau int = :yearStart "
+        	    + "DECLARE @namKetThuc int = :yearEnd "
 				+ "SELECT "
 				+ "    YEAR(ngayLapHoaDon) AS nam,  "
 				+ "    SUM(tongTienSauKhuyenMai) AS tongDoanhThu, "
@@ -60,7 +66,7 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 				+ "    ("
 				+ "        SELECT  "
 				+ "            ctdv.maHoaDon,  "
-				+ "            SUM(ctdv.giaBan * ctdv.soLuong) AS tienDichVu  "
+				+ "            SUM(ctdv.gia * ctdv.soLuong) AS tienDichVu  "
 				+ "        FROM  "
 				+ "            ChiTietDichVu ctdv "
 				+ "        GROUP BY  "
@@ -334,5 +340,10 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 
         return lists;
     }
+
+	@Override
+	public String hello() throws RemoteException {
+		return "Hello world!";
+	}
 
 }

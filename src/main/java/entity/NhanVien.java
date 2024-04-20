@@ -15,7 +15,7 @@ public class NhanVien implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3965347425631026906L;
 	@Id
 	@Column(name = "maNhanVien", columnDefinition = "varchar(20)", nullable = false, unique = true)
 	private String maNhanVien;

@@ -16,5 +16,5 @@ public interface ThongKeServices extends Remote {
 	public ArrayList<ModelThongKeKH> getTop10KhachHangHatNhieuNhat() throws RemoteException;
 	public ArrayList<ModelThongKeKH> getTop10KhachHangHatNhieuNhatTheoNam(String year) throws RemoteException;
 	public ArrayList<ModelThongKeKH> getTop10KhachHangHatNhieuNhatTheoThang(String year, String month) throws RemoteException;
-	
+	public String hello() throws RemoteException;
 }

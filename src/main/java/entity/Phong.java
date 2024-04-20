@@ -13,7 +13,11 @@ public class Phong implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3802269524994377355L;
+
+	/**
+	 * 
+	 */
 	@Id
 	@Column(name = "maPhong", columnDefinition = "VARCHAR(10)", nullable = false, unique = true)
 	private String maPhong;

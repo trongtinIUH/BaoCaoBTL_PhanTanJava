@@ -13,7 +13,11 @@ public class TaiKhoan implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7028406105184499423L;
+
+	/**
+	 * 
+	 */
 	@Id
 	@Column(name = "maTaiKhoan", columnDefinition = "VARCHAR(20)", unique = true, nullable = false)
 	private String maTaiKhoan;

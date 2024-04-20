@@ -16,7 +16,8 @@ public class KhachHang implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4267039113765479718L;
+
 	@Id
 	@Column(name = "maKhachHang", columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
 	private String maKhachHang;

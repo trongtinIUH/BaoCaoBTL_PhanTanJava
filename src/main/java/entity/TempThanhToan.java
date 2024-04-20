@@ -1,5 +1,7 @@
 package entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.*;
 
 /**
@@ -19,8 +21,12 @@ import jakarta.persistence.*;
                 query = "delete TempThanhToan where maPhong <> '000'"),
 
 })
-public class TempThanhToan {
-    @Id
+public class TempThanhToan implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3104681637952995224L;
+	@Id
     @Column(name = "maPhong", columnDefinition = "varchar(20)", nullable = false)
     private String maPhong;
 

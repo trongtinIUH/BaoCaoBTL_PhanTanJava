@@ -17,7 +17,7 @@ public class KhuyenMai implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7953143939375949866L;
 	@Id
 	@Column(name = "maKhuyenMai", columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
 	private String maKhuyenMai;
