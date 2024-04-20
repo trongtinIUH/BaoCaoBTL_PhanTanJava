@@ -30,8 +30,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import dao.ChiTietDichVu_dao;
-import dao.ChiTietHoaDon_dao;
+import dao.ChiTietDichVuServices;
+import dao.ChiTietHoaDonServices;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.LoaiPhong_dao;
@@ -39,6 +39,8 @@ import dao.NhanVien_dao;
 import dao.PhieuDatPhong_dao;
 import dao.Phong_dao;
 import dao.TempPhongBiChuyen_dao;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.ChiTietHoaDon_dao_impl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -84,7 +86,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private Date tgHT;
 	private double soGioHat;
 	private double soPhutHat;
-	private  ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDon_dao_impl cthd_dao;
 	private final PhieuDatPhong_dao pdp_dao;
 	private Date ngayHienTai;
 	private Date date;
@@ -100,7 +102,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private String loaiPhong;
 	private final JLabel lblPhongHienTai_1;
 	private final TempPhongBiChuyen_dao tempChuyen_dao;
-	private  ChiTietDichVu_dao ctdv_dao;
+	private  ChiTietDichVu_dao_impl ctdv_dao;
 	public Dialog_ChuyenPhong(String maPhong, String soNguoi) throws RemoteException {
 		getContentPane().setBackground(Color.WHITE);
 		setSize(800, 480);
@@ -112,7 +114,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 		ph_dao = new Phong_dao();
 		loaiPhong_dao = new LoaiPhong_dao();
 		try {
-			cthd_dao = new ChiTietHoaDon_dao();
+			cthd_dao = new ChiTietHoaDon_dao_impl();
 		} catch (RemoteException e1) {
 			e1.printStackTrace();
 		}
@@ -122,7 +124,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 		kh_dao = new KhachHang_dao();
 		tempChuyen_dao = new TempPhongBiChuyen_dao();
 		try {
-			ctdv_dao = new ChiTietDichVu_dao();
+			ctdv_dao = new ChiTietDichVu_dao_impl();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

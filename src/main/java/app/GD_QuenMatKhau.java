@@ -17,7 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import dao.DangNhap_dao;
+import dao.DangNhapServices;
+import dao.impl.DangNhap_dao_impl;
 
 public class GD_QuenMatKhau extends JFrame implements ActionListener {
 	
@@ -38,7 +39,7 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 	private final JButton btnHuy;
     private final JButton btnXacNhan;
     private final JButton btnOTP;
-	private  DangNhap_dao dangNhap_dao;
+	private  DangNhap_dao_impl dangNhap_dao;
 	
 	// Thay thế bằng Account SID và Auth Token của bạn
     public static final String ACCOUNT_SID = "AC7f55b2559cf6d868c6c92f6733eafb65";
@@ -47,7 +48,7 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 
 	public  GD_QuenMatKhau() {
 		try {
-			 dangNhap_dao = new DangNhap_dao();
+			 dangNhap_dao = new DangNhap_dao_impl();
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception

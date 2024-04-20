@@ -22,8 +22,9 @@ import java.awt.Window;
 
 import javax.swing.UIManager;
 
-import dao.DangNhap_dao;
+import dao.DangNhapServices;
 import dao.NhanVien_dao;
+import dao.impl.DangNhap_dao_impl;
 import entity.NhanVien;
 
 public class Dialog_User extends JDialog implements ActionListener{
@@ -45,7 +46,7 @@ public class Dialog_User extends JDialog implements ActionListener{
 	private String ma;
 	private final JLabel lbl_TrangThai_1;
 	@SuppressWarnings("unused")
-	private  DangNhap_dao dangNhap_dao;
+	private  DangNhap_dao_impl dangNhap_dao;
 	private final String trangthaidangnhap;
     private String hinhanh_url;
 //	private GD_TrangDangNhap gd_dangNhap = new GD_TrangDangNhap(); 
@@ -57,7 +58,7 @@ public class Dialog_User extends JDialog implements ActionListener{
 	    this.setIconImage(icon.getImage());
 		//setResizable(false);
 	    try {
-	    	dangNhap_dao= new DangNhap_dao();
+	    	dangNhap_dao= new DangNhap_dao_impl();
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception

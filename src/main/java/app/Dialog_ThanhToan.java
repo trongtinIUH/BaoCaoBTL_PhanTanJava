@@ -41,8 +41,8 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import dao.ChiTietDichVu_dao;
-import dao.ChiTietHoaDon_dao;
+import dao.ChiTietDichVuServices;
+import dao.ChiTietHoaDonServices;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.KhuyenMai_dao;
@@ -53,6 +53,8 @@ import dao.Phong_dao;
 import dao.SanPham_dao;
 import dao.TempPhongBiChuyen_dao;
 import dao.TempThanhToan_dao;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.ChiTietHoaDon_dao_impl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -112,7 +114,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private final JButton btnThanhToan;
 	private final JButton btnQuayLai;
 	private final NhanVien_dao nv_dao;
-	private  ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDon_dao_impl cthd_dao;
 	private final HoaDonDatPhong_dao hd_dao;
 	private final KhachHang_dao kh_dao;
 	private final JLabel lblMaHD;
@@ -120,7 +122,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private final Date ngayTraPhong;
 	private final Phong_dao ph_dao;
 	private final LoaiPhong_dao loaiPhong_dao;
-	private  ChiTietDichVu_dao ctdv_dao;
+	private  ChiTietDichVu_dao_impl ctdv_dao;
 	private final SanPham_dao sp_dao;
 	private int tongTienDichVu;
 	private double tongTienPhong;
@@ -167,12 +169,12 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		nv_dao = new NhanVien_dao();
 		
 		try {
-			cthd_dao = new ChiTietHoaDon_dao();
+			cthd_dao = new ChiTietHoaDon_dao_impl();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		try {
-			ctdv_dao = new ChiTietDichVu_dao();
+			ctdv_dao = new ChiTietDichVu_dao_impl ();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

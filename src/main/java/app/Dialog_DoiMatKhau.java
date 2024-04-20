@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import dao.DangNhap_dao;
+import dao.DangNhapServices;
 import dao.impl.DangNhap_dao_impl;
 
 import javax.swing.SwingConstants;
@@ -36,11 +36,11 @@ public class Dialog_DoiMatKhau extends JDialog implements ActionListener {
 	private final JLabel lblTitle;
 	private final JButton btnHuy;
     private final JButton btnXacNhan;
-	private  DangNhap_dao dangNhap_dao ;
+	private  DangNhap_dao_impl dangNhap_dao ;
 	private String manv="";
 	public  Dialog_DoiMatKhau(String ma) {
         try {
-            dangNhap_dao = new DangNhap_dao();
+            dangNhap_dao = new DangNhap_dao_impl();
         } catch (RemoteException e) {
             e.printStackTrace();
         }

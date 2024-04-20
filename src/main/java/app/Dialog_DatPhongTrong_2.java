@@ -52,8 +52,8 @@ import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 
-import dao.ChiTietDichVu_dao;
-import dao.ChiTietHoaDon_dao;
+import dao.ChiTietDichVuServices;
+import dao.ChiTietHoaDonServices;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.LoaiPhong_dao;
@@ -62,6 +62,8 @@ import dao.PhieuDatPhong_dao;
 import dao.Phong_dao;
 import dao.SanPham_dao;
 import dao.TempDatPhong_dao;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.ChiTietHoaDon_dao_impl;
 
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -95,8 +97,8 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 	private final NhanVien_dao nv_dao;
 	private NhanVien nv;
 	private final HoaDonDatPhong_dao hddp_dao;
-	private final ChiTietHoaDon_dao cthd_dao;
-	private final ChiTietDichVu_dao ctdv_dao;
+	private   ChiTietHoaDon_dao_impl cthd_dao;
+	private  ChiTietDichVu_dao_impl ctdv_dao;
 
 	private final JTable tblThemPhongMoi;
     private final JTable tblDV;
@@ -140,8 +142,19 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 		this.setIconImage(icon.getImage());
 		nv_dao = new NhanVien_dao();
 		hddp_dao = new HoaDonDatPhong_dao();
-		cthd_dao = new ChiTietHoaDon_dao();
-		ctdv_dao = new ChiTietDichVu_dao();
+		try {
+			cthd_dao = new ChiTietHoaDon_dao_impl();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		
+		try {
+			ctdv_dao = new ChiTietDichVu_dao_impl();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		tmpDatPhong_dao = new TempDatPhong_dao();
 		p_dao = new Phong_dao();
 		lp_dao = new LoaiPhong_dao();

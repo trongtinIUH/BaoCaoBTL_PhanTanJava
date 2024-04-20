@@ -27,10 +27,12 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import dao.ChiTietDichVu_dao;
-import dao.ChiTietHoaDon_dao;
+import dao.ChiTietDichVuServices;
+import dao.ChiTietHoaDonServices;
 import dao.Phong_dao;
 import dao.SanPham_dao;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.ChiTietHoaDon_dao_impl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -85,17 +87,17 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 	private final String ma;
 	private double tongTien;
 	private final Phong_dao p_dao;
-	private  ChiTietDichVu_dao ctdv_dao;
+	private  ChiTietDichVu_dao_impl ctdv_dao;
 	@SuppressWarnings("unused")
 	private String maHoaDon = "";
-	private  ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDon_dao_impl cthd_dao;
 
 	private final JLabel lblPhong1;
 
 	public Dialog_ThemDichVu(String customer, String employee, String maPhong) {
 		this.ma = maPhong;
 	try {
-		cthd_dao = new ChiTietHoaDon_dao();
+		cthd_dao = new ChiTietHoaDon_dao_impl();
 	}catch(RemoteException e) {
 		e.printStackTrace();
 	}
@@ -108,7 +110,7 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 		this.setIconImage(icon.getImage());
 		p_dao = new Phong_dao();
 	try {
-		ctdv_dao = new ChiTietDichVu_dao();
+		ctdv_dao = new ChiTietDichVu_dao_impl();
 	} catch(RemoteException e) {
 		e.printStackTrace();
 	}

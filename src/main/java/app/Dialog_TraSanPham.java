@@ -13,8 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import dao.ChiTietDichVu_dao;
+import dao.ChiTietDichVuServices;
 import dao.SanPham_dao;
+import dao.impl.ChiTietDichVu_dao_impl;
 import entity.ChiTietDichVu;
 import entity.HoaDonDatPhong;
 import entity.Phong;
@@ -34,7 +35,7 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 	private final JTextField txtSLTra;
 	private final JButton btnDongY;
 	private final JButton btnHuy;
-	private  ChiTietDichVu_dao ctdv_dao;
+	private  ChiTietDichVu_dao_impl ctdv_dao;
 	private final SanPham_dao sp_dao;
 	private final String tenSp;
 	private final String maHD;
@@ -51,7 +52,7 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 		this.tenSp = tenSp;
 		this.maPhong = maPhong;
 		try {
-			ctdv_dao = new ChiTietDichVu_dao();
+			ctdv_dao = new ChiTietDichVu_dao_impl();
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception

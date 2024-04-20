@@ -24,7 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
-import dao.ChiTietHoaDon_dao;
+import dao.ChiTietHoaDonServices;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.LoaiPhong_dao;
@@ -33,6 +33,7 @@ import dao.Phong_dao;
 import dao.TempDatPhong_dao;
 import dao.TempPhongBiChuyen_dao;
 import dao.TempThanhToan_dao;
+import dao.impl.ChiTietHoaDon_dao_impl;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
 import entity.HoaDonDatPhong;
@@ -77,7 +78,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	private final PhieuDatPhong_dao phieuDatPhong_dao;
 	@SuppressWarnings("unused")
 	private final PhieuDatPhong_dao phieuDatPhong_dao_1= new PhieuDatPhong_dao();
-	private  ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDon_dao_impl cthd_dao;
 	private final Date gioHienTai;
 	private final Date phutHienTai;
 	private double soGioHat;
@@ -109,7 +110,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 
 		phieuDatPhong_dao = new PhieuDatPhong_dao();
 		try {
-			cthd_dao = new ChiTietHoaDon_dao();
+			cthd_dao = new ChiTietHoaDon_dao_impl();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

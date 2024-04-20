@@ -15,14 +15,16 @@ import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import dao.ChiTietDichVu_dao;
-import dao.ChiTietHoaDon_dao;
+import dao.ChiTietDichVuServices;
+import dao.ChiTietHoaDonServices;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.KhuyenMai_dao;
 import dao.LoaiPhong_dao;
 import dao.PhieuDatPhong_dao;
 import dao.Phong_dao;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.ChiTietHoaDon_dao_impl;
 import entity.ChiTietHoaDon;
 import entity.HoaDonDatPhong;
 import entity.KhachHang;
@@ -57,7 +59,7 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	private LoaiPhong lp;
 	private final PhieuDatPhong_dao phieuDatPhong_dao;
 	private final Phong_dao phong_dao= new Phong_dao();
-	private  ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDonServices cthd_dao;
 	private final Date gioHienTai;
 	private final Date phutHienTai;
 	private double soGioHat;
@@ -72,7 +74,7 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	private final JLabel lbl_Tongtien_1;
 	private final KhuyenMai_dao khuyenmai_dao= new KhuyenMai_dao();
 
-	private  ChiTietDichVu_dao chitietdichvu_dao;
+	private  ChiTietDichVu_dao_impl chitietdichvu_dao;
 	
 
 	public Dialog_TimPDP_DaThanhToan(String maPhong, String maPDP) throws RemoteException {
@@ -85,14 +87,14 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	    this.setIconImage(icon.getImage());
 	    
 	    try {
-	    	chitietdichvu_dao= new ChiTietDichVu_dao();
+	    	chitietdichvu_dao= new ChiTietDichVu_dao_impl();
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception
 		}
 		phieuDatPhong_dao = new PhieuDatPhong_dao();
 		try {
-            cthd_dao = new ChiTietHoaDon_dao();
+            cthd_dao = new ChiTietHoaDon_dao_impl();
         } catch (Exception e) {
             e.printStackTrace();
         }

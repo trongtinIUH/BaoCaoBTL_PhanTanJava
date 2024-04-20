@@ -28,7 +28,8 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
 import connectDB.ConnectDB;
-import dao.DangNhap_dao;
+import dao.DangNhapServices;
+import dao.impl.DangNhap_dao_impl;
 
 public class GD_TrangDangNhap extends JFrame  implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -38,7 +39,7 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
     private final JButton btnLogin;
     private final JButton btnQuenMatKhau;
 	private final JLabel lblKaeaoke;
-	private DangNhap_dao dangNhap_dao;
+	private DangNhap_dao_impl dangNhap_dao;
 	private final GD_TrangChu gd_TrangChu;
 	private String username;
 
@@ -54,7 +55,7 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
   			e1.printStackTrace();
   		}
 		try {
-			dangNhap_dao= new DangNhap_dao();
+			dangNhap_dao= new DangNhap_dao_impl();
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception

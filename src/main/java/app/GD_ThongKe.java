@@ -36,14 +36,16 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.DateTimePicker;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 
-import dao.ChiTietDichVu_dao;
-import dao.ChiTietHoaDon_dao;
+import dao.ChiTietDichVuServices;
+import dao.ChiTietHoaDonServices;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.KhuyenMai_dao;
 import dao.NhanVien_dao;
 import dao.Phong_dao;
 import dao.ThongKe_dao;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.ChiTietHoaDon_dao_impl;
 import entity.HoaDonDatPhong;
 import utils.CurveLineChart;
 import utils.DoanhThuLoaiPhong;
@@ -76,8 +78,8 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 	private final HoaDonDatPhong_dao hoadon_dao;
 	private final KhachHang_dao khachhang_dao;
 	private final Phong_dao phong_dao;
-	private  ChiTietDichVu_dao chitietdichvu_dao;
-	private  ChiTietHoaDon_dao chitiethoadon_dao;
+	private  ChiTietDichVu_dao_impl chitietdichvu_dao;
+	private  ChiTietHoaDon_dao_impl chitiethoadon_dao;
 	private final KhuyenMai_dao khuyenmai_dao;
 	private final JPanel pnTable;
     private final JPanel pnContent;
@@ -107,14 +109,14 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		khachhang_dao = new KhachHang_dao();
 		phong_dao = new Phong_dao();
 		try {
-			chitietdichvu_dao = new ChiTietDichVu_dao();
+			chitietdichvu_dao = new ChiTietDichVu_dao_impl();
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception
 		}
 		khuyenmai_dao = new KhuyenMai_dao();
 		try {
-			chitiethoadon_dao = new ChiTietHoaDon_dao();
+			chitiethoadon_dao = new ChiTietHoaDon_dao_impl();
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception

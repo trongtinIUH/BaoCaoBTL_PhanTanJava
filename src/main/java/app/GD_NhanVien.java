@@ -42,8 +42,9 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
-import dao.DangNhap_dao;
+import dao.DangNhapServices;
 import dao.NhanVien_dao;
+import dao.impl.DangNhap_dao_impl;
 import entity.NhanVien;
 import entity.TaiKhoan;
 import utils.DateLabelFormatter;
@@ -78,7 +79,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	private final JTable table;
 	private final JScrollPane scroll;
 	private NhanVien_dao nv_dao;
-	private  DangNhap_dao dangNhap_dao ;
+	private  DangNhap_dao_impl dangNhap_dao ;
 	private final JTextField txtMa;
 	private final JTextField txtHoTen;
 	private final JTextField txtSDT;
@@ -95,7 +96,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 
 	public GD_NhanVien() {
 		try {
-			dangNhap_dao = new DangNhap_dao();
+			dangNhap_dao = new DangNhap_dao_impl();
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception
