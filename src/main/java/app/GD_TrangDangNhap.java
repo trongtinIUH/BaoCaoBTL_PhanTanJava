@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 import java.sql.SQLException;
 
 import javax.swing.AbstractAction;
@@ -40,7 +41,7 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
 	private final GD_TrangChu gd_TrangChu;
 	private String username;
 
-	public GD_TrangDangNhap() {
+	public GD_TrangDangNhap() throws RemoteException {
 		setTitle("Đăng Nhập KARAOKE 4T");
 		setSize(720, 400);
 		setLocationRelativeTo(null);
@@ -157,7 +158,7 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
         this.getRootPane().setDefaultButton(btnLogin);
         
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RemoteException {
 		ImageIcon img = new ImageIcon("icon\\icon_Karaoke3.jpg");
 		GD_TrangDangNhap trangDangNhap = new GD_TrangDangNhap();
 		trangDangNhap.setVisible(true);

@@ -6,11 +6,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -20,8 +23,10 @@ import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.KhuyenMai_dao;
 import dao.LoaiPhong_dao;
-import dao.PhieuDatPhong_dao;
-import dao.Phong_dao;
+import dao.PhieuDatPhongService;
+import dao.PhongService;
+import dao.impl.PhieuDatPhongImpl;
+import dao.impl.PhongImpl;
 import entity.ChiTietHoaDon;
 import entity.HoaDonDatPhong;
 import entity.KhachHang;
@@ -50,12 +55,11 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
     private final JLabel lblTenKH_1;
 
 
-	private final Phong_dao p_dao = new Phong_dao();
+	private final PhongService p_Service = new PhongImpl();
 	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
 	private Phong p;
 	private LoaiPhong lp;
-	private final PhieuDatPhong_dao phieuDatPhong_dao;
-	private final Phong_dao phong_dao= new Phong_dao();
+	private final PhieuDatPhongService pdp_Service;
 	private final ChiTietHoaDon_dao cthd_dao;
 	private final Date gioHienTai;
 	private final Date phutHienTai;
@@ -74,7 +78,7 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	private final ChiTietDichVu_dao chitietdichvu_dao= new ChiTietDichVu_dao();
 	
 
-	public Dialog_TimPDP_DaThanhToan(String maPhong, String maPDP) {
+	public Dialog_TimPDP_DaThanhToan(String maPhong, String maPDP) throws RemoteException{
 		//kích thước giao diện
 		getContentPane().setBackground(Color.WHITE);
 		setSize(335, 500);
@@ -83,7 +87,7 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 	    this.setIconImage(icon.getImage());
 	    
-		phieuDatPhong_dao = new PhieuDatPhong_dao();
+	    pdp_Service = new PhieuDatPhongImpl();
 		cthd_dao = new ChiTietHoaDon_dao();
 		kh_dao = new KhachHang_dao();
 				
@@ -125,7 +129,12 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 		lblPhong_1.setBounds(150, 10, 140, 30);
 		getContentPane().add(lblPhong_1);
 		
-		p = p_dao.getPhongTheoMaPhong(maPhong);
+		try {
+			p = p_Service.getPhongTheoMaPhong(maPhong);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
 		
 		lblLoai_1 = new JLabel();
@@ -135,7 +144,7 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 		getContentPane().add(lblLoai_1);
 		
 		PhieuDatPhong pdp_of_room = null;
-		ArrayList<PhieuDatPhong> dsPDP = phieuDatPhong_dao.getDanhsachPhieuDatPhongTheoMaPhong(lblPhong_1.getText().trim());
+		List<PhieuDatPhong> dsPDP = pdp_Service.getDanhSachPhieuDatPhongTheoMaPhong(lblPhong_1.getText().trim());
 		for(PhieuDatPhong pdp : dsPDP) {
 			pdp_of_room = pdp;
 		}
@@ -186,7 +195,12 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 		lbltrangthai_1.setBounds(150, 170, 120, 30);
 		getContentPane().add(lbltrangthai_1);
 		
-		p = p_dao.getPhongTheoMaPhong(maPhong);
+		try {
+			p = p_Service.getPhongTheoMaPhong(maPhong);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
 		
 		lblgia_1 = new JLabel();
@@ -235,9 +249,14 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 		
 		lbl_Tongtien_1 = new JLabel();
 		df= new DecimalFormat("#,###,### VNĐ");
-		lbl_Tongtien_1.setText(df.format(hd.tinhTongTienThanhToan(phong_dao.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
-				chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
-				khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()))));
+		try {
+			lbl_Tongtien_1.setText(df.format(hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+					chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
+					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()))));
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		lbl_Tongtien_1.setFont(new Font("Arial", Font.BOLD, 18));
 		lbl_Tongtien_1.setBounds(115, 370, 190, 30);
 		getContentPane().add(lbl_Tongtien_1);

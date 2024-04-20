@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 
 import javax.swing.JDialog;
 import java.awt.Color;
@@ -23,7 +24,8 @@ import java.awt.Window;
 import javax.swing.UIManager;
 
 import dao.DangNhap_dao;
-import dao.NhanVien_dao;
+import dao.NhanVienService;
+import dao.impl.NhanVienImpl;
 import entity.NhanVien;
 
 public class Dialog_User extends JDialog implements ActionListener{
@@ -40,7 +42,7 @@ public class Dialog_User extends JDialog implements ActionListener{
 	private final JTextField txtQunL;
 	private final JLabel hinhNV;
 	private final JLabel lbl_nen;
-	private final NhanVien_dao nv_dao;
+	private final NhanVienService nv_dao;
 	private Dialog_DoiMatKhau Dialog_Doi_mk;
 	private String ma;
 	private final JLabel lbl_TrangThai_1;
@@ -49,18 +51,23 @@ public class Dialog_User extends JDialog implements ActionListener{
 	private final String trangthaidangnhap;
     private String hinhanh_url;
 //	private GD_TrangDangNhap gd_dangNhap = new GD_TrangDangNhap(); 
-	public Dialog_User() {
+	public Dialog_User() throws RemoteException {
 		setTitle("User");
 		setSize(400, 300);
 		setLocationRelativeTo(null);
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 	    this.setIconImage(icon.getImage());
 		//setResizable(false);
-		nv_dao = new NhanVien_dao();
+		nv_dao = new NhanVienImpl();
 		this.addWindowListener(new WindowAdapter() {
 		    public void windowOpened(WindowEvent e) {
 				NhanVien nv = null;
-				nv = nv_dao.getNhanVienTheoMa(DataManager.getUserName());
+				try {
+					nv = nv_dao.findByID(DataManager.getUserName());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				txt_HoTen.setText(nv.getHoTen());
 				txtQunL.setText(nv.getChucVu());
 				ma=nv.getMaNhanVien();
@@ -162,7 +169,13 @@ public class Dialog_User extends JDialog implements ActionListener{
 			for (Window window : windows) {
 				window.dispose();
 			}
-			GD_TrangDangNhap dangNhap = new GD_TrangDangNhap();
+			GD_TrangDangNhap dangNhap = null;
+			try {
+				dangNhap = new GD_TrangDangNhap();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dangNhap.setVisible(true);
 		}else if(o.equals(btnDoiMK)) {		
 			Dialog_Doi_mk= new Dialog_DoiMatKhau(ma);
