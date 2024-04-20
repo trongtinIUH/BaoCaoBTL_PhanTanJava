@@ -44,9 +44,10 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
-import dao.DangNhap_dao;
+import dao.DangNhapServices;
 import dao.NhanVienService;
 import dao.impl.NhanVienImpl;
+import dao.impl.DangNhap_dao_impl;
 import entity.NhanVien;
 import entity.TaiKhoan;
 import utils.DateLabelFormatter;
@@ -82,7 +83,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	private final JScrollPane scroll;
 //	private NhanVien_dao nv_dao;
 	private NhanVienService nv_dao;
-	private final DangNhap_dao dangNhap_dao = new DangNhap_dao();
+	private DangNhapServices dangNhap_dao;
 	private final JTextField txtMa;
 	private final JTextField txtHoTen;
 	private final JTextField txtSDT;
@@ -98,6 +99,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	private final Dialog_User dialog_user = new Dialog_User();
 
 	public GD_NhanVien() throws RemoteException{
+		dangNhap_dao = new DangNhap_dao_impl();
 		setBackground(new Color(246, 245, 255));
 		setLayout(null);
 		nv_dao = new NhanVienImpl();
@@ -445,7 +447,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 		}
 	}
 
-	private void them() {
+	private void them() throws RemoteException {
 		//Gán dữ liệu cứng
 		if(rdoNam.isSelected())
 			imageLabel.setIcon(new ImageIcon("image\\nhanvien_nam.png"));
@@ -708,7 +710,12 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 		// TODO Auto-generated method stub
 		Object obj = e.getSource();
 		if (obj.equals(btnThem)) {
-			them();
+			try {
+				them();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnXoa)) {
 			xoa();
 		} else if (obj.equals(btnSua)) {

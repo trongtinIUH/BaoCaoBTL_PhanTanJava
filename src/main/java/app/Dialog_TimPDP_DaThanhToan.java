@@ -1,7 +1,5 @@
 package app;
 
-
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -17,14 +15,16 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import dao.ChiTietDichVu_dao;
-import dao.ChiTietHoaDon_dao;
+import dao.ChiTietDichVuServices;
+import dao.ChiTietHoaDonServices;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.KhuyenMai_dao;
 import dao.LoaiPhong_dao;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.ChiTietHoaDon_dao_impl;
 import dao.impl.PhieuDatPhongImpl;
 import dao.impl.PhongImpl;
 import entity.ChiTietHoaDon;
@@ -60,7 +60,7 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	private Phong p;
 	private LoaiPhong lp;
 	private final PhieuDatPhongService pdp_Service;
-	private final ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDonServices cthd_dao;
 	private final Date gioHienTai;
 	private final Date phutHienTai;
 	private double soGioHat;
@@ -75,10 +75,10 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	private final JLabel lbl_Tongtien_1;
 	private final KhuyenMai_dao khuyenmai_dao= new KhuyenMai_dao();
 
-	private final ChiTietDichVu_dao chitietdichvu_dao= new ChiTietDichVu_dao();
+	private ChiTietDichVuServices chitietdichvu_dao;
 	
 
-	public Dialog_TimPDP_DaThanhToan(String maPhong, String maPDP) throws RemoteException{
+	public Dialog_TimPDP_DaThanhToan(String maPhong, String maPDP) throws RemoteException {
 		//kích thước giao diện
 		getContentPane().setBackground(Color.WHITE);
 		setSize(335, 500);
@@ -88,7 +88,8 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	    this.setIconImage(icon.getImage());
 	    
 	    pdp_Service = new PhieuDatPhongImpl();
-		cthd_dao = new ChiTietHoaDon_dao();
+		cthd_dao = new ChiTietHoaDon_dao_impl();
+		chitietdichvu_dao= new ChiTietDichVu_dao_impl();
 		kh_dao = new KhachHang_dao();
 				
 		//các lbl góc trái-----------------------------------------------------------------------

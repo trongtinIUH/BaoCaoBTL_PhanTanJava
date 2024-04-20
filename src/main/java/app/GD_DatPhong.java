@@ -925,7 +925,12 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					JOptionPane.showMessageDialog(this, "Chưa phòng nào được thêm vào danh sách đặt");
 				} else {
 					DataManager.setLoadDV(true);
-					dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(TOOL_TIP_TEXT_KEY, null, null, 0, trangChu);
+					try {
+						dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(TOOL_TIP_TEXT_KEY, null, null, 0, trangChu);
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					dialog_DatPhongTrong_2.setVisible(true);
 				}
 			} catch (HeadlessException | RemoteException e1) {
@@ -938,7 +943,12 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				if (tempTT_dao.getAllTemp().size() == 0) {
 					JOptionPane.showMessageDialog(this, "Chưa phòng nào được thêm vào danh sách thanh toán");
 				} else {
-					dialog_ThanhToan = new Dialog_ThanhToan(txtMaPhong.getText());
+					try {
+						dialog_ThanhToan = new Dialog_ThanhToan(txtMaPhong.getText());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					dialog_ThanhToan.setVisible(true);
 				}
 			} catch (HeadlessException | RemoteException e1) {

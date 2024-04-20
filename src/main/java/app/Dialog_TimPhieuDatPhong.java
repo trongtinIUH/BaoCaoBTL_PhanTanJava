@@ -852,7 +852,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 		if (o.equals(btn_NhanPhong)) {
 			try {
 				nhanPhong();
-			} catch (RemoteException e1) {
+			} catch (NumberFormatException | RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -1090,7 +1090,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			JOptionPane.showMessageDialog(null, "chưa chọn phòng chờ hiển thị!");
 	}
 
-	public void nhanPhong() throws RemoteException {
+	public void nhanPhong() throws NumberFormatException, RemoteException {
 		int row = tblPhieuDatPhong.getSelectedRow();
 		String maphong = tblPhieuDatPhong.getValueAt(row, 1).toString();
 		String songuoi = tblPhieuDatPhong.getValueAt(row, 6).toString();

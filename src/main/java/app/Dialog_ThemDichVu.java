@@ -28,12 +28,14 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import dao.ChiTietDichVu_dao;
-import dao.ChiTietHoaDon_dao;
+import dao.ChiTietDichVuServices;
+import dao.ChiTietHoaDonServices;
 import dao.PhongService;
 import dao.SanPhamService;
 import dao.impl.PhongImpl;
 import dao.impl.SanPhamImpl;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.ChiTietHoaDon_dao_impl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -88,16 +90,20 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 	private final String ma;
 	private double tongTien;
 	private final PhongService p_Service;
-	private final ChiTietDichVu_dao ctdv_dao;
+	private  ChiTietDichVuServices ctdv_dao;
 	@SuppressWarnings("unused")
 	private String maHoaDon = "";
-	private final ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDonServices cthd_dao;
 
 	private final JLabel lblPhong1;
 
 	public Dialog_ThemDichVu(String customer, String employee, String maPhong) throws RemoteException {
 		this.ma = maPhong;
-		cthd_dao = new ChiTietHoaDon_dao();
+	try {
+		cthd_dao = new ChiTietHoaDon_dao_impl();
+	}catch(RemoteException e) {
+		e.printStackTrace();
+	}
 		df = new DecimalFormat("#,###,### VNĐ");
 		getContentPane().setBackground(Color.WHITE);
 		setSize(800, 500);
@@ -106,7 +112,7 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 		this.setIconImage(icon.getImage());
 		p_Service = new PhongImpl();
-		ctdv_dao = new ChiTietDichVu_dao();
+		ctdv_dao = new ChiTietDichVu_dao_impl();
 		sp_Service = new SanPhamImpl();
 
 		// panel chứa tiêu đề--------------------------------------
@@ -658,7 +664,13 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 				}
 
 				ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-				ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong1.getText().trim());
+				ArrayList<ChiTietHoaDon> dsCTHD = new ArrayList<ChiTietHoaDon>();
+				try {
+					dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong1.getText().trim());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				for (ChiTietHoaDon cthd : dsCTHD) {
 					cthd_hienTaiCuaPhong = cthd;
 				}
@@ -671,20 +683,41 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 									new HoaDonDatPhong(cthd_hienTaiCuaPhong.getHoaDon().getMaHoaDon()),
 									new Phong(tmp.getMaPhong()), new SanPham(tmp.getMaSP()), tmp.getSoLuong(),
 									tmp.getDonGia() * 1.03);
-							ctdv_dao.addChiTietDV(ctdv);
-						} else if (sp_Service.getLoaiSanPhamTheoMaSP(tmp.getMaSP()).equals("Đồ uống")) {
-							ChiTietDichVu ctdv = new ChiTietDichVu(
-									new HoaDonDatPhong(cthd_hienTaiCuaPhong.getHoaDon().getMaHoaDon()),
-									new Phong(tmp.getMaPhong()), new SanPham(tmp.getMaSP()), tmp.getSoLuong(),
-									tmp.getDonGia() * 1.02);
-							ctdv_dao.addChiTietDV(ctdv);
-						} else {
-							ChiTietDichVu ctdv = new ChiTietDichVu(
-									new HoaDonDatPhong(cthd_hienTaiCuaPhong.getHoaDon().getMaHoaDon()),
-									new Phong(tmp.getMaPhong()), new SanPham(tmp.getMaSP()), tmp.getSoLuong(),
-									tmp.getDonGia() * 1.01);
-							ctdv_dao.addChiTietDV(ctdv);
-						}
+							try {
+								ctdv_dao.addChiTietDV(ctdv);
+							} catch (RemoteException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						} else
+							try {
+								if (sp_Service.getLoaiSanPhamTheoMaSP(tmp.getMaSP()).equals("Đồ uống")) {
+									ChiTietDichVu ctdv = new ChiTietDichVu(
+											new HoaDonDatPhong(cthd_hienTaiCuaPhong.getHoaDon().getMaHoaDon()),
+											new Phong(tmp.getMaPhong()), new SanPham(tmp.getMaSP()), tmp.getSoLuong(),
+											tmp.getDonGia() * 1.02);
+									try {
+										ctdv_dao.addChiTietDV(ctdv);
+									} catch (RemoteException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+								} else {
+									ChiTietDichVu ctdv = new ChiTietDichVu(
+											new HoaDonDatPhong(cthd_hienTaiCuaPhong.getHoaDon().getMaHoaDon()),
+											new Phong(tmp.getMaPhong()), new SanPham(tmp.getMaSP()), tmp.getSoLuong(),
+											tmp.getDonGia() * 1.01);
+									try {
+										ctdv_dao.addChiTietDV(ctdv);
+									} catch (RemoteException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+								}
+							} catch (RemoteException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 					} catch (RemoteException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

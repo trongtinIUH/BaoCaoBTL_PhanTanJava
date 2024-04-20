@@ -2,6 +2,7 @@ package app;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -12,7 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import dao.ChiTietDichVu_dao;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.ChiTietDichVuServices;
 import dao.SanPhamService;
 import dao.impl.SanPhamImpl;
 import entity.ChiTietDichVu;
@@ -34,7 +36,7 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 	private final JTextField txtSLTra;
 	private final JButton btnDongY;
 	private final JButton btnHuy;
-	private final ChiTietDichVu_dao ctdv_dao;
+	private  ChiTietDichVuServices ctdv_dao;
 	private final SanPhamService sp_Service;
 	private final String tenSp;
 	private final String maHD;
@@ -50,7 +52,7 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 		this.maHD = maHD;
 		this.tenSp = tenSp;
 		this.maPhong = maPhong;
-		ctdv_dao = new ChiTietDichVu_dao();
+		ctdv_dao = new ChiTietDichVu_dao_impl();
 		sp_Service = new SanPhamImpl();
 		
 		getContentPane().add(lblSLDaDat = new JLabel("Số lượng đã đặt"));
@@ -89,7 +91,7 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 		
 	}
 	
-	public void dongY() throws NumberFormatException, RemoteException {
+	public void dongY() throws NumberFormatException, HeadlessException, RemoteException {
 		HoaDonDatPhong hd = new HoaDonDatPhong(maHD);
 		Phong ph = new Phong(maPhong);
 		SanPham s = null;
@@ -155,7 +157,7 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 		if(o.equals(btnDongY)){
 			try {
 				dongY();
-			} catch (NumberFormatException | RemoteException e1) {
+			} catch (NumberFormatException | HeadlessException | RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}

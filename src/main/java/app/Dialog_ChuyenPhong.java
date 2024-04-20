@@ -31,8 +31,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import dao.ChiTietDichVu_dao;
-import dao.ChiTietHoaDon_dao;
+import dao.ChiTietDichVuServices;
+import dao.ChiTietHoaDonServices;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.LoaiPhong_dao;
@@ -44,6 +44,8 @@ import dao.impl.NhanVienImpl;
 import dao.impl.PhieuDatPhongImpl;
 import dao.impl.PhongImpl;
 import dao.impl.TempPhongBiChuyenImpl;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.ChiTietHoaDon_dao_impl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -89,7 +91,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private Date tgHT;
 	private double soGioHat;
 	private double soPhutHat;
-	private final ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDonServices cthd_dao;
 	private final PhieuDatPhongService pdp_Service;
 	private Date ngayHienTai;
 	private Date date;
@@ -105,7 +107,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private String loaiPhong;
 	private final JLabel lblPhongHienTai_1;
 	private final TempPhongBiChuyenServices tempChuyen_dao;
-	private final ChiTietDichVu_dao ctdv_dao;
+	private  ChiTietDichVuServices ctdv_dao;
 	public Dialog_ChuyenPhong(String maPhong, String soNguoi) throws RemoteException {
 		getContentPane().setBackground(Color.WHITE);
 		setSize(800, 480);
@@ -116,13 +118,13 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	    
 	    p_Service = new PhongImpl();
 		loaiPhong_dao = new LoaiPhong_dao();
-		cthd_dao = new ChiTietHoaDon_dao();
+		cthd_dao = new ChiTietHoaDon_dao_impl();
 		pdp_Service = new PhieuDatPhongImpl();
 		nv_dao = new NhanVienImpl();
 		hd_dao = new HoaDonDatPhong_dao();
 		kh_dao = new KhachHang_dao();
 		tempChuyen_dao = new TempPhongBiChuyenImpl();
-		ctdv_dao = new ChiTietDichVu_dao();
+		ctdv_dao = new ChiTietDichVu_dao_impl();
 		this.addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {
 				NhanVien nv = null;

@@ -41,8 +41,8 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import dao.ChiTietDichVu_dao;
-import dao.ChiTietHoaDon_dao;
+import dao.ChiTietDichVuServices;
+import dao.ChiTietHoaDonServices;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.KhuyenMai_dao;
@@ -59,6 +59,8 @@ import dao.impl.PhongImpl;
 import dao.impl.SanPhamImpl;
 import dao.impl.TempPhongBiChuyenImpl;
 import dao.impl.TempThanhToanImpl;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.ChiTietHoaDon_dao_impl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -118,7 +120,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private final JButton btnThanhToan;
 	private final JButton btnQuayLai;
 	private final NhanVienService nv_dao;
-	private final ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDonServices cthd_dao;
 	private final HoaDonDatPhong_dao hd_dao;
 	private final KhachHang_dao kh_dao;
 	private final JLabel lblMaHD;
@@ -126,7 +128,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private final Date ngayTraPhong;
 	private final PhongService p_Service;
 	private final LoaiPhong_dao loaiPhong_dao;
-	private final ChiTietDichVu_dao ctdv_dao;
+	private  ChiTietDichVuServices ctdv_dao;
 	private final SanPhamService sp_Service;
 	private int tongTienDichVu;
 	private double tongTienPhong;
@@ -171,8 +173,8 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		this.setIconImage(icon.getImage());
 
 		nv_dao = new NhanVienImpl();
-		cthd_dao = new ChiTietHoaDon_dao();
-		ctdv_dao = new ChiTietDichVu_dao();
+		cthd_dao = new ChiTietHoaDon_dao_impl();
+		ctdv_dao = new ChiTietDichVu_dao_impl ();
 		hd_dao = new HoaDonDatPhong_dao();
 		kh_dao = new KhachHang_dao();
 		p_Service = new PhongImpl();
@@ -526,7 +528,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		lbl_TongThanhTien_1.setText("");
 	}
 
-	public void load_Tien() {
+	public void load_Tien() throws RemoteException {
 		tienDichVu_update = 0;
 		
 		for (ChiTietDichVu ctdv : ctdv_dao.getChiTietDichVuTheoMaHD(lbl_MaHoaDon_1.getText().trim())) {
