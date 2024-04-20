@@ -32,6 +32,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.awt.event.ActionEvent;
@@ -59,7 +60,7 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 	private final GD_DanhSachPhong danhSachPhong = new GD_DanhSachPhong();
 	private final GD_NhanVien nhanVien = new GD_NhanVien();
 	private final GD_KhachHang khachHang = new GD_KhachHang();
-	private final GD_HoaDon hoaDon = new GD_HoaDon();
+	private  GD_HoaDon hoaDon;
 	private final GD_SanPham sanPham = new GD_SanPham();
 	private final GD_ThongKe thongKe = new GD_ThongKe();
 	private final GD_KhuyenMai khuyenMai = new GD_KhuyenMai();
@@ -70,6 +71,12 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 
 	public GD_TrangChu() {
 		super("Karaoke 4T");
+		try {
+			hoaDon	 = new GD_HoaDon();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		datPhong = new GD_DatPhong(this);
 		ImageIcon icon = new ImageIcon("icon\\icon_Karaoke3.jpg");
 		this.setIconImage(icon.getImage());
@@ -607,7 +614,12 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 			resetActiveTab();
 			btnHoaDon.setBackground(Color.decode("#F2F0FF"));
 			hoaDon.clearTableOrderList();
-			hoaDon.loadOrderListData();
+			try {
+				hoaDon.loadOrderListData();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if(DataManager.getRole().equals("NV")) {
 				hoaDon.btnXoa.setEnabled(false);
 				hoaDon.btnSua.setEnabled(false);

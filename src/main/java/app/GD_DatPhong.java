@@ -21,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -819,7 +820,12 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Chưa phòng nào được thêm vào danh sách đặt");
 			} else {
 				DataManager.setLoadDV(true);
-				dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(TOOL_TIP_TEXT_KEY, null, null, 0, trangChu);
+				try {
+					dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(TOOL_TIP_TEXT_KEY, null, null, 0, trangChu);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				dialog_DatPhongTrong_2.setVisible(true);
 			}
 		}
@@ -827,7 +833,12 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 			if (tempTT_dao.getAllTemp().size() == 0) {
 				JOptionPane.showMessageDialog(this, "Chưa phòng nào được thêm vào danh sách thanh toán");
 			} else {
-				dialog_ThanhToan = new Dialog_ThanhToan(txtMaPhong.getText());
+				try {
+					dialog_ThanhToan = new Dialog_ThanhToan(txtMaPhong.getText());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				dialog_ThanhToan.setVisible(true);
 			}
 		}
@@ -870,7 +881,12 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					}
 
 					if (p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
-						dialog_PhongDangSD = new Dialog_PhongDangSD(maPhong, this);
+						try {
+							dialog_PhongDangSD = new Dialog_PhongDangSD(maPhong, this);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						dialog_PhongDangSD.setModal(true);
 						dialog_PhongDangSD.setVisible(true);
 						return;

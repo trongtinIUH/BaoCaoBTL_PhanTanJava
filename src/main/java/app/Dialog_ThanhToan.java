@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -111,7 +112,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private final JButton btnThanhToan;
 	private final JButton btnQuayLai;
 	private final NhanVien_dao nv_dao;
-	private final ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDon_dao cthd_dao;
 	private final HoaDonDatPhong_dao hd_dao;
 	private final KhachHang_dao kh_dao;
 	private final JLabel lblMaHD;
@@ -119,7 +120,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private final Date ngayTraPhong;
 	private final Phong_dao ph_dao;
 	private final LoaiPhong_dao loaiPhong_dao;
-	private final ChiTietDichVu_dao ctdv_dao;
+	private  ChiTietDichVu_dao ctdv_dao;
 	private final SanPham_dao sp_dao;
 	private int tongTienDichVu;
 	private double tongTienPhong;
@@ -154,7 +155,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private final String maPh;
 	private final JTextField txtTienGiam;
 
-	public Dialog_ThanhToan(String maPhong) {
+	public Dialog_ThanhToan(String maPhong) throws RemoteException {
 		this.maPh = maPhong;
 		getContentPane().setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
@@ -164,8 +165,17 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		this.setIconImage(icon.getImage());
 
 		nv_dao = new NhanVien_dao();
-		cthd_dao = new ChiTietHoaDon_dao();
-		ctdv_dao = new ChiTietDichVu_dao();
+		
+		try {
+			cthd_dao = new ChiTietHoaDon_dao();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			ctdv_dao = new ChiTietDichVu_dao();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		hd_dao = new HoaDonDatPhong_dao();
 		kh_dao = new KhachHang_dao();
 		ph_dao = new Phong_dao();
@@ -514,7 +524,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		lbl_TongThanhTien_1.setText("");
 	}
 
-	public void load_Tien() {
+	public void load_Tien() throws RemoteException {
 		tienDichVu_update = 0;
 		
 		for (ChiTietDichVu ctdv : ctdv_dao.getChiTietDichVuTheoMaHD(lbl_MaHoaDon_1.getText().trim())) {
@@ -533,7 +543,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		}
 	}
 
-	public void loadData() {
+	public void loadData() throws NumberFormatException, RemoteException {
 		lbl_TongThoiLuong_1.setText("");
 		int i = 1;
 		tongTienPhong = 0;
@@ -900,7 +910,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		return bi;
 	}
 
-	private void thanhToan() {
+	private void thanhToan() throws RemoteException {
 		double tienThua = -1;
 		try {
 			tienThua = Double.parseDouble(txtTienThua.getText().replaceAll(" VNĐ", "").replaceAll(",", ""));
@@ -1147,7 +1157,12 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnThanhToan)) {
-			thanhToan();
+			try {
+				thanhToan();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 		} else if (o.equals(btnQuayLai)) {
 			setVisible(false);

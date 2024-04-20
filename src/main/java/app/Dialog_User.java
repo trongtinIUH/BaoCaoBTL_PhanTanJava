@@ -45,7 +45,7 @@ public class Dialog_User extends JDialog implements ActionListener{
 	private String ma;
 	private final JLabel lbl_TrangThai_1;
 	@SuppressWarnings("unused")
-	private final DangNhap_dao dangNhap_dao= new DangNhap_dao();
+	private  DangNhap_dao dangNhap_dao;
 	private final String trangthaidangnhap;
     private String hinhanh_url;
 //	private GD_TrangDangNhap gd_dangNhap = new GD_TrangDangNhap(); 
@@ -56,6 +56,12 @@ public class Dialog_User extends JDialog implements ActionListener{
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 	    this.setIconImage(icon.getImage());
 		//setResizable(false);
+	    try {
+	    	dangNhap_dao= new DangNhap_dao();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		nv_dao = new NhanVien_dao();
 		this.addWindowListener(new WindowAdapter() {
 		    public void windowOpened(WindowEvent e) {

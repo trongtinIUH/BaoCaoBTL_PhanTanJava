@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -75,8 +76,8 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 	private final HoaDonDatPhong_dao hoadon_dao;
 	private final KhachHang_dao khachhang_dao;
 	private final Phong_dao phong_dao;
-	private final ChiTietDichVu_dao chitietdichvu_dao;
-	private final ChiTietHoaDon_dao chitiethoadon_dao;
+	private  ChiTietDichVu_dao chitietdichvu_dao;
+	private  ChiTietHoaDon_dao chitiethoadon_dao;
 	private final KhuyenMai_dao khuyenmai_dao;
 	private final JPanel pnTable;
     private final JPanel pnContent;
@@ -105,9 +106,19 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		hoadon_dao = new HoaDonDatPhong_dao();
 		khachhang_dao = new KhachHang_dao();
 		phong_dao = new Phong_dao();
-		chitietdichvu_dao = new ChiTietDichVu_dao();
+		try {
+			chitietdichvu_dao = new ChiTietDichVu_dao();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		khuyenmai_dao = new KhuyenMai_dao();
-		chitiethoadon_dao = new ChiTietHoaDon_dao();
+		try {
+			chitiethoadon_dao = new ChiTietHoaDon_dao();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		thongke_dao = new ThongKe_dao();
 		nhanvien_dao = new NhanVien_dao();
 		JPanel pnNorth = new JPanel();
@@ -376,7 +387,12 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 			} else {
 				resetField();
 			    clearDataDoanhThuTheoNgay();
-			    loadDataDoanhThuTheoNgay(); 
+			    try {
+					loadDataDoanhThuTheoNgay();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
 			    try {
 			        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to match your SQL Server date/time format
 			        String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
@@ -421,7 +437,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		lineChart.start();
 	}
 	
-	public void loadDataDoanhThuTheoNgay() {
+	public void loadDataDoanhThuTheoNgay() throws RemoteException {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to match your SQL Server date/time format
 		String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
 		double tongDoanhThu = 0;
@@ -457,7 +473,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		model.setRowCount(0);
 	}
 	
-	private void ThongKeMonth() {
+	private void ThongKeMonth() throws RemoteException {
 		  pieChart.setSelectedIndex(-1);
 		  pieChart.clearData();
 		  int month = Integer.valueOf(cbMonth.getSelectedItem().toString());
@@ -504,7 +520,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 			}
 	}
 	
-	private void ThongKeYear() {
+	private void ThongKeYear() throws RemoteException {
 			pieChart.setSelectedIndex(-1);
 			pieChart.clearData();
 			int year = Integer.parseInt(cbYearEnd.getSelectedItem().toString());
@@ -739,7 +755,12 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 					if(cbDate.getSelectedItem().toString().equals("Ngày")) {
 						clearDataDoanhThuTheoNgay();
 						resetField();
-						loadDataDoanhThuTheoNgay();
+						try {
+							loadDataDoanhThuTheoNgay();
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						try {
 					        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to match your SQL Server date/time format
 					        String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
@@ -789,7 +810,12 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 							dateTimePicker.setVisible(false);
 							pnTable.setVisible(false);
 							resetField();
-							ThongKeMonth();
+							try {
+								ThongKeMonth();
+							} catch (RemoteException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							if(lblTongDoanhThu.getText().equals("0 VNĐ")) {
 								JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê của tháng: "
 								+ cbMonth.getSelectedItem() + " năm: " + cbYear.getSelectedItem()
@@ -817,7 +843,12 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 								dateTimePicker.setVisible(false);
 								pnTable.setVisible(false);
 								resetField();
-								ThongKeYear();
+								try {
+									ThongKeYear();
+								} catch (RemoteException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 								lblChartTitle.setText("BIỂU ĐỒ THỐNG KÊ DOANH THU THEO NĂM");
 								if(lblTongDoanhThu.getText().equals("0 VNĐ")) {
 									JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê của năm "

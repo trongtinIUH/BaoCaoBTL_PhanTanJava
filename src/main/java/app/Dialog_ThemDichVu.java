@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -84,16 +85,20 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 	private final String ma;
 	private double tongTien;
 	private final Phong_dao p_dao;
-	private final ChiTietDichVu_dao ctdv_dao;
+	private  ChiTietDichVu_dao ctdv_dao;
 	@SuppressWarnings("unused")
 	private String maHoaDon = "";
-	private final ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDon_dao cthd_dao;
 
 	private final JLabel lblPhong1;
 
 	public Dialog_ThemDichVu(String customer, String employee, String maPhong) {
 		this.ma = maPhong;
+	try {
 		cthd_dao = new ChiTietHoaDon_dao();
+	}catch(RemoteException e) {
+		e.printStackTrace();
+	}
 		df = new DecimalFormat("#,###,### VNĐ");
 		getContentPane().setBackground(Color.WHITE);
 		setSize(800, 500);
@@ -102,7 +107,11 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 		this.setIconImage(icon.getImage());
 		p_dao = new Phong_dao();
+	try {
 		ctdv_dao = new ChiTietDichVu_dao();
+	} catch(RemoteException e) {
+		e.printStackTrace();
+	}
 		sp_dao = new SanPham_dao();
 
 		// panel chứa tiêu đề--------------------------------------
@@ -594,7 +603,13 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 				}
 
 				ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-				ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong1.getText().trim());
+				ArrayList<ChiTietHoaDon> dsCTHD = new ArrayList<ChiTietHoaDon>();
+				try {
+					dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong1.getText().trim());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				for (ChiTietHoaDon cthd : dsCTHD) {
 					cthd_hienTaiCuaPhong = cthd;
 				}
@@ -606,19 +621,34 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 								new HoaDonDatPhong(cthd_hienTaiCuaPhong.getHoaDon().getMaHoaDon()),
 								new Phong(tmp.getMaPhong()), new SanPham(tmp.getMaSP()), tmp.getSoLuong(),
 								tmp.getDonGia() * 1.03);
-						ctdv_dao.addChiTietDV(ctdv);
+						try {
+							ctdv_dao.addChiTietDV(ctdv);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					} else if (sp_dao.getLoaiSanPhamTheoMaSP(tmp.getMaSP()).equals("Đồ uống")) {
 						ChiTietDichVu ctdv = new ChiTietDichVu(
 								new HoaDonDatPhong(cthd_hienTaiCuaPhong.getHoaDon().getMaHoaDon()),
 								new Phong(tmp.getMaPhong()), new SanPham(tmp.getMaSP()), tmp.getSoLuong(),
 								tmp.getDonGia() * 1.02);
-						ctdv_dao.addChiTietDV(ctdv);
+						try {
+							ctdv_dao.addChiTietDV(ctdv);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					} else {
 						ChiTietDichVu ctdv = new ChiTietDichVu(
 								new HoaDonDatPhong(cthd_hienTaiCuaPhong.getHoaDon().getMaHoaDon()),
 								new Phong(tmp.getMaPhong()), new SanPham(tmp.getMaSP()), tmp.getSoLuong(),
 								tmp.getDonGia() * 1.01);
-						ctdv_dao.addChiTietDV(ctdv);
+						try {
+							ctdv_dao.addChiTietDV(ctdv);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 			}

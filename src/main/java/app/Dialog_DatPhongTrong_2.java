@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -126,7 +127,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 	private final DecimalFormat df;
 	private final SanPham_dao sp_dao = new SanPham_dao();
 
-	public Dialog_DatPhongTrong_2(String maPhong, Phong p, LoaiPhong lp, int soNguoi, GD_TrangChu trangChu) {
+	public Dialog_DatPhongTrong_2(String maPhong, Phong p, LoaiPhong lp, int soNguoi, GD_TrangChu trangChu) throws RemoteException {
 		df = new DecimalFormat("#,###,### VNĐ");
 		// màn
 		// hình******************************************************************************
@@ -571,8 +572,14 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 					Phong p = p_dao.getPhongTheoMaPhong(tmpDatPhong.getMaPhong());
 					if (p != null && p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
 						checkPSD = 1;
-						ArrayList<ChiTietHoaDon> dsChiTietHoaDon = cthd_dao
-								.getChiTietHoaDonTheoMaPhong(tmpDatPhong.getMaPhong());
+						// tín chỉnh sửa khúc này !---------------------------------------------------------
+						ArrayList<ChiTietHoaDon> dsChiTietHoaDon = new ArrayList<ChiTietHoaDon>();
+						try {
+							dsChiTietHoaDon = cthd_dao.getChiTietHoaDonTheoMaPhong(tmpDatPhong.getMaPhong());
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						for (ChiTietHoaDon cthd : dsChiTietHoaDon) {
 							maHoaDon = cthd.getHoaDon().getMaHoaDon();
 						}
@@ -620,7 +627,12 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 
 						cthd = new ChiTietHoaDon(hddp, p, Timestamp.valueOf(ngayGioHT), Timestamp.valueOf(ngayGioHT),
 								0);
-						cthd_dao.addChiTietHD(cthd);
+						try {
+							cthd_dao.addChiTietHD(cthd);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 
 						// Thêm chi tiết dịch vụ, cập nhật lại số lượng sản phẩm trong csdl
 						if (DataManager.getCtdvTempList() != null) {
@@ -631,7 +643,12 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 									if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
 										SanPham sp = sp_dao.getSanPhamTheoMaSP(tmp.getMaSP());
 										sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
-										ctdv_dao.addChiTietDV(ctdv);
+										try {
+											ctdv_dao.addChiTietDV(ctdv);
+										} catch (RemoteException e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
 										sp_dao.updateSanPham(sp);
 									}
 								}
@@ -641,7 +658,12 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 									if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
 										SanPham sp = sp_dao.getSanPhamTheoMaSP(tmp.getMaSP());
 										sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
-										ctdv_dao.addChiTietDV(ctdv);
+										try {
+											ctdv_dao.addChiTietDV(ctdv);
+										} catch (RemoteException e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
 										sp_dao.updateSanPham(sp);
 									}
 								}
@@ -651,7 +673,12 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 									if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
 										SanPham sp = sp_dao.getSanPhamTheoMaSP(tmp.getMaSP());
 										sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
-										ctdv_dao.addChiTietDV(ctdv);
+										try {
+											ctdv_dao.addChiTietDV(ctdv);
+										} catch (RemoteException e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
 										sp_dao.updateSanPham(sp);
 									}
 								}

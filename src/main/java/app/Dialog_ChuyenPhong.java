@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -83,7 +84,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private Date tgHT;
 	private double soGioHat;
 	private double soPhutHat;
-	private final ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDon_dao cthd_dao;
 	private final PhieuDatPhong_dao pdp_dao;
 	private Date ngayHienTai;
 	private Date date;
@@ -99,8 +100,8 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private String loaiPhong;
 	private final JLabel lblPhongHienTai_1;
 	private final TempPhongBiChuyen_dao tempChuyen_dao;
-	private final ChiTietDichVu_dao ctdv_dao;
-	public Dialog_ChuyenPhong(String maPhong, String soNguoi) {
+	private  ChiTietDichVu_dao ctdv_dao;
+	public Dialog_ChuyenPhong(String maPhong, String soNguoi) throws RemoteException {
 		getContentPane().setBackground(Color.WHITE);
 		setSize(800, 480);
 		setLocationRelativeTo(null);
@@ -110,13 +111,21 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	    
 		ph_dao = new Phong_dao();
 		loaiPhong_dao = new LoaiPhong_dao();
-		cthd_dao = new ChiTietHoaDon_dao();
+		try {
+			cthd_dao = new ChiTietHoaDon_dao();
+		} catch (RemoteException e1) {
+			e1.printStackTrace();
+		}
 		pdp_dao = new PhieuDatPhong_dao();
 		nv_dao = new NhanVien_dao();
 		hd_dao = new HoaDonDatPhong_dao();
 		kh_dao = new KhachHang_dao();
 		tempChuyen_dao = new TempPhongBiChuyen_dao();
-		ctdv_dao = new ChiTietDichVu_dao();
+		try {
+			ctdv_dao = new ChiTietDichVu_dao();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		this.addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {
 				NhanVien nv = null;
@@ -409,7 +418,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
         }
 	}
 
-	private void chuyenPhong() {
+	private void chuyenPhong() throws RemoteException {
 		int flag = 0;
 		ChiTietHoaDon cthd_hienTaiCuaPhong = null;
 		ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(txtMa.getText());
@@ -563,7 +572,12 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 		} else if (o.equals(btnTimKiem)) {
 			timKiemPhong(); 
 		} else if (o.equals(btn_ChuyenPhong)) {
-			chuyenPhong();
+			try {
+				chuyenPhong();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 

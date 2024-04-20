@@ -1,5 +1,7 @@
 package dao;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,13 +10,26 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import connectDB.ConnectDB;
+import dao.impl.ChiTietDichVu_dao_impl;
 import entity.ChiTietDichVu;
 import entity.HoaDonDatPhong;
 import entity.Phong;
 import entity.SanPham;
 
-public class ChiTietDichVu_dao {
-	public ArrayList<ChiTietDichVu> getAllChiTietDichVu() {
+public class ChiTietDichVu_dao extends UnicastRemoteObject implements ChiTietDichVu_dao_impl {
+	
+	public ChiTietDichVu_dao() throws RemoteException {
+	
+	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6248955254471555575L;
+	
+
+	@Override
+	public ArrayList<ChiTietDichVu> getAllChiTietDichVu() throws RemoteException {
 		ArrayList<ChiTietDichVu> dsChiTietDichVu = new ArrayList<ChiTietDichVu>();
 		try {
 			ConnectDB.getInstance();
@@ -37,7 +52,8 @@ public class ChiTietDichVu_dao {
 		return dsChiTietDichVu;
 	}
 	
-	public ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaHD(String maHD) {
+	@Override
+	public ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaHD(String maHD) throws RemoteException {
 		ArrayList<ChiTietDichVu> dsChiTietDichVu = new ArrayList<ChiTietDichVu>();
 		try {
 			ConnectDB.getInstance();
@@ -60,7 +76,8 @@ public class ChiTietDichVu_dao {
 		return dsChiTietDichVu;
 	}
 	
-	public ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaHDVaMaPhong(String maHD, String maPhong) {
+	@Override
+	public ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaHDVaMaPhong(String maHD, String maPhong) throws RemoteException{
 		ArrayList<ChiTietDichVu> dsChiTietDichVu = new ArrayList<ChiTietDichVu>();
 		try {
 			ConnectDB.getInstance();
@@ -83,7 +100,8 @@ public class ChiTietDichVu_dao {
 		return dsChiTietDichVu;
 	}
 	
-	public ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaPhong(String maPhong) {
+	@Override
+	public ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaPhong(String maPhong) throws RemoteException {
 		ArrayList<ChiTietDichVu> dsChiTietDichVu = new ArrayList<ChiTietDichVu>();
 		try {
 			ConnectDB.getInstance();
@@ -106,7 +124,8 @@ public class ChiTietDichVu_dao {
 		return dsChiTietDichVu;
 	}
 	
-	public double tinhTongTienDVTheoMaHoaDon(String maHD) {
+	@Override
+	public double tinhTongTienDVTheoMaHoaDon(String maHD) throws RemoteException {
 		double tongTienDV = 0;
 		try {
 			ConnectDB.getInstance();
@@ -132,7 +151,8 @@ public class ChiTietDichVu_dao {
 		return tongTienDV;
 	}
 	
-	public boolean addChiTietDV(ChiTietDichVu ctdv) {
+	@Override
+	public boolean addChiTietDV(ChiTietDichVu ctdv)  throws RemoteException{
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
@@ -165,7 +185,8 @@ public class ChiTietDichVu_dao {
 		return n > 0;
 	}
 	
-	public boolean UpdateChiTietDV(ChiTietDichVu cthd) {
+	@Override
+	public boolean UpdateChiTietDV(ChiTietDichVu cthd) throws RemoteException{
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
@@ -197,7 +218,8 @@ public class ChiTietDichVu_dao {
 		return n > 0;
 	}
 	
-	public boolean deleteChiTietDV(String maSanPham) {
+	@Override
+	public boolean deleteChiTietDV(String maSanPham) throws RemoteException {
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
@@ -226,7 +248,8 @@ public class ChiTietDichVu_dao {
 		return n > 0;
 	}
 	
-	public boolean deleteChiTietDV2(String maHD, String maSanPham, String maPhong) {
+	@Override
+	public boolean deleteChiTietDV2(String maHD, String maSanPham, String maPhong) throws RemoteException {
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {

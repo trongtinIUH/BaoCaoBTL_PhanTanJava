@@ -1,9 +1,11 @@
 package app;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import dao.DangNhap_dao;
+import dao.impl.DangNhap_dao_impl;
 
 import javax.swing.SwingConstants;
 
@@ -33,9 +36,14 @@ public class Dialog_DoiMatKhau extends JDialog implements ActionListener {
 	private final JLabel lblTitle;
 	private final JButton btnHuy;
     private final JButton btnXacNhan;
-	private final DangNhap_dao dangNhap_dao = new DangNhap_dao();
+	private  DangNhap_dao dangNhap_dao ;
 	private String manv="";
 	public  Dialog_DoiMatKhau(String ma) {
+        try {
+            dangNhap_dao = new DangNhap_dao();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
 		setTitle("Đổi Mật Khẩu");
 		setSize(400, 300);
 		setLocationRelativeTo(null);
@@ -126,23 +134,29 @@ public class Dialog_DoiMatKhau extends JDialog implements ActionListener {
 		    String mk_cu=new String(mk_cuu);
 		    String mk_moi=new String(mk1);
 		    String mk_nhaplaimoi=new String(mk2);
-		    if(dangNhap_dao.LayMatKhauTheoMaNhanVien(manv).getMatKhau()!=null&&dangNhap_dao.LayMatKhauTheoMaNhanVien(manv).getMatKhau().equals(mk_cu)) {
-		        if(!mk_cu.equals(mk_moi)) {
-		            if(mk_moi.isEmpty() || mk_nhaplaimoi.isEmpty()) {
-		                JOptionPane.showMessageDialog(null, "Mật khẩu mới không được để trống !");
-		            } else if(mk_moi.equals(mk_nhaplaimoi)) {
-		                JOptionPane.showMessageDialog(null, "Mật khẩu mới của bạn đã được cập nhật !");
-		                dangNhap_dao.doiMatKhauTheoMaNV(manv, mk_moi);
-		                this.setVisible(false);	
-		            } else {
-		                JOptionPane.showMessageDialog(null, "Mật khẩu mới và nhập lại mật khẩu mới không trùng nhau !");
-		            }
-		        } else {
-		            JOptionPane.showMessageDialog(null, "Mật khẩu mới không được trùng với mật khẩu cũ !");
-		        }
-		    } else {
-		        JOptionPane.showMessageDialog(null, "MK cũ không chính xác hoặc không tồn tại!");
-		    }
+		    try {
+		    
+				if(dangNhap_dao.LayMatKhauTheoMaNhanVien(manv).getMatKhau()!=null&&dangNhap_dao.LayMatKhauTheoMaNhanVien(manv).getMatKhau().equals(mk_cu)) {
+				    if(!mk_cu.equals(mk_moi)) {
+				        if(mk_moi.isEmpty() || mk_nhaplaimoi.isEmpty()) {
+				            JOptionPane.showMessageDialog(null, "Mật khẩu mới không được để trống !");
+				        } else if(mk_moi.equals(mk_nhaplaimoi)) {
+				            JOptionPane.showMessageDialog(null, "Mật khẩu mới của bạn đã được cập nhật !");
+				            dangNhap_dao.doiMatKhauTheoMaNV(manv, mk_moi);
+				            this.setVisible(false);	
+				        } else {
+				            JOptionPane.showMessageDialog(null, "Mật khẩu mới và nhập lại mật khẩu mới không trùng nhau !");
+				        }
+				    } else {
+				        JOptionPane.showMessageDialog(null, "Mật khẩu mới không được trùng với mật khẩu cũ !");
+				    }
+				} else {
+				    JOptionPane.showMessageDialog(null, "MK cũ không chính xác hoặc không tồn tại!");
+				}
+			} catch (HeadlessException | RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 		else if(o.equals(btnHuy)) {

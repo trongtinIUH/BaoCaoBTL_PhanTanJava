@@ -1,5 +1,7 @@
 package dao;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,12 +10,27 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import connectDB.ConnectDB;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.DangNhap_dao_impl;
 import entity.NhanVien;
 import entity.TaiKhoan;
 
-public class DangNhap_dao {
+public class DangNhap_dao extends UnicastRemoteObject implements DangNhap_dao_impl {
 	
-	public ArrayList<TaiKhoan> getAllTaiKhoan() {
+	
+	
+	public DangNhap_dao() throws RemoteException {
+
+	}
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4745325277275024946L;
+
+ @Override
+	public ArrayList<TaiKhoan> getAllTaiKhoan() throws RemoteException {
 		ArrayList<TaiKhoan> dsTK = new ArrayList<TaiKhoan>();
 		try {
 			ConnectDB.getInstance();
@@ -37,8 +54,9 @@ public class DangNhap_dao {
 		return dsTK;
 	}
 	
+ @Override
 	//hàm tìm mã nv và mk để tiến hành đăng nhập
-	public boolean Timkiem(String maNV, String mk) {
+	public boolean Timkiem(String maNV, String mk) throws RemoteException {
         boolean found = false;
         try {
             ConnectDB.getInstance();
@@ -55,8 +73,9 @@ public class DangNhap_dao {
         return found;
     }
 	
+  @Override
 	// hàm quên mk sau đó cập nhật lại mk mới 
-	public boolean doiMatKhau(String soDienThoai, String matKhauMoi) {
+	public boolean doiMatKhau(String soDienThoai, String matKhauMoi)  throws RemoteException{
 	    boolean updated = false;
 	    try {
 	        ConnectDB.getInstance();
@@ -83,8 +102,9 @@ public class DangNhap_dao {
 	    }
 	    return updated;
 	}
+  @Override
 	// kiểm tra sdt có tồn tại trong hệ thống
-	public boolean TimkiemSDT(String SDT){
+	public boolean TimkiemSDT(String SDT) throws RemoteException{
 		boolean found = false;
 		try {
 			ConnectDB.getInstance();
@@ -100,8 +120,9 @@ public class DangNhap_dao {
 		}
 		return found;
 	}
+  @Override
 //tìm mk theo manv
-	public TaiKhoan LayMatKhauTheoMaNhanVien(String maNhanVien) {
+	public TaiKhoan LayMatKhauTheoMaNhanVien(String maNhanVien)  throws RemoteException{
 	    TaiKhoan taiKhoan = null;
 	    try {
 	        ConnectDB.getInstance();
@@ -122,8 +143,9 @@ public class DangNhap_dao {
 	    }
 	    return taiKhoan;
 	}
+  @Override
 //đổi mk theo ma nv
-	public boolean doiMatKhauTheoMaNV(String maNhanVien, String matKhauMoi) {
+	public boolean doiMatKhauTheoMaNV(String maNhanVien, String matKhauMoi) throws RemoteException {
 	    boolean updated = false;
 	    try {
 	        ConnectDB.getInstance();
@@ -149,8 +171,9 @@ public class DangNhap_dao {
 	    }
 	    return updated;
 	}
+  @Override
 	//thêm tk và  mk cho nv mới
-	public boolean Them_taiKhoan_matKhau(TaiKhoan tk) {
+	public boolean Them_taiKhoan_matKhau(TaiKhoan tk)  throws RemoteException{
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
@@ -180,8 +203,8 @@ public class DangNhap_dao {
 		return n > 0;
 	}
 
-
-	public String getRole(String maTaiKhoan, String matkhau) {
+@Override
+	public String getRole(String maTaiKhoan, String matkhau) throws RemoteException {
 	    String role = null;
 	    try {
 	        ConnectDB.getInstance();

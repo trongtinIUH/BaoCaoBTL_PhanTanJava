@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -76,7 +77,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	private final PhieuDatPhong_dao phieuDatPhong_dao;
 	@SuppressWarnings("unused")
 	private final PhieuDatPhong_dao phieuDatPhong_dao_1= new PhieuDatPhong_dao();
-	private final ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDon_dao cthd_dao;
 	private final Date gioHienTai;
 	private final Date phutHienTai;
 	private double soGioHat;
@@ -95,7 +96,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	private final TempPhongBiChuyen_dao tempChuyen_dao;
 	private final GD_DatPhong datPhong;
 
-	public Dialog_PhongDangSD(String maPhong, GD_DatPhong datPhong) {
+	public Dialog_PhongDangSD(String maPhong, GD_DatPhong datPhong) throws RemoteException {
 		// kích thước giao diện
 		maP = maPhong;
 		this.datPhong = datPhong;
@@ -107,7 +108,11 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 		this.setIconImage(icon.getImage());
 
 		phieuDatPhong_dao = new PhieuDatPhong_dao();
-		cthd_dao = new ChiTietHoaDon_dao();
+		try {
+			cthd_dao = new ChiTietHoaDon_dao();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		kh_dao = new KhachHang_dao();
 		tempTT_dao = new TempThanhToan_dao();
 		ph_dao = new Phong_dao();
@@ -343,7 +348,12 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnChuyenPhong)) {
-			dialog_ChuyenPhong = new Dialog_ChuyenPhong(lblPhong_1.getText(), lblSoNguoi_1.getText());
+			try {
+				dialog_ChuyenPhong = new Dialog_ChuyenPhong(lblPhong_1.getText(), lblSoNguoi_1.getText());
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dialog_ChuyenPhong.setModal(true);
 			dialog_ChuyenPhong.setVisible(true);
 			dispose();
@@ -359,7 +369,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 		if (o.equals(btnThanhToan)) {
 			if(tempTT_dao.getAllTemp().size() == 0) {
 				ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-				ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
+				ArrayList<ChiTietHoaDon> dsCTHD = new ArrayList<ChiTietHoaDon>();
+				try {
+					dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				for (ChiTietHoaDon cthd : dsCTHD) {
 					cthd_hienTaiCuaPhong = cthd;
 				}
@@ -369,7 +385,12 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				ArrayList<Phong> dsPhongTheoMaHoaDon = ph_dao.getPhongTheoMaCTHD(hd.getMaHoaDon());
 				if(dsPhongTheoMaHoaDon.size() == 1) {
 					DataManager.setMaHD_trongDSThanhToan(hd.getMaHoaDon());
-					dialog_ThanhToan = new Dialog_ThanhToan(lblPhong_1.getText());
+					try {
+						dialog_ThanhToan = new Dialog_ThanhToan(lblPhong_1.getText());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					dialog_ThanhToan.setModal(true);
 					dialog_ThanhToan.setVisible(true);
 					dispose();
@@ -392,7 +413,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 					
 					if(i > 0) {
 						ChiTietHoaDon cthd_ht = null;
-						ArrayList<ChiTietHoaDon> dsCTHD_ht = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText());
+						ArrayList<ChiTietHoaDon> dsCTHD_ht = new ArrayList<ChiTietHoaDon>();
+						try {
+							dsCTHD_ht = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText());
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						for (ChiTietHoaDon cthd : dsCTHD_ht) {
 							cthd_ht = cthd;
 						}
@@ -401,7 +428,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 						String maCt = "";
 						ArrayList<TempPhongBiChuyen> ds_PhongBiChuyen = tempChuyen_dao.getAllTemp();
 						for(TempPhongBiChuyen tm : ds_PhongBiChuyen) {
-							ArrayList<ChiTietHoaDon> cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhong());
+							ArrayList<ChiTietHoaDon> cthd_BiChuyen = new ArrayList<ChiTietHoaDon>();
+							try {
+								cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhong());
+							} catch (RemoteException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							for(ChiTietHoaDon ct : cthd_BiChuyen) {
 								maCt = ct.getHoaDon().getMaHoaDon();
 							}
@@ -426,7 +459,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				
 				if(i > 0) {
 					ChiTietHoaDon cthd_ht = null;
-					ArrayList<ChiTietHoaDon> dsCTHD_ht = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText());
+					ArrayList<ChiTietHoaDon> dsCTHD_ht = new ArrayList<ChiTietHoaDon>();
+					try {
+						dsCTHD_ht = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					for (ChiTietHoaDon cthd : dsCTHD_ht) {
 						cthd_ht = cthd;
 					}
@@ -435,7 +474,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 					String maCt = "";
 					ArrayList<TempPhongBiChuyen> ds_PhongBiChuyen = tempChuyen_dao.getAllTemp();
 					for(TempPhongBiChuyen tm : ds_PhongBiChuyen) {
-						ArrayList<ChiTietHoaDon> cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhong());
+						ArrayList<ChiTietHoaDon> cthd_BiChuyen = new ArrayList<ChiTietHoaDon>();
+						try {
+							cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhong());
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						for(ChiTietHoaDon ct : cthd_BiChuyen) {
 							maCt = ct.getHoaDon().getMaHoaDon();
 						}
@@ -447,7 +492,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				}
 				
 				ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-				ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
+				ArrayList<ChiTietHoaDon> dsCTHD = new ArrayList<ChiTietHoaDon>();
+				try {
+					dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				for (ChiTietHoaDon cthd : dsCTHD) {
 					cthd_hienTaiCuaPhong = cthd;
 				}
@@ -455,7 +506,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				int flag = 0;
 				ChiTietHoaDon cthd_hienTaiTemp = null;
 				for(TempThanhToan tmp : tempTT_dao.getAllTemp()) {
-					ArrayList<ChiTietHoaDon> dsCTHDTemp = cthd_dao.getChiTietHoaDonTheoMaPhong(tmp.getMaPhong().trim());
+					ArrayList<ChiTietHoaDon> dsCTHDTemp = new ArrayList<ChiTietHoaDon>();
+					try {
+						dsCTHDTemp = cthd_dao.getChiTietHoaDonTheoMaPhong(tmp.getMaPhong().trim());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					for (ChiTietHoaDon cthd : dsCTHDTemp) {
 						cthd_hienTaiTemp = cthd;
 					}
@@ -519,8 +576,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				}
 			}
 			DataManager.setSoDienThoaiKHDat(kh.getSoDienThoai());
-			dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
-					pdp_of_room.getSoNguoiHat(), trangChu);
+			try {
+				dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
+						pdp_of_room.getSoNguoiHat(), trangChu);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dispose();
 			JOptionPane.showMessageDialog(this, "Vui lòng chọn thêm phòng cần đặt");
 		}

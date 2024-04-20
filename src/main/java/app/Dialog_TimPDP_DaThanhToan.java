@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -56,7 +57,7 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	private LoaiPhong lp;
 	private final PhieuDatPhong_dao phieuDatPhong_dao;
 	private final Phong_dao phong_dao= new Phong_dao();
-	private final ChiTietHoaDon_dao cthd_dao;
+	private  ChiTietHoaDon_dao cthd_dao;
 	private final Date gioHienTai;
 	private final Date phutHienTai;
 	private double soGioHat;
@@ -71,10 +72,10 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	private final JLabel lbl_Tongtien_1;
 	private final KhuyenMai_dao khuyenmai_dao= new KhuyenMai_dao();
 
-	private final ChiTietDichVu_dao chitietdichvu_dao= new ChiTietDichVu_dao();
+	private  ChiTietDichVu_dao chitietdichvu_dao;
 	
 
-	public Dialog_TimPDP_DaThanhToan(String maPhong, String maPDP) {
+	public Dialog_TimPDP_DaThanhToan(String maPhong, String maPDP) throws RemoteException {
 		//kích thước giao diện
 		getContentPane().setBackground(Color.WHITE);
 		setSize(335, 500);
@@ -83,8 +84,18 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 	    this.setIconImage(icon.getImage());
 	    
+	    try {
+	    	chitietdichvu_dao= new ChiTietDichVu_dao();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		phieuDatPhong_dao = new PhieuDatPhong_dao();
-		cthd_dao = new ChiTietHoaDon_dao();
+		try {
+            cthd_dao = new ChiTietHoaDon_dao();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 		kh_dao = new KhachHang_dao();
 				
 		//các lbl góc trái-----------------------------------------------------------------------

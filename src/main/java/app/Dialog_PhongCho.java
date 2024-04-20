@@ -6,6 +6,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -381,8 +382,13 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 					// Khách hàng đến đúng giờ
 					TempDatPhong tmp = new TempDatPhong(p.getMaPhong(), Integer.parseInt(lbl_SoNguoi_1.getText()));
 					tmp_dao.addTemp(tmp);
-					dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
-							Integer.parseInt(lbl_SoNguoi_1.getText()), trangChu);
+					try {
+						dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
+								Integer.parseInt(lbl_SoNguoi_1.getText()), trangChu);
+					} catch (NumberFormatException | RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					dispose();
 					JOptionPane.showMessageDialog(this,
 							"Phòng " + p.getMaPhong() + " được thêm vào danh sách đặt phòng thành công.");

@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -96,9 +97,9 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 	private final HoaDonDatPhong_dao hoadon_dao;
 	private final KhachHang_dao khachhang_dao;
 	private final Phong_dao phong_dao;
-	private final ChiTietDichVu_dao chitietdichvu_dao;
+	private  ChiTietDichVu_dao chitietdichvu_dao;
 	private final KhuyenMai_dao khuyenmai_dao;
-	private final ChiTietHoaDon_dao chitiethoadon_dao;
+	private  ChiTietHoaDon_dao chitiethoadon_dao;
 	private final SanPham_dao sanpham_dao;
 	private XSSFWorkbook wordbook;
 	private final DecimalFormat df;
@@ -108,14 +109,24 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 	private final TimePickerSettings timeSettings;
 	private final DatePickerSettings dateSettings;
 
-	public GD_HoaDon() {
+	public GD_HoaDon() throws RemoteException {
 		df = new DecimalFormat("#,###,### VNĐ");
 		hoadon_dao = new HoaDonDatPhong_dao();
 		khachhang_dao = new KhachHang_dao();
 		phong_dao = new Phong_dao();
-		chitietdichvu_dao = new ChiTietDichVu_dao();
+		try {
+			chitietdichvu_dao = new ChiTietDichVu_dao();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		khuyenmai_dao = new KhuyenMai_dao();
-		chitiethoadon_dao = new ChiTietHoaDon_dao();
+		try {
+			chitiethoadon_dao = new ChiTietHoaDon_dao();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		sanpham_dao = new SanPham_dao();
 		setBackground(Color.decode("#FAFAFF"));
 		setLayout(null);
@@ -380,8 +391,13 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 				int orderDetailRow = tableOrderDetail.getSelectedRow();
 				if (orderDetailRow >= 0) {
 					clearTableServiceDetail();
-					loadServiceDetailData(modelOrderList.getValueAt(tableOrderList.getSelectedRow(), 1).toString(),
-							modelOrderDetail.getValueAt(orderDetailRow, 1).toString());
+					try {
+						loadServiceDetailData(modelOrderList.getValueAt(tableOrderList.getSelectedRow(), 1).toString(),
+								modelOrderDetail.getValueAt(orderDetailRow, 1).toString());
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -393,11 +409,21 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 		// TODO Auto-generated method stub
 		Object obj = e.getSource();
 		if (obj.equals(btnTimKiem)) {
-			tim();
+			try {
+				tim();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnXuatDSHD)) {
 			xuatExcel();
 		} else if (obj.equals(btnSua)) {
-			sua();
+			try {
+				sua();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnXoa)) {
 			xoa();
 		} else if (obj.equals(btnProfile)) {
@@ -419,14 +445,14 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 		modelServiceDetail.setRowCount(0);
 	}
 
-	public void loadOrderDetailData(String maHD) {
+	public void loadOrderDetailData(String maHD) throws RemoteException {
 		for (ChiTietHoaDon cthd : chitiethoadon_dao.getChiTietHoaDonTheoMaHD(maHD)) {
 			Object[] row = { cthd.getHoaDon().getMaHoaDon(), cthd.getPhong().getMaPhong(), Math.round(cthd.getSoGioHat() * 100.0) / 100.0 };
 			modelOrderDetail.addRow(row);
 		}
 	}
 
-	public void loadServiceDetailData(String maHD, String maPhong) {
+	public void loadServiceDetailData(String maHD, String maPhong) throws RemoteException {
 		for (ChiTietDichVu ctdv : chitietdichvu_dao.getChiTietDichVuTheoMaHD(maHD)) {
 			if (ctdv.getPhong().getMaPhong().equals(maPhong)) {
 				Object[] row = { ctdv.getHoaDon().getMaHoaDon(),
@@ -437,7 +463,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 		}
 	}
 
-	public void sua() {
+	public void sua() throws RemoteException {
 		if (tableOrderList.getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(null, "Bạn chưa chọn dòng để sửa!");
 		} else if (tableOrderList.getSelectedRowCount() > 1) {
@@ -479,7 +505,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 		}
 	}
 
-	public void tim() {
+	public void tim() throws RemoteException {
 		String searchTitle = txtTimKiem.getText();
 		if (searchTitle.equals("")) {
 			JOptionPane.showMessageDialog(null, "Vui lòng nhập vào từ khóa tìm kiếm!");
@@ -653,7 +679,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 		}
 	}
 
-	public void loadOrderListData() {
+	public void loadOrderListData() throws RemoteException {
 		int i = 0;
 		for (HoaDonDatPhong hd : hoadon_dao.getAllHoaDonDatPhong()) {
 			i++;
@@ -696,7 +722,12 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 		}
 		clearTableOrderDetail();
 		clearTableServiceDetail();
-		loadOrderDetailData(modelOrderList.getValueAt(row, 1).toString());
+		try {
+			loadOrderDetailData(modelOrderList.getValueAt(row, 1).toString());
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -77,7 +78,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	private final JTable table;
 	private final JScrollPane scroll;
 	private NhanVien_dao nv_dao;
-	private final DangNhap_dao dangNhap_dao = new DangNhap_dao();
+	private  DangNhap_dao dangNhap_dao ;
 	private final JTextField txtMa;
 	private final JTextField txtHoTen;
 	private final JTextField txtSDT;
@@ -93,6 +94,12 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	private final Dialog_User dialog_user = new Dialog_User();
 
 	public GD_NhanVien() {
+		try {
+			dangNhap_dao = new DangNhap_dao();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		setBackground(new Color(246, 245, 255));
 		setLayout(null);
 
@@ -427,7 +434,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 		}
 	}
 
-	private void them() {
+	private void them() throws RemoteException {
 		//Gán dữ liệu cứng
 		if(rdoNam.isSelected())
 			imageLabel.setIcon(new ImageIcon("image\\nhanvien_nam.png"));
@@ -664,7 +671,12 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 		// TODO Auto-generated method stub
 		Object obj = e.getSource();
 		if (obj.equals(btnThem)) {
-			them();
+			try {
+				them();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnXoa)) {
 			xoa();
 		} else if (obj.equals(btnSua)) {

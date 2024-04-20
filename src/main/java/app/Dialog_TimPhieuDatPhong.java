@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -754,13 +755,23 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			tim();
 		}
 		if (o.equals(btn_XemPhong)) {
-			xemPhong();
+			try {
+				xemPhong();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(btn_XuatPhong)) {
 			xuatExcel();
 		}
 		if (o.equals(btn_NhanPhong)) {
-			nhanPhong();
+			try {
+				nhanPhong();
+			} catch (NumberFormatException | RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			clearTable();
 			loadData();
 		}
@@ -932,7 +943,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 
 	}
 
-	public void xemPhong() {
+	public void xemPhong() throws RemoteException {
 		int row = tblPhieuDatPhong.getSelectedRow();
 		String maphong = (String) tblPhieuDatPhong.getValueAt(row, 1);
 		String hinhthuc = (String) tblPhieuDatPhong.getValueAt(row, 7);
@@ -970,7 +981,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			JOptionPane.showMessageDialog(null, "chưa chọn phòng chờ hiển thị!");
 	}
 
-	public void nhanPhong() {
+	public void nhanPhong() throws NumberFormatException, RemoteException {
 		int row = tblPhieuDatPhong.getSelectedRow();
 		String maphong = tblPhieuDatPhong.getValueAt(row, 1).toString();
 		String songuoi = tblPhieuDatPhong.getValueAt(row, 6).toString();
