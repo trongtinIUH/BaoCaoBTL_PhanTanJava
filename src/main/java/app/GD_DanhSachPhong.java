@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -31,11 +32,13 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import dao.Phong_dao;
+
+import dao.impl.PhongImpl;
 import entity.Enum_TrangThai;
 import entity.LoaiPhong;
 import entity.Phong;
 import dao.LoaiPhong_dao;
+import dao.PhongService;
 
 public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseListener {
 	/**
@@ -63,7 +66,7 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 	private final JButton btnXoa;
 	private final JButton btnSua;
 	private final JButton btnLamMoi;
-	private Phong_dao p_dao;
+	private PhongService p_Service;
 	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
 	private XSSFWorkbook wordbook;
 	private final JComboBox<String> cbLau;
@@ -366,22 +369,32 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 
 	private void loadData() {
 		int i = 0;
-		p_dao = new Phong_dao();
-		for (Phong p : p_dao.getallPhongs()) {
-			i++;
-			LoaiPhong loaiPhong = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
-			String trThai;
-			if (p.getTrangThai().toString().equals("Dang_su_dung")) {
-				trThai = "Đang sử dụng";
-			} else if (p.getTrangThai().toString().contentEquals("Dang_sua_chua"))
-				trThai = "Đang sửa chữa";
-			else
-				trThai = p.getTrangThai().toString();
-			if(loaiPhong != null) {
-			Object[] row = { i, p.getMaPhong(), loaiPhong.getTenLoaiPhong(), trThai, loaiPhong.getSucChua(),
-					loaiPhong.getDonGiaTheoGio() };
-			model.addRow(row);
+		try {
+			p_Service = new PhongImpl();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			for (Phong p : p_Service.getallPhongs()) {
+				i++;
+				LoaiPhong loaiPhong = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
+				String trThai;
+				if (p.getTrangThai().toString().equals("Dang_su_dung")) {
+					trThai = "Đang sử dụng";
+				} else if (p.getTrangThai().toString().contentEquals("Dang_sua_chua"))
+					trThai = "Đang sửa chữa";
+				else
+					trThai = p.getTrangThai().toString();
+				if(loaiPhong != null) {
+				Object[] row = { i, p.getMaPhong(), loaiPhong.getTenLoaiPhong(), trThai, loaiPhong.getSucChua(),
+						loaiPhong.getDonGiaTheoGio() };
+				model.addRow(row);
+				}
 			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -423,7 +436,7 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 		}
 	}
 
-	private void them() {
+	private void them() throws RemoteException{
 		if (txtSucChua.getText().trim().equals("") || txtDonGia.getText().trim().equals("")) {
 			JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!!");
 		} else {
@@ -445,7 +458,7 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			LoaiPhong lp = new LoaiPhong(maLP, tenLoaiPhong, sucChua, donGia);
 			Phong p = new Phong(maP, lp, trangThai);
 			lp_dao.addLoaiPhong(lp);
-			if (p_dao.addPhong(p)) {
+			if (p_Service.addPhong(p)) {
 				clearTable();
 				loadData();
 				xoaTrang();
@@ -465,7 +478,7 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa phòng này không?", "Thông báo",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				int row = table.getSelectedRow();
-				p_dao.deletePhong(model.getValueAt(row, 1).toString());
+				p_Service.deletePhong(model.getValueAt(row, 1).toString());
 				model.removeRow(row);
 				clearTable();
 				loadData();
@@ -498,7 +511,7 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			LoaiPhong lp = new LoaiPhong(maLP, tenLoaiPhong, sucChua, donGia);
 			Phong p = new Phong(maP, lp, trangThai);
 			lp_dao.addLoaiPhong(lp);
-			if (p_dao.updatePhong(p, generateRandomCode())) {
+			if (p_Service.updatePhong(p, generateRandomCode())) {
 //				if(txtMa.getText().trim() != model.getValueAt(table.getSelectedRow(), 1).toString()){
 //					JOptionPane.showMessageDialog(null, "Không được sửa mã phòng!!");
 //				}else if(txtMa.getText().trim() == model.getValueAt(table.getSelectedRow(), 1).toString()){
@@ -520,7 +533,12 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 		if (btnTimKiem.getText().equals("Tìm kiếm")) {
 			if (cbLoaiTim.getSelectedItem().equals("Mã phòng")) {
 				Phong p = null;
-				p = p_dao.getPhongTheoMaPhong(txtTuKhoaTim.getText());
+				try {
+					p = p_Service.getPhongTheoMaPhong(txtTuKhoaTim.getText());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if (p != null) {
 					btnTimKiem.setText("Hủy tìm");
 					clearTable();
@@ -532,7 +550,13 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 					JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin!!");
 				}
 			} else if (cbLoaiTim.getSelectedItem().equals("Sức chứa")) {
-				ArrayList<Phong> dsPhong = p_dao.getPhongTheoSucChua(txtTuKhoaTim.getText());
+				List<Phong> dsPhong = null;
+				try {
+					dsPhong = p_Service.getPhongTheoSucChua(txtTuKhoaTim.getText());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if (dsPhong != null) {
 					btnTimKiem.setText("Hủy tìm");
 					clearTable();
@@ -574,25 +598,25 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			cell = row.createCell(5, CellType.STRING);
 			cell.setCellValue("Đơn giá");
 
-			for (int i = 0; i < p_dao.getallPhongs().size(); i++) {
+			for (int i = 0; i < p_Service.getallPhongs().size(); i++) {
 				row = sheet.createRow(3 + i); // Bỏ qua 2 dòng trống
 
 				cell = row.createCell(0, CellType.NUMERIC);
 				cell.setCellValue(i + 1);
 				cell = row.createCell(1, CellType.STRING);
-				cell.setCellValue(p_dao.getallPhongs().get(i).getMaPhong());
+				cell.setCellValue(p_Service.getallPhongs().get(i).getMaPhong());
 				cell = row.createCell(2, CellType.STRING);
 				LoaiPhong loaiPhong = lp_dao
-						.getLoaiPhongTheoMaLoaiPhong(p_dao.getallPhongs().get(i).getLoaiPhong().getMaLoaiPhong());
+						.getLoaiPhongTheoMaLoaiPhong(p_Service.getallPhongs().get(i).getLoaiPhong().getMaLoaiPhong());
 				cell.setCellValue(loaiPhong.getTenLoaiPhong());
 				cell = row.createCell(3, CellType.STRING);
 				String trThai;
-				if (p_dao.getallPhongs().get(i).getTrangThai().toString().equals("Đang_sử_dụng")) {
+				if (p_Service.getallPhongs().get(i).getTrangThai().toString().equals("Đang_sử_dụng")) {
 					trThai = "Đang sử dụng";
-				} else if (p_dao.getallPhongs().get(i).getTrangThai().toString().contentEquals("Đang_sửa_chữa"))
+				} else if (p_Service.getallPhongs().get(i).getTrangThai().toString().contentEquals("Đang_sửa_chữa"))
 					trThai = "Đang sửa chữa";
 				else
-					trThai = p_dao.getallPhongs().get(i).getTrangThai().toString();
+					trThai = p_Service.getallPhongs().get(i).getTrangThai().toString();
 				cell.setCellValue(trThai);
 				cell = row.createCell(4, CellType.STRING);
 				cell.setCellValue(loaiPhong.getSucChua());
@@ -626,7 +650,12 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			dialog_user.setVisible(true);
 		}
 		if (obj.equals(btnThem)) {
-			them();
+			try {
+				them();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnXoa)) {
 			xoa();
 		} else if (obj.equals(btnSua)) {

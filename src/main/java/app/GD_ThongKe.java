@@ -41,9 +41,11 @@ import dao.ChiTietHoaDon_dao;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.KhuyenMai_dao;
-import dao.NhanVien_dao;
-import dao.Phong_dao;
+import dao.NhanVienService;
+import dao.PhongService;
 import dao.ThongKe_dao;
+import dao.impl.NhanVienImpl;
+import dao.impl.PhongImpl;
 import entity.HoaDonDatPhong;
 import utils.CurveLineChart;
 import utils.DoanhThuLoaiPhong;
@@ -75,7 +77,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 	JButton btnThongKe, btnLamMoi, btnProfile;
 	private final HoaDonDatPhong_dao hoadon_dao;
 	private final KhachHang_dao khachhang_dao;
-	private final Phong_dao phong_dao;
+	private final PhongService p_Service;
 	private final ChiTietDichVu_dao chitietdichvu_dao;
 	private final ChiTietHoaDon_dao chitiethoadon_dao;
 	private final KhuyenMai_dao khuyenmai_dao;
@@ -88,7 +90,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 	private final PieChart pieChart;
 	private final CurveLineChart lineChart;
 	private final ThongKe_dao thongke_dao;
-	private final NhanVien_dao nhanvien_dao;
+	private final NhanVienService nhanvien_dao;
 	private final Dialog_User dialog_user;
 
 	private final LocalDateTime now;
@@ -105,12 +107,12 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		setBackground(Color.decode("#FAFAFF"));
 		hoadon_dao = new HoaDonDatPhong_dao();
 		khachhang_dao = new KhachHang_dao();
-		phong_dao = new Phong_dao();
+		p_Service = new PhongImpl();
 		chitietdichvu_dao = new ChiTietDichVu_dao();
 		khuyenmai_dao = new KhuyenMai_dao();
 		chitiethoadon_dao = new ChiTietHoaDon_dao();
 		thongke_dao = new ThongKe_dao();
-		nhanvien_dao = new NhanVien_dao();
+		nhanvien_dao = new NhanVienImpl();
 		JPanel pnNorth = new JPanel();
 		pnNorth.setBackground(Color.decode("#B5E6FB"));
 		pnNorth.setBounds(0, 0, 1080, 60);
@@ -387,7 +389,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 			        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to match your SQL Server date/time format
 			        String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
 
-			        DoanhThuLoaiPhong dtlp = phong_dao.tinhTongDoanhThuLoaiPhongTheoNgay(formattedDateTime);
+			        DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoNgay(formattedDateTime);
 			        if(dtlp != null) {
 			            lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
 			            lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
@@ -435,7 +437,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		int i = 0;
 		for (HoaDonDatPhong hd : hoadon_dao.getHoaDonTheoNgayLapHD(formattedDateTime)) {
 			i++;
-			tongDoanhThu += hd.tinhTongTienThanhToan(phong_dao.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
+			tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
 					chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), 
 					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()));
 			doanhThuDV += chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon());
@@ -444,7 +446,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 			khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getHoTen(), 
 			khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getSoDienThoai(),
 			khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()),
-			df.format(hd.tinhTongTienThanhToan(phong_dao.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
+			df.format(hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
 			chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), 
 			khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai())
 			)),
@@ -463,7 +465,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		model.setRowCount(0);
 	}
 	
-	private void ThongKeMonth() {
+	private void ThongKeMonth() throws RemoteException {
 		  pieChart.setSelectedIndex(-1);
 		  pieChart.clearData();
 		  int month = Integer.valueOf(cbMonth.getSelectedItem().toString());
@@ -479,7 +481,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 			int i = 0;
 			for (HoaDonDatPhong hd : hoadon_dao.getHoaDonTheoThang(m, year)) {
 				i++;
-				tongDoanhThu += hd.tinhTongTienThanhToan(phong_dao.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
+				tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
 						chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), 
 						khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()));
 				doanhThuDV += chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon());
@@ -488,7 +490,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 			lblDoanhThuDichVu.setText(df.format(doanhThuDV));
 			lblTongHoaDon.setText(i+"");
 			try {
-		    	DoanhThuLoaiPhong dtlp = phong_dao.tinhTongDoanhThuLoaiPhongTheoThang(m, year);
+		    	DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoThang(m, year);
 			    if(dtlp != null) {
 			    	lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
 				    lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
@@ -510,7 +512,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 			}
 	}
 	
-	private void ThongKeYear() {
+	private void ThongKeYear() throws RemoteException {
 			pieChart.setSelectedIndex(-1);
 			pieChart.clearData();
 			int year = Integer.parseInt(cbYearEnd.getSelectedItem().toString());
@@ -519,7 +521,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 			int i = 0;
 			for (HoaDonDatPhong hd : hoadon_dao.getHoaDonTheoNam(year)) {
 				i++;
-				tongDoanhThu += hd.tinhTongTienThanhToan(phong_dao.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
+				tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
 						chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), 
 						khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()));
 				doanhThuDV += chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon());
@@ -528,7 +530,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 			lblDoanhThuDichVu.setText(df.format(doanhThuDV));
 			lblTongHoaDon.setText(i+"");
 			try {
-		    	DoanhThuLoaiPhong dtlp = phong_dao.tinhTongDoanhThuLoaiPhongTheoNam(year);
+		    	DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoNam(year);
 			    if(dtlp != null) {
 			    	lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
 				    lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
@@ -755,7 +757,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 					        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to match your SQL Server date/time format
 					        String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
 
-					        DoanhThuLoaiPhong dtlp = phong_dao.tinhTongDoanhThuLoaiPhongTheoNgay(formattedDateTime);
+					        DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoNgay(formattedDateTime);
 					        if(dtlp != null) {
 					            lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
 					            lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
@@ -800,7 +802,12 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 							dateTimePicker.setVisible(false);
 							pnTable.setVisible(false);
 							resetField();
-							ThongKeMonth();
+							try {
+								ThongKeMonth();
+							} catch (RemoteException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							if(lblTongDoanhThu.getText().equals("0 VNĐ")) {
 								JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê của tháng: "
 								+ cbMonth.getSelectedItem() + " năm: " + cbYear.getSelectedItem()
@@ -828,7 +835,12 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 								dateTimePicker.setVisible(false);
 								pnTable.setVisible(false);
 								resetField();
-								ThongKeYear();
+								try {
+									ThongKeYear();
+								} catch (RemoteException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 								lblChartTitle.setText("BIỂU ĐỒ THỐNG KÊ DOANH THU THEO NĂM");
 								if(lblTongDoanhThu.getText().equals("0 VNĐ")) {
 									JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê của năm "

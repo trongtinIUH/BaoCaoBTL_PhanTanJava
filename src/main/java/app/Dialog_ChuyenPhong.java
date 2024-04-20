@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -35,10 +36,13 @@ import dao.ChiTietHoaDon_dao;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.LoaiPhong_dao;
-import dao.NhanVien_dao;
-import dao.PhieuDatPhong_dao;
-import dao.Phong_dao;
+import dao.NhanVienService;
+import dao.PhieuDatPhongService;
+import dao.PhongService;
 import dao.TempPhongBiChuyen_dao;
+import dao.impl.NhanVienImpl;
+import dao.impl.PhieuDatPhongImpl;
+import dao.impl.PhongImpl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -69,7 +73,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private final JTable tblChuyenPhong;
 	private final DefaultTableModel model;
 	private final String[] col = { "Mã Phòng", "Loại Phòng", "Sức Chứa", "Đơn Giá", "Trạng Thái" };
-	private final Phong_dao ph_dao;
+	private final PhongService p_Service;
 	private final LoaiPhong_dao loaiPhong_dao;
 	private final JLabel lblPhongHienTai_1_1;
 	private final JPanel panel_1;
@@ -85,14 +89,14 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private double soGioHat;
 	private double soPhutHat;
 	private final ChiTietHoaDon_dao cthd_dao;
-	private final PhieuDatPhong_dao pdp_dao;
+	private final PhieuDatPhongService pdp_Service;
 	private Date ngayHienTai;
 	private Date date;
 	private final JLabel lblMaNV;
 	private final JTextField txtMaNV;
 	private final JLabel lblMaKH;
 	private final JTextField txtMaKH;
-	private final NhanVien_dao nv_dao;
+	private final NhanVienService nv_dao;
 	private final HoaDonDatPhong_dao hd_dao;
 	private final KhachHang_dao kh_dao;
 	private LocalDateTime ngayGioDatPhong;
@@ -109,11 +113,11 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 	    this.setIconImage(icon.getImage());
 	    
-		ph_dao = new Phong_dao();
+	    p_Service = new PhongImpl();
 		loaiPhong_dao = new LoaiPhong_dao();
 		cthd_dao = new ChiTietHoaDon_dao();
-		pdp_dao = new PhieuDatPhong_dao();
-		nv_dao = new NhanVien_dao();
+		pdp_Service = new PhieuDatPhongImpl();
+		nv_dao = new NhanVienImpl();
 		hd_dao = new HoaDonDatPhong_dao();
 		kh_dao = new KhachHang_dao();
 		tempChuyen_dao = new TempPhongBiChuyen_dao();
@@ -360,33 +364,48 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	}
 
 	private void loadData_Phong() {
-		for (Phong ph : ph_dao.getallPhongs()) {
-			if (Integer.parseInt(txtNguoi.getText().trim()) <= loaiPhong_dao
-					.getSucChuaTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong())
-					&& (ph.getTrangThai() == Enum_TrangThai.Trong)) {
-				Object[] row = { ph.getMaPhong(),
-						loaiPhong_dao.getTenLoaiPhongTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong()),
-						loaiPhong_dao.getSucChuaTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong()),
-						loaiPhong_dao.getDonGiaTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong()), ph.getTrangThai() };
-				model.addRow(row);
+		try {
+			for (Phong ph : p_Service.getallPhongs()) {
+				if (Integer.parseInt(txtNguoi.getText().trim()) <= loaiPhong_dao
+						.getSucChuaTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong())
+						&& (ph.getTrangThai() == Enum_TrangThai.Trong)) {
+					Object[] row = { ph.getMaPhong(),
+							loaiPhong_dao.getTenLoaiPhongTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong()),
+							loaiPhong_dao.getSucChuaTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong()),
+							loaiPhong_dao.getDonGiaTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong()), ph.getTrangThai() };
+					model.addRow(row);
+				}
 			}
+		} catch (NumberFormatException | RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
 	@SuppressWarnings("unused")
 	private void timKiemPhong() {
         if (btnTimKiem.getText().equals("Tìm kiếm")) {
-            ArrayList<Phong> dsPhong = new ArrayList<Phong>();
+            List<Phong> dsPhong = new ArrayList<Phong>();
             loaiPhong = comboBox_LoaiPhong.getSelectedItem().toString();
             if (txtMaPhong.getText().trim().equals("") && comboBox_LoaiPhong.getSelectedItem().equals("")) {
                 JOptionPane.showMessageDialog(this, "Bạn chưa nhập bất kì thông tin nào để tìm");
             } else {
                 if (!txtMaPhong.getText().trim().equals("")) {
-                    if (ph_dao.getPhongTheoMaPhong(txtMaPhong.getText()) != null) {
-                        dsPhong.add(ph_dao.getPhongTheoMaPhong(txtMaPhong.getText()));
-                    }
+                    try {
+						if (p_Service.getPhongTheoMaPhong(txtMaPhong.getText()) != null) {
+						    dsPhong.add(p_Service.getPhongTheoMaPhong(txtMaPhong.getText()));
+						}
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
                 } else if (!comboBox_LoaiPhong.getSelectedItem().toString().equals("")) {
-                    dsPhong = ph_dao.getPhongTheoLoaiPhong(loaiPhong);
+                    try {
+						dsPhong = p_Service.getPhongTheoTenLoaiPhong(loaiPhong);
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
                 }
             }
 
@@ -456,8 +475,8 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 					Enum_TrangThai trangThaiPhongMoi = Enum_TrangThai.Dang_su_dung;
 					Phong phongMoi = new Phong(maPhongMoi1, trangThaiPhongMoi);
 
-					ph_dao.updatePhong(phongCu, maPhongCu1);
-					ph_dao.updatePhong(phongMoi, maPhongMoi1);
+					p_Service.updatePhong(phongCu, maPhongCu1);
+					p_Service.updatePhong(phongMoi, maPhongMoi1);
 					
 					// update lại giờ trả phòng của phòng cũ
 					tgHT = new Date();
@@ -499,7 +518,12 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 					int songuoiHat = Integer.parseInt(txtNguoi.getText());
 
 					PhieuDatPhong pdp = new PhieuDatPhong(maPhieu, ph1, nv, kh, ngayGioDatPhong, ngay_GioNhanPhong, songuoiHat);
-					pdp_dao.addPhieuDatPhong(pdp);
+					try {
+						pdp_Service.addPhieuDatPhong(pdp);
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 					JOptionPane.showMessageDialog(null,
 							"Chuyển sang phòng " + model.getValueAt(tblChuyenPhong.getSelectedRow(), 0) + " thành công!!");
@@ -538,8 +562,13 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private int ThuTuPhieuDatPhongTrongNgay() {
 		int sl = 1;
 		String maPDP = "";
-		for (PhieuDatPhong pdp : pdp_dao.getAllsPhieuDatPhong()) {
-			maPDP = pdp.getMaPhieu(); // Chạy hết vòng for sẽ lấy được mã Phiếu đặt phòng cuối danh sách
+		try {
+			for (PhieuDatPhong pdp : pdp_Service.getAllsPhieuDatPhong()) {
+				maPDP = pdp.getMaPhieu(); // Chạy hết vòng for sẽ lấy được mã Phiếu đặt phòng cuối danh sách
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		int ngayTrenMaPDPCuoiDS = Integer.parseInt(maPDP.substring(3, 9));
 		DateFormat dateFormat = new SimpleDateFormat("yyMMdd"); // Format yyMMdd sẽ so sánh ngày được

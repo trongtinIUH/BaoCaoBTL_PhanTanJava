@@ -45,7 +45,8 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
 import dao.DangNhap_dao;
-import dao.NhanVien_dao;
+import dao.NhanVienService;
+import dao.impl.NhanVienImpl;
 import entity.NhanVien;
 import entity.TaiKhoan;
 import utils.DateLabelFormatter;
@@ -79,8 +80,8 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	private final DefaultTableModel model;
 	private final JTable table;
 	private final JScrollPane scroll;
-	private NhanVien_dao nv_dao;
-//	private NhanVienDao nv_dao;
+//	private NhanVien_dao nv_dao;
+	private NhanVienService nv_dao;
 	private final DangNhap_dao dangNhap_dao = new DangNhap_dao();
 	private final JTextField txtMa;
 	private final JTextField txtHoTen;
@@ -99,6 +100,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	public GD_NhanVien() throws RemoteException{
 		setBackground(new Color(246, 245, 255));
 		setLayout(null);
+		nv_dao = new NhanVienImpl();
 
 		pnNorth = new JPanel();
 		pnNorth.setLayout(null);
@@ -376,7 +378,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 		int i = 0;
 			
 			try {
-				nv_dao = new NhanVien_dao();
+				nv_dao = new NhanVienImpl();
 				for (NhanVien nv : nv_dao.findAllNhanVien()) {
 					i++;
 					Object[] row = { i, nv.getMaNhanVien(), nv.getHoTen(), nv.getSoDienThoai(), getGT(nv), nv.getNgaySinh(),
@@ -400,7 +402,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	private String thuTuNhanVienTrongNam() {
 		int sl = 0;
 		try {
-			nv_dao = new NhanVien_dao();
+			nv_dao = new NhanVienImpl();
 			for (NhanVien nv : nv_dao.findAllNhanVien()) {
 				if (nv.getMaNhanVien().startsWith("23"))
 					sl++;

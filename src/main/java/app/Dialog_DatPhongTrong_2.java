@@ -57,11 +57,15 @@ import dao.ChiTietHoaDon_dao;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.LoaiPhong_dao;
-import dao.NhanVien_dao;
-import dao.PhieuDatPhong_dao;
-import dao.Phong_dao;
-import dao.SanPham_dao;
+import dao.NhanVienService;
+import dao.PhieuDatPhongService;
+import dao.PhongService;
+import dao.SanPhamService;
 import dao.TempDatPhong_dao;
+import dao.impl.NhanVienImpl;
+import dao.impl.PhieuDatPhongImpl;
+import dao.impl.PhongImpl;
+import dao.impl.SanPhamImpl;
 
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -92,7 +96,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
     private final JLabel lbl_TenKH_1;
 	private final JTextField txtSoNguoi;
 	private final JButton btn_DatThemPhong;
-	private final NhanVien_dao nv_dao;
+	private final NhanVienService nv_dao;
 	private NhanVien nv;
 	private final HoaDonDatPhong_dao hddp_dao;
 	private final ChiTietHoaDon_dao cthd_dao;
@@ -116,16 +120,16 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 	private KhachHang_dao khachHang_dao;
 	private final JLabel lblTieuDe;
 	private final TempDatPhong_dao tmpDatPhong_dao;
-	private final Phong_dao p_dao;
+	private final PhongService p_Service;
 	private final LoaiPhong_dao lp_dao;
 	private final JLabel lbl_Loai;
 	private final JLabel lblMaPhong;
-	private final PhieuDatPhong_dao pdp_dao;
+	private final PhieuDatPhongService pdp_Service;
 	private Date ngayHienTai;
 	private Date date;
 	private final KhachHang_dao kh_dao;
 	private final DecimalFormat df;
-	private final SanPham_dao sp_dao = new SanPham_dao();
+	private final SanPhamService sp_Service = new SanPhamImpl();
 
 	public Dialog_DatPhongTrong_2(String maPhong, Phong p, LoaiPhong lp, int soNguoi, GD_TrangChu trangChu) throws RemoteException {
 		df = new DecimalFormat("#,###,### VNĐ");
@@ -138,14 +142,14 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 		setLocationRelativeTo(null);
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 		this.setIconImage(icon.getImage());
-		nv_dao = new NhanVien_dao();
+		nv_dao = new NhanVienImpl();
 		hddp_dao = new HoaDonDatPhong_dao();
 		cthd_dao = new ChiTietHoaDon_dao();
 		ctdv_dao = new ChiTietDichVu_dao();
 		tmpDatPhong_dao = new TempDatPhong_dao();
-		p_dao = new Phong_dao();
+		p_Service = new PhongImpl();
 		lp_dao = new LoaiPhong_dao();
-		pdp_dao = new PhieuDatPhong_dao();
+		pdp_Service = new PhieuDatPhongImpl();
 		kh_dao = new KhachHang_dao();
 
 		// panel chứa tiêu đề--------------------------------------
@@ -418,7 +422,13 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 		for (TempDatPhong tmp : tmpDatPhong_dao.getAllTemp()) {
 			if (!tmp.getMaPhong().equals("000")) {
 				i++;
-				Phong p = p_dao.getPhongTheoMaPhong(tmp.getMaPhong());
+				Phong p = null;
+				try {
+					p = p_Service.getPhongTheoMaPhong(tmp.getMaPhong());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				LoaiPhong lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
 				Object[] row = { i, tmp.getMaPhong(), lp.getTenLoaiPhong(), tmp.getSoNguoiHat(),
 						lp.getDonGiaTheoGio() };
@@ -547,7 +557,12 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 				}
 				String maPhong = lblMaPhong.getText();
 				String ma = maPhong.substring(maPhong.indexOf(":") + 1).trim();
-				dialog_ThemDichVu = new Dialog_ThemDichVu(customer, nv.getHoTen(), ma);
+				try {
+					dialog_ThemDichVu = new Dialog_ThemDichVu(customer, nv.getHoTen(), ma);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				dialog_ThemDichVu.setModal(true);
 				dialog_ThemDichVu.setVisible(true);
 			} else {
@@ -574,7 +589,13 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 			if (!lbl_TenKH_1.getText().equals("")) {
 				for (TempDatPhong tmpDatPhong : tmpDatPhong_dao.getAllTemp()) {
 					// Sửa trống -> Đang sử dụng
-					Phong p = p_dao.getPhongTheoMaPhong(tmpDatPhong.getMaPhong());
+					Phong p = null;
+					try {
+						p = p_Service.getPhongTheoMaPhong(tmpDatPhong.getMaPhong());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					if (p != null && p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
 						checkPSD = 1;
 						ArrayList<ChiTietHoaDon> dsChiTietHoaDon = cthd_dao
@@ -597,15 +618,25 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 						PhieuDatPhong pdb = new PhieuDatPhong(TaoMaPDP(), p, nv, kh, ngayGioHT, ngayGioHT,
 								tmpDatPhong.getSoNguoiHat());
 						if (p.getTrangThai() != Enum_TrangThai.Cho) {
-							pdp_dao.addPhieuDatPhong(pdb);
+							try {
+								pdp_Service.addPhieuDatPhong(pdb);
+							} catch (RemoteException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							// Nếu là chờ thì sửa lại.
 						}
 						if (p.getTrangThai() == Enum_TrangThai.Cho) {
-							pdp_dao.addPhieuDatPhong(pdb);
+							try {
+								pdp_Service.addPhieuDatPhong(pdb);
+							} catch (RemoteException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 
 						p.setTrangThai(Enum_TrangThai.Dang_su_dung);
-						p_dao.updatePhong(p, p.getMaPhong());
+						p_Service.updatePhong(p, p.getMaPhong());
 
 						// Thêm vào HoaDonDatPhong
 						KhuyenMai km = new KhuyenMai(null);
@@ -631,35 +662,78 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 						// Thêm chi tiết dịch vụ, cập nhật lại số lượng sản phẩm trong csdl
 						if (DataManager.getCtdvTempList() != null) {
 							for (TempThemDV tmp : DataManager.getCtdvTempList()) {
-								if(sp_dao.getLoaiSanPhamTheoMaSP(tmp.getMaSP()).equals("Thức ăn")) {
-									ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
-											new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.03);
-									if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
-										SanPham sp = sp_dao.getSanPhamTheoMaSP(tmp.getMaSP());
-										sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
-										ctdv_dao.addChiTietDV(ctdv);
-										sp_dao.updateSanPham(sp);
-									}
-								}
-								else if(sp_dao.getLoaiSanPhamTheoMaSP(tmp.getMaSP()).equals("Đồ uống")) {
-									ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
-											new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.02);
-									if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
-										SanPham sp = sp_dao.getSanPhamTheoMaSP(tmp.getMaSP());
-										sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
-										ctdv_dao.addChiTietDV(ctdv);
-										sp_dao.updateSanPham(sp);
-									}
-								}
-								else {
-									ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
-											new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.01);
-									if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
-										SanPham sp = sp_dao.getSanPhamTheoMaSP(tmp.getMaSP());
-										sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
-										ctdv_dao.addChiTietDV(ctdv);
-										sp_dao.updateSanPham(sp);
-									}
+								try {
+									if(sp_Service.getLoaiSanPhamTheoMaSP(tmp.getMaSP()).equals("Thức ăn")) {
+										ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
+												new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.03);
+										if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
+											SanPham sp = null;
+											try {
+												sp = sp_Service.getSanPhamTheoMaSP(tmp.getMaSP());
+											} catch (RemoteException e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
+											}
+											sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
+											ctdv_dao.addChiTietDV(ctdv);
+											try {
+												sp_Service.updateSanPham(sp);
+											} catch (RemoteException e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
+											}
+										}
+									} else
+										try {
+											if(sp_Service.getLoaiSanPhamTheoMaSP(tmp.getMaSP()).equals("Đồ uống")) {
+												ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
+														new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.02);
+												if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
+													SanPham sp = null;
+													try {
+														sp = sp_Service.getSanPhamTheoMaSP(tmp.getMaSP());
+													} catch (RemoteException e1) {
+														// TODO Auto-generated catch block
+														e1.printStackTrace();
+													}
+													sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
+													ctdv_dao.addChiTietDV(ctdv);
+													try {
+														sp_Service.updateSanPham(sp);
+													} catch (RemoteException e1) {
+														// TODO Auto-generated catch block
+														e1.printStackTrace();
+													}
+												}
+											}
+											else {
+												ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
+														new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.01);
+												if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
+													SanPham sp = null;
+													try {
+														sp = sp_Service.getSanPhamTheoMaSP(tmp.getMaSP());
+													} catch (RemoteException e1) {
+														// TODO Auto-generated catch block
+														e1.printStackTrace();
+													}
+													sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
+													ctdv_dao.addChiTietDV(ctdv);
+													try {
+														sp_Service.updateSanPham(sp);
+													} catch (RemoteException e1) {
+														// TODO Auto-generated catch block
+														e1.printStackTrace();
+													}
+												}
+											}
+										} catch (RemoteException e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+								} catch (RemoteException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
 								}
 							}
 						}
@@ -756,8 +830,13 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 	private int ThuTuPhieuDatPhongTrongNgay() {
 		int sl = 1;
 		String maPDP = "";
-		for (PhieuDatPhong pdp : pdp_dao.getAllsPhieuDatPhong()) {
-			maPDP = pdp.getMaPhieu(); // Chạy hết vòng for sẽ lấy được mã Phiếu đặt phòng cuối danh sách
+		try {
+			for (PhieuDatPhong pdp : pdp_Service.getAllsPhieuDatPhong()) {
+				maPDP = pdp.getMaPhieu(); // Chạy hết vòng for sẽ lấy được mã Phiếu đặt phòng cuối danh sách
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		int ngayTrenMaPDPCuoiDS = Integer.parseInt(maPDP.substring(3, 9));
 		DateFormat dateFormat = new SimpleDateFormat("yyMMdd"); // Format yyMMdd sẽ so sánh ngày được

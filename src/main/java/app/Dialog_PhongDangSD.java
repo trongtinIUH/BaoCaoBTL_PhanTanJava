@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -28,11 +29,13 @@ import dao.ChiTietHoaDon_dao;
 import dao.HoaDonDatPhong_dao;
 import dao.KhachHang_dao;
 import dao.LoaiPhong_dao;
-import dao.PhieuDatPhong_dao;
-import dao.Phong_dao;
+import dao.PhieuDatPhongService;
+import dao.PhongService;
 import dao.TempDatPhong_dao;
 import dao.TempPhongBiChuyen_dao;
 import dao.TempThanhToan_dao;
+import dao.impl.PhieuDatPhongImpl;
+import dao.impl.PhongImpl;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
 import entity.HoaDonDatPhong;
@@ -70,33 +73,29 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	private Dialog_ChuyenPhong dialog_ChuyenPhong;
 	private Dialog_ThemDichVu dialog_ThemDichVu;
 	private Dialog_ThanhToan dialog_ThanhToan;
-	private final Phong_dao p_dao = new Phong_dao();
+	private PhongService p_Service = new PhongImpl();
 	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
 	private Phong p;
 	private LoaiPhong lp;
-	private final PhieuDatPhong_dao phieuDatPhong_dao;
-	@SuppressWarnings("unused")
-	private final PhieuDatPhong_dao phieuDatPhong_dao_1= new PhieuDatPhong_dao();
 	private final ChiTietHoaDon_dao cthd_dao;
 	private final Date gioHienTai;
 	private final Date phutHienTai;
 	private double soGioHat;
 	private double soPhutHat;
 	private final KhachHang_dao kh_dao;
-	private final PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
+	private final PhieuDatPhongService pdp_Service = new PhieuDatPhongImpl();
 	private PhieuDatPhong pdp_of_room;
 	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
 	private final HoaDonDatPhong_dao hd_dao = new HoaDonDatPhong_dao();
 	private GD_TrangChu trangChu;
 	private final TempThanhToan_dao tempTT_dao;
-	private final Phong_dao ph_dao;
 	@SuppressWarnings("unused")
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
 	private final String maP;
 	private final TempPhongBiChuyen_dao tempChuyen_dao;
 	private final GD_DatPhong datPhong;
 
-	public Dialog_PhongDangSD(String maPhong, GD_DatPhong datPhong) {
+	public Dialog_PhongDangSD(String maPhong, GD_DatPhong datPhong) throws RemoteException{
 		// kích thước giao diện
 		maP = maPhong;
 		this.datPhong = datPhong;
@@ -107,11 +106,12 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 		this.setIconImage(icon.getImage());
 
-		phieuDatPhong_dao = new PhieuDatPhong_dao();
 		cthd_dao = new ChiTietHoaDon_dao();
 		kh_dao = new KhachHang_dao();
 		tempTT_dao = new TempThanhToan_dao();
-		ph_dao = new Phong_dao();
+		
+		p_Service = new PhongImpl();
+	
 		tempChuyen_dao = new TempPhongBiChuyen_dao();
 
 		// các lbl góc
@@ -153,7 +153,12 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 		lblPhong_1.setFont(new Font("Arial", Font.BOLD, 15));
 		lblPhong_1.setBounds(150, 10, 140, 30);
 		getContentPane().add(lblPhong_1);
-		p = p_dao.getPhongTheoMaPhong(maPhong);
+		try {
+			p = p_Service.getPhongTheoMaPhong(maPhong);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
 
 		lblLoai_1 = new JLabel();
@@ -163,8 +168,8 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 		getContentPane().add(lblLoai_1);
 
 		pdp_of_room = null;
-		ArrayList<PhieuDatPhong> dsPDP = phieuDatPhong_dao
-				.getDanhsachPhieuDatPhongTheoMaPhong(lblPhong_1.getText().trim());
+		List<PhieuDatPhong> dsPDP = pdp_Service
+				.getDanhSachPhieuDatPhongTheoMaPhong(lblPhong_1.getText().trim());
 		for (PhieuDatPhong pdp : dsPDP) {
 			pdp_of_room = pdp;
 		}
@@ -216,7 +221,12 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 		lbltrangthai_1.setBounds(150, 170, 120, 30);
 		getContentPane().add(lbltrangthai_1);
 
-		p = p_dao.getPhongTheoMaPhong(maPhong);
+		try {
+			p = p_Service.getPhongTheoMaPhong(maPhong);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
 
 		lblgia_1 = new JLabel();
@@ -356,8 +366,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 		}
 
 		if (o.equals(btnThemDV)) {
-			dialog_ThemDichVu = new Dialog_ThemDichVu(lblTenKH_1.getText(), DataManager.getUserName(),
-					lblPhong_1.getText());
+			try {
+				dialog_ThemDichVu = new Dialog_ThemDichVu(lblTenKH_1.getText(), DataManager.getUserName(),
+						lblPhong_1.getText());
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dialog_ThemDichVu.setModal(true);
 			dialog_ThemDichVu.setVisible(true);
 			dispose();
@@ -372,7 +387,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				HoaDonDatPhong hd = null;
 				hd = hd_dao.getHoaDonTheoMaHoaDon(cthd_hienTaiCuaPhong.getHoaDon().getMaHoaDon());
 				
-				ArrayList<Phong> dsPhongTheoMaHoaDon = ph_dao.getPhongTheoMaCTHD(hd.getMaHoaDon());
+				List<Phong> dsPhongTheoMaHoaDon = null;
+				try {
+					dsPhongTheoMaHoaDon = p_Service.getPhongTheoMaCTHD(hd.getMaHoaDon());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				if(dsPhongTheoMaHoaDon.size() == 1) {
 					DataManager.setMaHD_trongDSThanhToan(hd.getMaHoaDon());
 					try {
@@ -492,7 +513,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 			TempDatPhong tmp = null;
 			KhachHang kh = kh_dao.getKhachHangTheoMaKH(pdp_of_room.getKhachHang().getMaKhachHang());
 
-			ArrayList<PhieuDatPhong> DsPDP_Tmp = pdp_dao.getPhieuDatPhongTheoMaKH(kh.getMaKhachHang());
+			List<PhieuDatPhong> DsPDP_Tmp = null;
+			try {
+				DsPDP_Tmp = pdp_Service.getPhieuDatPhongTheoMaKH(kh.getMaKhachHang());
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 			// lấy ra danh sách phiếu đặt phòng mới nhất của khách hàng nếu bị trùng phòng
 			ArrayList<PhieuDatPhong> DsPDP = new ArrayList<PhieuDatPhong>();
@@ -522,7 +549,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 
 			String maHD_PhongHT = hd_dao.getHoaDonDatPhongTheoMaPDP(pdp_PhongHT.getMaPhieu()).getMaHoaDon();
 			for (PhieuDatPhong pdp : DsPDP) {
-				Phong p = p_dao.getPhongTheoMaPhong(pdp.getPhong().getMaPhong());
+				Phong p = null;
+				try {
+					p = p_Service.getPhongTheoMaPhong(pdp.getPhong().getMaPhong());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				HoaDonDatPhong hd = hd_dao.getHoaDonDatPhongTheoMaPDP(pdp.getMaPhieu());
 				if (p.getTrangThai() == Enum_TrangThai.Dang_su_dung && hd.getMaHoaDon().equals(maHD_PhongHT)) {
 					tmp = new TempDatPhong(pdp.getPhong().getMaPhong(), pdp.getSoNguoiHat());

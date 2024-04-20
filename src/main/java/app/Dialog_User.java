@@ -24,7 +24,8 @@ import java.awt.Window;
 import javax.swing.UIManager;
 
 import dao.DangNhap_dao;
-import dao.NhanVien_dao;
+import dao.NhanVienService;
+import dao.impl.NhanVienImpl;
 import entity.NhanVien;
 
 public class Dialog_User extends JDialog implements ActionListener{
@@ -41,7 +42,7 @@ public class Dialog_User extends JDialog implements ActionListener{
 	private final JTextField txtQunL;
 	private final JLabel hinhNV;
 	private final JLabel lbl_nen;
-	private final NhanVien_dao nv_dao;
+	private final NhanVienService nv_dao;
 	private Dialog_DoiMatKhau Dialog_Doi_mk;
 	private String ma;
 	private final JLabel lbl_TrangThai_1;
@@ -57,7 +58,7 @@ public class Dialog_User extends JDialog implements ActionListener{
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 	    this.setIconImage(icon.getImage());
 		//setResizable(false);
-		nv_dao = new NhanVien_dao();
+		nv_dao = new NhanVienImpl();
 		this.addWindowListener(new WindowAdapter() {
 		    public void windowOpened(WindowEvent e) {
 				NhanVien nv = null;
