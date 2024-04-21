@@ -55,9 +55,13 @@ public class KhuyenMaiImpl extends UnicastRemoteObject implements KhuyenMaiServi
 
 	@Override
 	public float getPhanTramKhuyenMaiTheoMaKM(String maKM) throws RemoteException {
-		TypedQuery<Float> query = em.createNamedQuery("KhuyenMai.getPhanTramKhuyenMaiTheoMaKM", Float.class);
-		query.setParameter("maKM", maKM);
-		return query.getSingleResult();
+		if (maKM == null) {
+			return 0.0f;
+		}else {
+			TypedQuery<Float> query = em.createNamedQuery("KhuyenMai.getPhanTramKhuyenMaiTheoMaKM", Float.class);
+			query.setParameter("maKM", maKM);
+			return query.getSingleResult();
+		}
 	}
 
 	@Override

@@ -10,7 +10,7 @@ import entity.PhieuDatPhong;
 
 public interface PhieuDatPhongService extends Remote{
 	public boolean addPhieuDatPhong(PhieuDatPhong pdp) throws RemoteException;
-	public boolean xoaPhieuDatPhongTheoMa(String maPhong);
+	public boolean xoaPhieuDatPhongTheoMa(String maPhong) throws RemoteException;
 	public List<PhieuDatPhong> getAllsPhieuDatPhong() throws RemoteException;
 	public List<PhieuDatPhong> getMaPhongDatTruoc() throws RemoteException;
 	public PhieuDatPhong getPDPDatTruocTheoMaPhong(String maPhong) throws RemoteException;

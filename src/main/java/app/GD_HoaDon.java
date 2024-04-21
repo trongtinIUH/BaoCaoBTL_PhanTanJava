@@ -682,13 +682,14 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 		int i = 0;
 		for (HoaDonDatPhong hd : hoadon_dao.getAllHoaDonDatPhong()) {
 			i++;
+			String maKM = hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKhuyenMai() : null;
 			Object[] row = { i, hd.getMaHoaDon(),
 					khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getHoTen(),
 					hd.getNhanVien().getMaNhanVien(), hd.getNgayLapHoaDon(),
-					hd.isTrangThai() ? "Đã thanh toán" : "Chưa thanh toán", hd.getKhuyenMai().getMaKhuyenMai(),
+					hd.isTrangThai() ? "Đã thanh toán" : "Chưa thanh toán", maKM,
 					df.format(hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 							chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
-							khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()))) };
+							khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(maKM)))};
 			modelOrderList.addRow(row);
 		}
 	}

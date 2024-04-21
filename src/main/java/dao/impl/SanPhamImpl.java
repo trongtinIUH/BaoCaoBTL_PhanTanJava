@@ -80,7 +80,7 @@ public class SanPhamImpl extends UnicastRemoteObject implements SanPhamService{
 	}
 
 	@Override
-	public boolean deleteSanPham(String maSP) {
+	public boolean deleteSanPham(String maSP) throws RemoteException {
 		EntityTransaction tx = em.getTransaction();
 
 		try {

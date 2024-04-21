@@ -465,7 +465,12 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa Sản phẩm này không?", "Thông báo",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				int row = table.getSelectedRow();
-				sp_Service.deleteSanPham(model.getValueAt(row, 1).toString());
+				try {
+					sp_Service.deleteSanPham(model.getValueAt(row, 1).toString());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				model.removeRow(row);
 				JOptionPane.showMessageDialog(this, "Xóa thành công!!");
 			}

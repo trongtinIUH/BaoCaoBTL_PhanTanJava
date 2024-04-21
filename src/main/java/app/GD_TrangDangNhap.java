@@ -10,7 +10,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -26,10 +25,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
-
-import connectDB.ConnectDB;
-import dao.DangNhapServices;
 import dao.impl.DangNhap_dao_impl;
+import jakarta.persistence.Persistence;
 
 public class GD_TrangDangNhap extends JFrame  implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -48,12 +45,6 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
 		setSize(720, 400);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		try {
-  			ConnectDB.getInstance().connect("sa", "sapassword");
-  		} catch (SQLException e1) {
-  			// TODO Auto-generated catch block
-  			e1.printStackTrace();
-  		}
 		try {
 			dangNhap_dao= new DangNhap_dao_impl();
 		} catch (Exception e) {
@@ -215,22 +206,18 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
 	          try {
 				if (dangNhap_dao.Timkiem(username, mkstr)) {
 					  String roleName = dangNhap_dao.getRole(username, mkstr);
-					    try {
-					        if (roleName.equals("Quản lý")) {
-					        	DataManager.setRole("QL");
-					        	DataManager.setRolePassword("QLpassword");
-					            ConnectDB.getInstance().connect("QL", "QLpassword");
-					        } else if (roleName.equals("Nhân viên")) {
-					        	DataManager.setRole("NV");
-					        	DataManager.setRolePassword("NVpassword");
-					            ConnectDB.getInstance().connect("NV", "NVpassword");
-					            gd_TrangChu.btnDanhSachPhong.setEnabled(false);
-					            gd_TrangChu.btnNhanVien.setEnabled(false);
-					            gd_TrangChu.btnSanPham.setEnabled(false);
-					        }
-					    } catch (SQLException ex) {
-					    	ex.printStackTrace();
-					    }
+					    if (roleName.equals("Quản lý")) {
+							DataManager.setRole("QL");
+							DataManager.setRolePassword("QLpassword");
+						    Persistence.createEntityManagerFactory("jpa-mssql-manager");
+						} else if (roleName.equals("Nhân viên")) {
+							DataManager.setRole("NV");
+							DataManager.setRolePassword("NVpassword");
+							Persistence.createEntityManagerFactory("jpa-mssql-employee");
+						    gd_TrangChu.btnDanhSachPhong.setEnabled(false);
+						    gd_TrangChu.btnNhanVien.setEnabled(false);
+						    gd_TrangChu.btnSanPham.setEnabled(false);
+						}
 				      gd_TrangChu.setVisible(true);
 				      dispose();
 				  } else {

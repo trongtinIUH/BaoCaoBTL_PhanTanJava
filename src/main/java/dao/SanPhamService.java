@@ -10,7 +10,7 @@ public interface SanPhamService extends Remote{
 	public boolean addSanPham(SanPham sp) throws RemoteException;
 	public boolean updateSanPham(SanPham sp) throws RemoteException;
 	public boolean updateSLTon(int slTon, String ma) throws RemoteException;
-	public boolean deleteSanPham(String maSP);
+	public boolean deleteSanPham(String maSP) throws RemoteException;
 	public List<SanPham> getAllSanPhams() throws RemoteException;
 	public SanPham getSanPhamTheoMaSP(String maSP) throws RemoteException;
 	public String getLoaiSanPhamTheoMaSP(String maSP) throws RemoteException;

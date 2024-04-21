@@ -1,31 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+<persistence version="2.2"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 	<persistence-unit name="jpa-mssql">
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>entity.ChiTietDichVu</class>
-        <class>entity.ChiTietHoaDon</class>
-        <class>entity.HoaDonDatPhong</class>
-        <class>entity.KhachHang</class>
-        <class>entity.KhuyenMai</class>
-        <class>entity.LoaiPhong</class>
-        <class>entity.NhanVien</class>
-        <class>entity.PhieuDatPhong</class>
-        <class>entity.Phong</class>
-        <class>entity.SanPham</class>
-        <class>entity.TaiKhoan</class>
-        <class>entity.TempDatPhong</class>
-        <class>entity.TempPhongBiChuyen</class>
-        <class>entity.TempThanhToan</class>
-        <properties>
-            <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-            <property name="jakarta.persistence.jdbc.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
-            <property name="hibernate.connection.url" value="jdbc:sqlserver://localhost:1433;databaseName=BaiTapLonPTUD_NHOM4;trustServerCertificate=true;encrypt=true;"/>
-            <property name="hibernate.connection.username" value="sa"/>
-            <property name="hibernate.connection.password" value="sapassword"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.show_sql" value="false"/>
-            <property name="hibernate.format_sql" value="true"/>
-        </properties>
-    </persistence-unit>
-
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<class>entity.ChiTietDichVu</class>
+		<class>entity.ChiTietHoaDon</class>
+		<class>entity.HoaDonDatPhong</class>
+		<class>entity.KhachHang</class>
+		<class>entity.KhuyenMai</class>
+		<class>entity.LoaiPhong</class>
+		<class>entity.NhanVien</class>
+		<class>entity.PhieuDatPhong</class>
+		<class>entity.Phong</class>
+		<class>entity.SanPham</class>
+		<class>entity.TaiKhoan</class>
+		<class>entity.TempDatPhong</class>
+		<class>entity.TempPhongBiChuyen</class>
+		<class>entity.TempThanhToan</class>
+		<properties>
+			<property name="jakarta.persistence.jdbc.driver"
+				value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<property name="jakarta.persistence.jdbc.dialect"
+				value="org.hibernate.dialect.SQLServerDialect" />
+			<property name="hibernate.connection.url"
+				value="jdbc:sqlserver://localhost:1433;databaseName=BaiTapLonPTUD_NHOM4;trustServerCertificate=true;encrypt=true;" />
+			<property name="hibernate.connection.username" value="sa" />
+			<property name="hibernate.connection.password"
+				value="sapassword" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.generate_statistics" value="false"></property>
+        	<property name="hibernate.use_sql_comments" value="false"></property>
+        	<property name="log4j.logger.org.hibernate" value="ERROR, stdout"></property>
+		</properties>
+	</persistence-unit>
+	
+	<persistence-unit name="jpa-mssql-employee">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<class>entity.ChiTietDichVu</class>
+		<class>entity.ChiTietHoaDon</class>
+		<class>entity.HoaDonDatPhong</class>
+		<class>entity.KhachHang</class>
+		<class>entity.KhuyenMai</class>
+		<class>entity.LoaiPhong</class>
+		<class>entity.NhanVien</class>
+		<class>entity.PhieuDatPhong</class>
+		<class>entity.Phong</class>
+		<class>entity.SanPham</class>
+		<class>entity.TaiKhoan</class>
+		<class>entity.TempDatPhong</class>
+		<class>entity.TempPhongBiChuyen</class>
+		<class>entity.TempThanhToan</class>
+		<properties>
+			<property name="jakarta.persistence.jdbc.driver"
+				value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<property name="jakarta.persistence.jdbc.dialect"
+				value="org.hibernate.dialect.SQLServerDialect" />
+			<property name="hibernate.connection.url"
+				value="jdbc:sqlserver://localhost:1433;databaseName=BaiTapLonPTUD_NHOM4;trustServerCertificate=true;encrypt=true;" />
+			<property name="hibernate.connection.username" value="NV" />
+			<property name="hibernate.connection.password"
+				value="NVpassword" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.generate_statistics" value="false"></property>
+        	<property name="hibernate.use_sql_comments" value="false"></property>
+        	<property name="log4j.logger.org.hibernate" value="ERROR, stdout"></property>
+		</properties>
+	</persistence-unit>
+	
+	<persistence-unit name="jpa-mssql-manager">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<class>entity.ChiTietDichVu</class>
+		<class>entity.ChiTietHoaDon</class>
+		<class>entity.HoaDonDatPhong</class>
+		<class>entity.KhachHang</class>
+		<class>entity.KhuyenMai</class>
+		<class>entity.LoaiPhong</class>
+		<class>entity.NhanVien</class>
+		<class>entity.PhieuDatPhong</class>
+		<class>entity.Phong</class>
+		<class>entity.SanPham</class>
+		<class>entity.TaiKhoan</class>
+		<class>entity.TempDatPhong</class>
+		<class>entity.TempPhongBiChuyen</class>
+		<class>entity.TempThanhToan</class>
+		<properties>
+			<property name="jakarta.persistence.jdbc.driver"
+				value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<property name="jakarta.persistence.jdbc.dialect"
+				value="org.hibernate.dialect.SQLServerDialect" />
+			<property name="hibernate.connection.url"
+				value="jdbc:sqlserver://localhost:1433;databaseName=BaiTapLonPTUD_NHOM4;trustServerCertificate=true;encrypt=true;" />
+			<property name="hibernate.connection.username" value="QL" />
+			<property name="hibernate.connection.password"
+				value="QLpassword" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.generate_statistics" value="false"></property>
+        	<property name="hibernate.use_sql_comments" value="false"></property>
+        	<property name="log4j.logger.org.hibernate" value="ERROR, stdout"></property>
+		</properties>
+	</persistence-unit>
 </persistence>

@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import connectDB.ConnectDB;
 import dao.DangNhapServices;
 import entity.NhanVien;
 import entity.TaiKhoan;
@@ -25,7 +23,6 @@ public class DangNhap_dao_impl  extends UnicastRemoteObject implements DangNhapS
 	
 	public DangNhap_dao_impl() throws RemoteException {
 		em = Persistence.createEntityManagerFactory("jpa-mssql").createEntityManager();
-
 	}
 
 	/**

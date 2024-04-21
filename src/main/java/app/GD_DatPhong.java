@@ -6,8 +6,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
-import connectDB.ConnectDB;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -46,6 +44,7 @@ import entity.PhieuDatPhong;
 import entity.Phong;
 import entity.TempDatPhong;
 import entity.TempThanhToan;
+import jakarta.persistence.Persistence;
 import dao.KhachHangServices;
 import dao.LoaiPhongServices;
 import dao.PhieuDatPhongService;
@@ -325,12 +324,10 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					ConnectDB.getInstance().connect(DataManager.getRole(), DataManager.getRolePassword());
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-					System.out.println("GetRole:  " + DataManager.getRole());
-					System.out.println("GetRolePass: " + DataManager.getRolePassword());
+				if (DataManager.getRole().equals("Quản lý")) {
+					Persistence.createEntityManagerFactory("jpa-mssql-manager");
+				} else if (DataManager.getRole().equals("Nhân viên")) {
+					Persistence.createEntityManagerFactory("jpa-mssql-employee");
 				}
 				
 				try {

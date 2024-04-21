@@ -6,13 +6,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
-import connectDB.ConnectDB;
 import dao.PhieuDatPhongService;
 import entity.KhachHang;
 import entity.NhanVien;
@@ -52,7 +52,7 @@ public class PhieuDatPhongImpl extends UnicastRemoteObject implements PhieuDatPh
 	}
 
 	@Override
-	public boolean xoaPhieuDatPhongTheoMa(String maPhong) {
+	public boolean xoaPhieuDatPhongTheoMa(String maPhong) throws RemoteException {
 		EntityTransaction tx = em.getTransaction();
 
 		try {
@@ -120,41 +120,33 @@ public class PhieuDatPhongImpl extends UnicastRemoteObject implements PhieuDatPh
 		return em.createNamedQuery("PhieuDatPhong.timThongTinPhieuDatPhongTheoMaPhong",PhieuDatPhong.class)
 				.setParameter("maPhong", maPhong).getResultList().stream().findFirst().orElse(null);
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PhieuDatPhong> getAllsPhieuDatPhong_ChuaThanhToan() {
-		ArrayList<PhieuDatPhong> dspdp = new ArrayList<PhieuDatPhong>();
-		try {
-			ConnectDB.getInstance();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		Connection con = ConnectDB.getConnection();
-		try {
-			String sql = "select * from PhieuDatPhong";
-			Statement stm = con.createStatement();
-			ResultSet rs = stm.executeQuery(sql);
-			while (rs.next()) {
-				String maPhieu = rs.getString(1);
-				String maHoaDon = "HD" + maPhieu.substring(3);
-				String sqlCheck = "select * from HoaDonDatPhong where maHoaDon = ? and trangThai = 0";
-				PreparedStatement stmCheck = con.prepareStatement(sqlCheck);
-				stmCheck.setString(1, maHoaDon);
-				ResultSet rsCheck = stmCheck.executeQuery();
-				if (rsCheck.next()) {
-					Phong p = new Phong(rs.getString("maPhong"));
-					NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
-					KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
-					LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
-					LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
-					dspdp.add(
-							new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dspdp;
+	    List<PhieuDatPhong> dspdp = new ArrayList<PhieuDatPhong>();
+	    try {
+	        String sql = "select maPhieu, maPhong, maNhanVien, maKhachHang, ngayGioDatPhong, ngayGioNhanPhong, soNguoiHat \r\n"
+	        		+ "from PhieuDatPhong";
+	        List<Object[]> results = em.createNativeQuery(sql).getResultList();
+	        for (Object[] row : results) {
+	            String maPhieu = row[0].toString();
+	            String maHoaDon = "HD" + maPhieu.substring(3);
+	            String sqlCheck = "select * from HoaDonDatPhong where maHoaDon = ? and trangThai = 0";
+	            List<Object[]> resultsCheck = em.createNativeQuery(sqlCheck).setParameter(1, maHoaDon).getResultList();
+	            if (!resultsCheck.isEmpty()) {
+	                Phong p = new Phong(row[1].toString());
+	                NhanVien nv = new NhanVien(row[2].toString());
+	                KhachHang kh = new KhachHang(row[3].toString());
+	                LocalDateTime ngayGioDatPhong = ((Timestamp) row[4]).toLocalDateTime();
+	                LocalDateTime ngayGioNhanPhong = ((Timestamp) row[5]).toLocalDateTime();
+	                dspdp.add(new PhieuDatPhong(maPhieu, p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, (Integer) row[6]));
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return dspdp;
 	}
 
 	@Override
@@ -184,40 +176,32 @@ public class PhieuDatPhongImpl extends UnicastRemoteObject implements PhieuDatPh
 		return em.createNamedQuery("PhieuDatPhong.getAllsPhieuDatPhong_PhongCho", PhieuDatPhong.class).getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PhieuDatPhong> getAllsPhieuDatPhong_DaThanhToan() throws RemoteException {
-		ArrayList<PhieuDatPhong> dspdp = new ArrayList<PhieuDatPhong>();
-		try {
-			ConnectDB.getInstance();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		Connection con = ConnectDB.getConnection();
-		try {
-			String sql = "select * from PhieuDatPhong";
-			Statement stm = con.createStatement();
-			ResultSet rs = stm.executeQuery(sql);
-			while (rs.next()) {
-				String maPhieu = rs.getString(1);
-				String maHoaDon = "HD" + maPhieu.substring(3);
-				String sqlCheck = "select * from HoaDonDatPhong where maHoaDon = ? and trangThai = 1";
-				PreparedStatement stmCheck = con.prepareStatement(sqlCheck);
-				stmCheck.setString(1, maHoaDon);
-				ResultSet rsCheck = stmCheck.executeQuery();
-				if (rsCheck.next()) {
-					Phong p = new Phong(rs.getString("maPhong"));
-					NhanVien nv = new NhanVien(rs.getString("maNhanVien"));
-					KhachHang kh = new KhachHang(rs.getString("maKhachHang"));
-					LocalDateTime ngayGioDatPhong = rs.getTimestamp("ngayGioDatPhong").toLocalDateTime();
-					LocalDateTime ngayGioNhanPhong = rs.getTimestamp("ngayGioNhanPhong").toLocalDateTime();
-					dspdp.add(
-							new PhieuDatPhong(rs.getString("maPhieu"), p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, rs.getInt("soNguoiHat")));
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dspdp;
+		List<PhieuDatPhong> dspdp = new ArrayList<PhieuDatPhong>();
+	    try {
+	        String sql = "select maPhieu, maPhong, maNhanVien, maKhachHang, ngayGioDatPhong, ngayGioNhanPhong, soNguoiHat \r\n"
+	        		+ "from PhieuDatPhong";
+	        List<Object[]> results = em.createNativeQuery(sql).getResultList();
+	        for (Object[] row : results) {
+	            String maPhieu = row[0].toString();
+	            String maHoaDon = "HD" + maPhieu.substring(3);
+	            String sqlCheck = "select * from HoaDonDatPhong where maHoaDon = ? and trangThai = 1";
+	            List<Object[]> resultsCheck = em.createNativeQuery(sqlCheck).setParameter(1, maHoaDon).getResultList();
+	            if (!resultsCheck.isEmpty()) {
+	                Phong p = new Phong(row[1].toString());
+	                NhanVien nv = new NhanVien(row[2].toString());
+	                KhachHang kh = new KhachHang(row[3].toString());
+	                LocalDateTime ngayGioDatPhong = ((Timestamp) row[4]).toLocalDateTime();
+	                LocalDateTime ngayGioNhanPhong = ((Timestamp) row[5]).toLocalDateTime();
+	                dspdp.add(new PhieuDatPhong(maPhieu, p, nv, kh, ngayGioDatPhong, ngayGioNhanPhong, (Integer) row[6]));
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return dspdp;
 	}
 
 

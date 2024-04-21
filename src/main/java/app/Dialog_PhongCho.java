@@ -457,7 +457,12 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 					// Khách hàng đến trễ hơn giờ nhận phòng 30 phút
 					// Thực hiện công việc B
 					JOptionPane.showMessageDialog(this, "Phòng hủy do đến trễ quá 30 phút vui lòng đặt phòng khác để sử dụng phòng karaoke!");
-					pdp_Service.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
+					try {
+						pdp_Service.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					DataManager.setDatPhongCho(true);
 					Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 					Phong phong = new Phong(lblPhong_1.getText(), trangThai);
@@ -481,7 +486,12 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 				// Khách hàng đến trễ hơn giờ nhận phòng 30 phút
 				// Thực hiện công việc B
 				JOptionPane.showMessageDialog(this, "Phòng hủy do đến trễ quá 30 phút!");
-				pdp_Service.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
+				try {
+					pdp_Service.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				DataManager.setDatPhongCho(true);
 				Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 				Phong phong = new Phong(lblPhong_1.getText(), trangThai);
@@ -507,7 +517,12 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 					JOptionPane.YES_NO_OPTION);
 			if (tb == JOptionPane.YES_OPTION) {
 				JOptionPane.showMessageDialog(this, "Phòng hủy thành công!");
-				pdp_Service.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
+				try {
+					pdp_Service.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				DataManager.setDatPhongCho(true);
 				Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 				Phong phong = new Phong(lblPhong_1.getText(), trangThai);

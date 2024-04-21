@@ -10,7 +10,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import connectDB.ConnectDB;
 import dao.ChiTietHoaDonServices;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -61,8 +60,10 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
  
 	@Override
 	public double tinhSoGioHatTheoNgay(String date) {
-	    String jpql = "SELECT SUM(c.soGioHat) FROM ChiTietHoaDon c WHERE FUNCTION('DATE', c.ngayLapHoaDon) = :date";
-	    Double soGioHat = em.createQuery(jpql, Double.class)
+	    String jpql = "SELECT SUM(CTHD.soGioHat) AS TongSoGioHat   FROM HoaDonDatPhong HDP \r\n"
+	    		+ "					 INNER JOIN ChiTietHoaDon CTHD ON HDP.maHoaDon = CTHD.maHoaDon   where ngayLapHoaDon = \r\n"
+	    		+ "					 :date GROUP BY ngayLapHoaDon";
+	    Double soGioHat = (Double) em.createNativeQuery(jpql, Double.class)
 	                         .setParameter("date", date)
 	                         .getSingleResult();
 	    return soGioHat != null ? soGioHat : 0;
@@ -70,31 +71,42 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 
 	@Override
 	public double tinhSoGioHatTheoThang(String thang, int nam) {
-	    String jpql = "SELECT SUM(c.soGioHat) FROM ChiTietHoaDon c WHERE FUNCTION('YEAR', c.ngayLapHoaDon) = :nam AND FUNCTION('MONTH', c.ngayLapHoaDon) = :thang";
-	    Double soGioHat = em.createQuery(jpql, Double.class)
-	                         .setParameter("nam", nam)
-	                         .setParameter("thang", thang)
-	                         .getSingleResult();
+	    String sql = "SELECT SUM(CTHD.soGioHat) AS TongSoGioHat "
+	               + "FROM HoaDonDatPhong HDP "
+	               + "INNER JOIN ChiTietHoaDon CTHD ON HDP.maHoaDon = CTHD.maHoaDon "
+	               + "WHERE FORMAT(HDP.ngayLapHoaDon, 'yyyy-MM') = :date ";
+	    String date = nam + "-" + thang;
+	    Double soGioHat = (Double) em.createNativeQuery(sql, Double.class)
+	                                 .setParameter("date", date)
+	                                 .getSingleResult();
 	    return soGioHat != null ? soGioHat : 0;
 	}
-
+	
 	@Override
 	public double tinhSoGioHatTheoNam(int nam) {
-	    String jpql = "SELECT SUM(c.soGioHat) FROM ChiTietHoaDon c WHERE FUNCTION('YEAR', c.ngayLapHoaDon) = :nam";
-	    Double soGioHat = em.createQuery(jpql, Double.class)
-	                         .setParameter("nam", nam)
-	                         .getSingleResult();
-	    return soGioHat != null ? soGioHat : 0;
+	    String sql = "SELECT FORMAT(HDP.ngayLapHoaDon, 'yyyy') AS Nam, "
+	               + "       SUM(CTHD.soGioHat) AS TongSoGioHat "
+	               + "FROM HoaDonDatPhong HDP "
+	               + "INNER JOIN ChiTietHoaDon CTHD ON HDP.maHoaDon = CTHD.maHoaDon "
+	               + "WHERE FORMAT(HDP.ngayLapHoaDon, 'yyyy') = :nam "
+	               + "GROUP BY FORMAT(HDP.ngayLapHoaDon, 'yyyy')";
+	    Object[] result = (Object[]) em.createNativeQuery(sql)
+	                                   .setParameter("nam", String.valueOf(nam))
+	                                   .getSingleResult();
+	    return result != null && result[1] != null ? ((Number) result[1]).doubleValue() : 0;
 	}
 
 	@Override
 	public double tinhSoGioHatTheoNhieuNam(int nambt, int namkt) {
-	    String jpql = "SELECT SUM(c.soGioHat) FROM ChiTietHoaDon c WHERE FUNCTION('YEAR', c.ngayLapHoaDon) BETWEEN :nambt AND :namkt";
-	    Double soGioHat = em.createQuery(jpql, Double.class)
-	                         .setParameter("nambt", nambt)
-	                         .setParameter("namkt", namkt)
-	                         .getSingleResult();
-	    return soGioHat != null ? soGioHat : 0;
+	    String sql = "SELECT SUM(CTHD.soGioHat) AS TongSoGioHat "
+	               + "FROM HoaDonDatPhong HDP "
+	               + "INNER JOIN ChiTietHoaDon CTHD ON HDP.maHoaDon = CTHD.maHoaDon "
+	               + "WHERE YEAR(HDP.ngayLapHoaDon) BETWEEN :nambt AND :namkt";
+	    Double result = (Double) em.createNativeQuery(sql)
+	                               .setParameter("nambt", String.valueOf(nambt))
+	                               .setParameter("namkt", String.valueOf(namkt))
+	                               .getSingleResult();
+	    return result != null ? result : 0;
 	}
 
 	@Override
