@@ -60,7 +60,7 @@ public class TempDatPhongImpl extends UnicastRemoteObject implements TempDatPhon
     @Override
     public boolean updateTempDP(String maPhong, int soNguoi) throws RemoteException {
         em.getTransaction().begin();
-        int updatedCount = em.createNamedQuery("TempDatPhong.getTempDP")
+        int updatedCount = em.createNamedQuery("TempDatPhong.updateTempDP")
                 .setParameter(1, soNguoi)
                 .setParameter(2, maPhong)
                 .executeUpdate();

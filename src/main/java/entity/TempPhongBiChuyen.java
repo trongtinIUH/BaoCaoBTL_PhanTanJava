@@ -14,16 +14,16 @@ import jakarta.persistence.*;
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name = "TempPhongBiChuyen.getAllTemp",
-                query = "select * from TempPhongBiChuyen"
+                query = "select * from TempPhongBiChuyen", resultClass = TempPhongBiChuyen.class
         ),
         @NamedNativeQuery(name="TempPhongBiChuyen.addTemp",
-                query = "insert into TempPhongBiChuyen values(?,?)"),
+                query = "insert into TempPhongBiChuyen values(?,?)", resultClass = TempPhongBiChuyen.class),
         @NamedNativeQuery(name="TempPhongBiChuyen.deleteALLTempPhongBiChuyen",
-                query = "delete TempPhongBiChuyen where maPhong <> '000'"),
+                query = "delete TempPhongBiChuyen where maPhongBiChuyen <> '000'", resultClass = TempPhongBiChuyen.class),
         @NamedNativeQuery(name="TempPhongBiChuyen.deleteTempPhongBiChuyen",
-                query = "delete TempPhongBiChuyen where maPhongBiChuyen=?"),
+                query = "delete TempPhongBiChuyen where maPhongBiChuyen=?", resultClass = TempPhongBiChuyen.class),
         @NamedNativeQuery(name="TempPhongBiChuyen.updateTempPhongBiChuyen",
-                query = "update TempPhongBiChuyen set maPhongMoi=? where maPhongBiChuyen=?"),
+                query = "update TempPhongBiChuyen set maPhongMoi=? where maPhongBiChuyen=?", resultClass = TempPhongBiChuyen.class),
 })
 public class TempPhongBiChuyen implements Serializable {
     /**

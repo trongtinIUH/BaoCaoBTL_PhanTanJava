@@ -5,14 +5,16 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 @Entity
+@NamedQueries({ 
+	@NamedQuery(name = "ChiTietDichVu.getAllChiTietDichVu", 
+			query = "select c from ChiTietDichVu c"),
+})
 public class ChiTietDichVu  implements Serializable{
 
 /**
 	 * 
 	 */
 	private static final long serialVersionUID = -7257157286341808456L;
-//    @EmbeddedId
-//    private ChiTietDichVuID id;
 	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maHoaDon", columnDefinition = "VARCHAR(20)", nullable = false)
@@ -25,7 +27,9 @@ public class ChiTietDichVu  implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maSanPham")
 	private SanPham sanPham;
+	@Column(name = "soLuong", columnDefinition = "INT", nullable = false)
 	private int soLuong;
+	@Column(name = "gia", columnDefinition = "FLOAT", nullable = false)
 	private double gia;
 	
 	
@@ -75,15 +79,12 @@ public class ChiTietDichVu  implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+	
 	@Override
 	public String toString() {
 		return "ChiTietDichVu [hoaDon=" + hoaDon + ", phong=" + phong + ", sanPham=" + sanPham + ", soLuong=" + soLuong
 				+ ", gia=" + gia + "]";
 	}
-	
-	
-	
-
-	
 	
 }

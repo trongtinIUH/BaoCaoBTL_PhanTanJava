@@ -19,7 +19,6 @@ import entity.Phong;
 import entity.SanPham;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
-import utils.ModelThongKe;
 
 public class Test {
 	public static void main(String[] args) throws RemoteException {
