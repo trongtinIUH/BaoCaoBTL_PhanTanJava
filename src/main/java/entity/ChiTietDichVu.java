@@ -2,17 +2,21 @@ package entity;
 
 import java.io.Serializable;
 
+
+
 import jakarta.persistence.*;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "ChiTietDichVu.getAllChiTietDichVu", query = "select s from ChiTietDichVu s")
+})
 public class ChiTietDichVu  implements Serializable{
 
 /**
 	 * 
 	 */
 	private static final long serialVersionUID = -7257157286341808456L;
-//    @EmbeddedId
-//    private ChiTietDichVuID id;
+
 	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maHoaDon", columnDefinition = "VARCHAR(20)", nullable = false)
@@ -77,8 +81,9 @@ public class ChiTietDichVu  implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "ChiTietDichVu [hoaDon=" + hoaDon + ", phong=" + phong + ", sanPham=" + sanPham + ", soLuong=" + soLuong
-				+ ", gia=" + gia + "]";
+	    return "ChiTietDichVu [hoaDonId=" + hoaDon.getMaHoaDon() + ", phongId=" + phong.getMaPhong() + 
+	    		", sanPhamId=" + sanPham.getMaSanPham() + ", soLuong=" + soLuong
+	            + ", gia=" + gia + "]";
 	}
 	
 	

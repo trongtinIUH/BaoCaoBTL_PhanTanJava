@@ -3,26 +3,29 @@ package dao;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
+
 import entity.ChiTietDichVu;
 
 
 public interface ChiTietDichVuServices extends Remote {
 
-	ArrayList<ChiTietDichVu> getAllChiTietDichVu() throws RemoteException;
+ public	List<ChiTietDichVu> getAllChiTietDichVu() throws RemoteException;
 
-	ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaHD(String maHD) throws RemoteException;
+ public	List<ChiTietDichVu> getChiTietDichVuTheoMaHD(String maHD) throws RemoteException;
 
-	ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaHDVaMaPhong(String maHD, String maPhong) throws RemoteException;
+ public	List<ChiTietDichVu> getChiTietDichVuTheoMaHDVaMaPhong(String maHD, String maPhong) throws RemoteException;
 
-	ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaPhong(String maPhong) throws RemoteException;
+ public	List<ChiTietDichVu> getChiTietDichVuTheoMaPhong(String maPhong) throws RemoteException;
 
-	double tinhTongTienDVTheoMaHoaDon(String maHD) throws RemoteException;
+ public	double tinhTongTienDVTheoMaHoaDon(String maHD) throws RemoteException;
 
-	boolean addChiTietDV(ChiTietDichVu ctdv) throws RemoteException;
+ public	boolean addChiTietDV(ChiTietDichVu ctdv) throws RemoteException;
 
-	boolean UpdateChiTietDV(ChiTietDichVu cthd) throws RemoteException;
+ public	boolean UpdateChiTietDV(ChiTietDichVu cthd) throws RemoteException;
+ public ChiTietDichVu findChiTietDichVu(String maHoaDon, String maPhong, String maSanPham) throws RemoteException;
 
-	boolean deleteChiTietDV(String maSanPham) throws RemoteException;
+ public boolean deleteChiTietDV(String maSanPham) throws RemoteException;
 
-	boolean deleteChiTietDV2(String maHD, String maSanPham, String maPhong) throws RemoteException;
+ public boolean deleteChiTietDV2(String maHD, String maSanPham, String maPhong) throws RemoteException;
 }

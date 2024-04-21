@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
 import dao.impl.ChiTietHoaDon_dao_impl;
@@ -19,17 +20,17 @@ import entity.HoaDonDatPhong;
 public interface ChiTietHoaDonServices extends Remote {
 	
 
-	ArrayList<ChiTietHoaDon> getAllChiTietHoaDon() throws RemoteException;
-	ArrayList<ChiTietHoaDon> getChiTietHoaDonTheoMaHD(String maHD) throws RemoteException;
-	ArrayList<ChiTietHoaDon> getChiTietHoaDonTheoMaPhong(String maPhong) throws RemoteException;
-	double tinhSoGioHatTheoNgay(String date)  throws RemoteException;
-	double tinhSoGioHatTheoThang(String thang, int nam) throws RemoteException ;
-	double tinhSoGioHatTheoNam(int nam)  throws RemoteException;
-	double tinhSoGioHatTheoNhieuNam(int nambt, int namkt) throws RemoteException;
-	boolean addChiTietHD(ChiTietHoaDon cthd) throws RemoteException;
-	boolean UpdateChiTietHD(ChiTietHoaDon cthd) throws RemoteException;
-	boolean UpdateChiTietHD_ChuyenPhong(ChiTietHoaDon cthd) 	    throws RemoteException;
-	boolean deleteChiTietHD(String maPhong)  throws RemoteException;
-	ArrayList<ChiTietHoaDon> getCTHDPhongDangSD() throws RemoteException;
+public	List<ChiTietHoaDon> getAllChiTietHoaDon() throws RemoteException;
+public	List<ChiTietHoaDon> getChiTietHoaDonTheoMaHD(String maHD) throws RemoteException;
+public	List<ChiTietHoaDon> getChiTietHoaDonTheoMaPhong(String maPhong) throws RemoteException;
+public	double tinhSoGioHatTheoNgay(String date)  throws RemoteException;
+public	double tinhSoGioHatTheoThang(String thang, int nam) throws RemoteException ;
+public	double tinhSoGioHatTheoNam(int nam)  throws RemoteException;
+public	double tinhSoGioHatTheoNhieuNam(int nambt, int namkt) throws RemoteException;
+public	boolean addChiTietHD(ChiTietHoaDon cthd) throws RemoteException;
+public	boolean UpdateChiTietHD(ChiTietHoaDon cthd) throws RemoteException;
+public	boolean UpdateChiTietHD_ChuyenPhong(ChiTietHoaDon cthd) 	    throws RemoteException;
+public	boolean deleteChiTietHD(String maPhong)  throws RemoteException;
+public	List<ChiTietHoaDon> getCTHDPhongDangSD() throws RemoteException;
 	
 }

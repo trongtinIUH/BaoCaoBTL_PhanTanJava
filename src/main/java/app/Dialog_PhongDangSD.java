@@ -186,7 +186,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 		getContentPane().add(lblSoNguoi_1);
 
 		ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-		ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
+		List<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
 		for (ChiTietHoaDon cthd : dsCTHD) {
 			cthd_hienTaiCuaPhong = cthd;
 		}
@@ -387,7 +387,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 			try {
 				if(tempTT_dao.getAllTemp().size() == 0) {
 					ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-					ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
+					List<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
 					for (ChiTietHoaDon cthd : dsCTHD) {
 						cthd_hienTaiCuaPhong = cthd;
 					}
@@ -420,7 +420,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 						
 						if(i > 0) {
 							ChiTietHoaDon cthd_ht = null;
-							ArrayList<ChiTietHoaDon> dsCTHD_ht = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText());
+							List<ChiTietHoaDon> dsCTHD_ht = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText());
 							for (ChiTietHoaDon cthd : dsCTHD_ht) {
 								cthd_ht = cthd;
 							}
@@ -429,7 +429,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 							String maCt = "";
 							ArrayList<TempPhongBiChuyen> ds_PhongBiChuyen = tempChuyen_dao.getAllTemp();
 							for(TempPhongBiChuyen tm : ds_PhongBiChuyen) {
-								ArrayList<ChiTietHoaDon> cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhongBiChuyen());
+								List<ChiTietHoaDon> cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhongBiChuyen());
 								for(ChiTietHoaDon ct : cthd_BiChuyen) {
 									maCt = ct.getHoaDon().getMaHoaDon();
 								}
@@ -454,7 +454,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 					
 					if(i > 0) {
 						ChiTietHoaDon cthd_ht = null;
-						ArrayList<ChiTietHoaDon> dsCTHD_ht = new ArrayList<ChiTietHoaDon>();
+						List<ChiTietHoaDon> dsCTHD_ht = new ArrayList<ChiTietHoaDon>() ;
 						try {
 							dsCTHD_ht = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText());
 						} catch (RemoteException e1) {
@@ -469,7 +469,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 						String maCt = "";
 						ArrayList<TempPhongBiChuyen> ds_PhongBiChuyen = tempChuyen_dao.getAllTemp();
 						for(TempPhongBiChuyen tm : ds_PhongBiChuyen) {
-							ArrayList<ChiTietHoaDon> cthd_BiChuyen = new ArrayList<ChiTietHoaDon>();
+							List<ChiTietHoaDon> cthd_BiChuyen = new ArrayList<ChiTietHoaDon>();
 							try {
 								cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhongBiChuyen());
 							} catch (RemoteException e1) {
@@ -508,7 +508,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				
 				if(i > 0) {
 					ChiTietHoaDon cthd_ht = null;
-					ArrayList<ChiTietHoaDon> dsCTHD_ht = new ArrayList<ChiTietHoaDon>();
+					List<ChiTietHoaDon> dsCTHD_ht = new ArrayList<ChiTietHoaDon>();
 					try {
 						dsCTHD_ht = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText());
 					} catch (RemoteException e1) {
@@ -529,7 +529,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 						e1.printStackTrace();
 					}
 					for(TempPhongBiChuyen tm : ds_PhongBiChuyen) {
-						ArrayList<ChiTietHoaDon> cthd_BiChuyen = new ArrayList<ChiTietHoaDon>();
+						List<ChiTietHoaDon> cthd_BiChuyen = new ArrayList<ChiTietHoaDon>();
 						try {
 							cthd_BiChuyen = cthd_dao.getChiTietHoaDonTheoMaPhong(tm.getMaPhongBiChuyen());
 						} catch (RemoteException e1) {
@@ -552,7 +552,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				}
 				
 				ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-				ArrayList<ChiTietHoaDon> dsCTHD = new ArrayList<ChiTietHoaDon>();
+				List<ChiTietHoaDon> dsCTHD = new ArrayList<ChiTietHoaDon>();
 				try {
 					dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
 				} catch (RemoteException e1) {
@@ -567,7 +567,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				ChiTietHoaDon cthd_hienTaiTemp = null;
 				try {
 					for(TempThanhToan tmp : tempTT_dao.getAllTemp()) {
-						ArrayList<ChiTietHoaDon> dsCTHDTemp = new ArrayList<ChiTietHoaDon>();
+						List<ChiTietHoaDon> dsCTHDTemp = new ArrayList<ChiTietHoaDon>();
 						try {
 							dsCTHDTemp = cthd_dao.getChiTietHoaDonTheoMaPhong(tmp.getMaPhong().trim());
 						} catch (RemoteException e1) {
@@ -598,7 +598,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 					JOptionPane.showMessageDialog(this, "Phòng " + p.getMaPhong() + " được thêm vào danh sách thanh toán thành công.");
 					
 					ChiTietHoaDon cthd_hienTaiCuaPhong1 = null;
-					ArrayList<ChiTietHoaDon> dsCTHD1 = null;
+					List<ChiTietHoaDon> dsCTHD1 = null;
 					try {
 						dsCTHD1 = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
 					} catch (RemoteException e1) {
@@ -613,7 +613,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 					ChiTietHoaDon cthd_hienTaiTemp1 = null;
 					try {
 						for(TempThanhToan tmp1 : tempTT_dao.getAllTemp()) {
-							ArrayList<ChiTietHoaDon> dsCTHDTemp = cthd_dao.getChiTietHoaDonTheoMaPhong(tmp1.getMaPhong().trim());
+							List<ChiTietHoaDon> dsCTHDTemp = cthd_dao.getChiTietHoaDonTheoMaPhong(tmp1.getMaPhong().trim());
 							for (ChiTietHoaDon cthd : dsCTHDTemp) {
 								cthd_hienTaiTemp1 = cthd;
 							}

@@ -156,7 +156,7 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 		getContentPane().add(lblSoNguoi_1);
 		
 		ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-		ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
+		List<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong_1.getText().trim());
 		for(ChiTietHoaDon cthd: dsCTHD) {
 			cthd_hienTaiCuaPhong = cthd;
 		}

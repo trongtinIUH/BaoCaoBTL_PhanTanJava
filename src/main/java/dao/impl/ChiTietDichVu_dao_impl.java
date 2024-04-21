@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
 import dao.ChiTietDichVuServices;
@@ -15,276 +16,144 @@ import entity.ChiTietDichVu;
 import entity.HoaDonDatPhong;
 import entity.Phong;
 import entity.SanPham;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
-public 	class ChiTietDichVu_dao_impl extends UnicastRemoteObject implements ChiTietDichVuServices{
-
-	
-	public ChiTietDichVu_dao_impl() throws RemoteException {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	
+public class ChiTietDichVu_dao_impl extends UnicastRemoteObject implements ChiTietDichVuServices {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6248955254471555575L;
-	
+	private static final long serialVersionUID = 4609465373599378623L;
+	private EntityManager em;
+
+	public ChiTietDichVu_dao_impl() throws RemoteException {
+
+		em = Persistence.createEntityManagerFactory("jpa-mssql").createEntityManager();
+
+	}
 
 	@Override
-	public ArrayList<ChiTietDichVu> getAllChiTietDichVu() throws RemoteException {
-		ArrayList<ChiTietDichVu> dsChiTietDichVu = new ArrayList<ChiTietDichVu>();
-		try {
-			ConnectDB.getInstance();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		Connection con = ConnectDB.getConnection();
-		try {
-			String sql = "select * from ChiTietDichVu";
-			Statement sta = con.createStatement();
-			ResultSet rs = sta.executeQuery(sql);
-			while(rs.next()) {
-				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")), new SanPham(rs.getString("maSanPham")), rs.getInt("soLuong"),  rs.getDouble("gia")));
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dsChiTietDichVu;
-	}
-	
-	@Override
-	public ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaHD(String maHD) throws RemoteException {
-		ArrayList<ChiTietDichVu> dsChiTietDichVu = new ArrayList<ChiTietDichVu>();
-		try {
-			ConnectDB.getInstance();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		Connection con = ConnectDB.getConnection();
-		try {
-			String sql = "select * from ChiTietDichVu where maHoaDon='"+ maHD +"'";
-			Statement sta = con.createStatement();
-			ResultSet rs = sta.executeQuery(sql);
-			while(rs.next()) {
-				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")), new SanPham(rs.getString("maSanPham")), rs.getInt("soLuong"),  rs.getDouble("gia")));
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dsChiTietDichVu;
-	}
-	
-	@Override
-	public ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaHDVaMaPhong(String maHD, String maPhong) throws RemoteException{
-		ArrayList<ChiTietDichVu> dsChiTietDichVu = new ArrayList<ChiTietDichVu>();
-		try {
-			ConnectDB.getInstance();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		Connection con = ConnectDB.getConnection();
-		try {
-			String sql = "select * from ChiTietDichVu where maHoaDon = '" + maHD +"' and maPhong = '" + maPhong + "'";
-			Statement sta = con.createStatement();
-			ResultSet rs = sta.executeQuery(sql);
-			while(rs.next()) {
-				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")), new SanPham(rs.getString("maSanPham")), rs.getInt("soLuong"),  rs.getDouble("gia")));
-				}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dsChiTietDichVu;
-	}
-	
-	@Override
-	public ArrayList<ChiTietDichVu> getChiTietDichVuTheoMaPhong(String maPhong) throws RemoteException {
-		ArrayList<ChiTietDichVu> dsChiTietDichVu = new ArrayList<ChiTietDichVu>();
-		try {
-			ConnectDB.getInstance();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		Connection con = ConnectDB.getConnection();
-		try {
-			String sql = "select * from ChiTietDichVu where maPhong='"+ maPhong +"'";
-			Statement sta = con.createStatement();
-			ResultSet rs = sta.executeQuery(sql);
-			while(rs.next()) {
-				dsChiTietDichVu.add(new ChiTietDichVu(new HoaDonDatPhong(rs.getString("maHoaDon")), new Phong(rs.getString("maPhong")), new SanPham(rs.getString("maSanPham")), rs.getInt("soLuong"),  rs.getDouble("gia")));
-				}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dsChiTietDichVu;
-	}
-	
-	@Override
-	public double tinhTongTienDVTheoMaHoaDon(String maHD) throws RemoteException {
-		double tongTienDV = 0;
-		try {
-			ConnectDB.getInstance();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		Connection con = ConnectDB.getConnection();
-		try {
-			String sql = "SELECT SUM(gia * soLuong) AS tongTienDV "
-					+ "FROM ChiTietDichVu ctdv "
-					+ "where ctdv.maHoaDon = '" + maHD + "'"
-					+ "GROUP BY ctdv.maHoaDon";
-			Statement stm = con.createStatement();
-			ResultSet rs = stm.executeQuery(sql);
-			while(rs.next()) {
-				tongTienDV = rs.getDouble("tongTienDV");
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		return tongTienDV;
-	}
-	
-	@Override
-	public boolean addChiTietDV(ChiTietDichVu ctdv)  throws RemoteException{
-		try {
-			ConnectDB.getInstance();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		Connection con = ConnectDB.getConnection();
-		PreparedStatement stmt = null;
-		int n = 0;
-		try {
-	        stmt = con.prepareStatement("insert into ChiTietDichVu(maHoaDon, maSanPham, maPhong, soLuong, gia) values(?,?,?,?,?)");
-	        stmt.setString(1, ctdv.getHoaDon().getMaHoaDon());
-	        stmt.setString(2, ctdv.getSanPham().getMaSanPham());
-	        stmt.setString(3, ctdv.getPhong().getMaPhong());
-	        stmt.setInt(4, ctdv.getSoLuong());
-	        stmt.setDouble(5, ctdv.getGia());
-			n = stmt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e2) {
-				// TODO: handle exception
-				e2.printStackTrace();
-			}
+	public List<ChiTietDichVu> getAllChiTietDichVu() throws RemoteException {
+		String sql = "select * from ChiTietDichVu";
+		List<ChiTietDichVu> dsChiTietDichVu = new ArrayList<ChiTietDichVu>();
+		return dsChiTietDichVu = em.createNativeQuery(sql, ChiTietDichVu.class).getResultList();
 
-		}
-		return n > 0;
-	}
-	
-	@Override
-	public boolean UpdateChiTietDV(ChiTietDichVu cthd) throws RemoteException{
-		try {
-			ConnectDB.getInstance();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		Connection con = ConnectDB.getConnection();
-		PreparedStatement stmt = null;
-		int n = 0;
-		try {
-			stmt = con.prepareStatement("update ChiTietDichVu set soLuong=?, giaBan=? where maHoaDon=? and maSanPham=? and maPhong=?");
-			stmt.setInt(1, cthd.getSoLuong());
-			stmt.setDouble(2, cthd.getGia());
-			stmt.setString(3, cthd.getHoaDon().getMaHoaDon());
-			stmt.setString(4, cthd.getSanPham().getMaSanPham());
-			stmt.setString(5, cthd.getPhong().getMaPhong());
-			n = stmt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e2) {
-				// TODO: handle exception
-				e2.printStackTrace();
-			}
-
-		}
-		return n > 0;
-	}
-	
-	@Override
-	public boolean deleteChiTietDV(String maSanPham) throws RemoteException {
-		try {
-			ConnectDB.getInstance();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		Connection con = ConnectDB.getConnection();
-		PreparedStatement stmt = null;
-		int n = 0;
-		try {
-			stmt = con.prepareStatement("delete from ChiTietDichVu where maSanPham = ?");
-			stmt.setString(1, maSanPham);
-			n = stmt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e2) {
-				// TODO: handle exception
-				e2.printStackTrace();
-			}
-
-		}
-		return n > 0;
-	}
-	
-	@Override
-	public boolean deleteChiTietDV2(String maHD, String maSanPham, String maPhong) throws RemoteException {
-		try {
-			ConnectDB.getInstance();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		Connection con = ConnectDB.getConnection();
-		PreparedStatement stmt = null;
-		int n = 0;
-		try {
-			stmt = con.prepareStatement("delete from ChiTietDichVu where maHoaDon=? and maSanPham=? and maPhong=?");
-			stmt.setString(1, maHD);
-			stmt.setString(2, maSanPham);
-			stmt.setString(3, maPhong);
-			n = stmt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e2) {
-				// TODO: handle exception
-				e2.printStackTrace();
-			}
-
-		}
-		return n > 0;
 	}
 
+	@Override
+	public List<ChiTietDichVu> getChiTietDichVuTheoMaHD(String maHD) {
+		String jpql = "SELECT c FROM ChiTietDichVu c WHERE c.hoaDon.maHoaDon = :maHD";
+		return em.createQuery(jpql, ChiTietDichVu.class).setParameter("maHD", maHD).getResultList();
+	}
+
+	@Override
+	public List<ChiTietDichVu> getChiTietDichVuTheoMaHDVaMaPhong(String maHD, String maPhong) {
+		String jpql = "SELECT c FROM ChiTietDichVu c WHERE c.hoaDon.maHoaDon = :maHD AND c.phong.maPhong = :maPhong";
+		return em.createQuery(jpql, ChiTietDichVu.class).setParameter("maHD", maHD).setParameter("maPhong", maPhong)
+				.getResultList();
+	}
+
+	@Override
+	public List<ChiTietDichVu> getChiTietDichVuTheoMaPhong(String maPhong) {
+		String jpql = "SELECT c FROM ChiTietDichVu c WHERE c.phong.maPhong = :maPhong";
+		return em.createQuery(jpql, ChiTietDichVu.class).setParameter("maPhong", maPhong).getResultList();
+	}
+
+	@Override
+	public double tinhTongTienDVTheoMaHoaDon(String maHD) {
+		String jpql = "SELECT SUM(c.gia * c.soLuong) FROM ChiTietDichVu c WHERE c.hoaDon.maHoaDon = :maHD GROUP BY c.hoaDon.maHoaDon";
+		return em.createQuery(jpql, Double.class).setParameter("maHD", maHD).getSingleResult();
+	}
+
+	@Override
+	public boolean addChiTietDV(ChiTietDichVu ctdv) {
+	    try {
+	        em.getTransaction().begin(); // Bắt đầu một transaction
+	        em.persist(ctdv); // Lưu đối tượng vào cơ sở dữ liệu
+	        em.getTransaction().commit(); // Commit transaction
+	        return true;
+	    } catch (Exception e) {
+	        if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback transaction nếu có lỗi
+	        }
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
 	
-	
-	
+	@Override
+	public ChiTietDichVu findChiTietDichVu(String maHoaDon, String maPhong, String maSanPham) {
+	    // Tạo câu truy vấn JPQL
+	    String jpql = "SELECT c FROM ChiTietDichVu c WHERE c.hoaDon.maHoaDon = :maHoaDon AND c.phong.maPhong = :maPhong AND c.sanPham.maSanPham = :maSanPham";
+
+	    // Thực hiện truy vấn và trả về kết quả
+	    return em.createQuery(jpql, ChiTietDichVu.class)
+	              .setParameter("maHoaDon", maHoaDon)
+	              .setParameter("maPhong", maPhong)
+	              .setParameter("maSanPham", maSanPham)
+	              .getSingleResult();
+	}
+	@Override
+	public boolean UpdateChiTietDV(ChiTietDichVu ctdv) {
+	    try {
+	        em.getTransaction().begin(); // Bắt đầu một transaction
+	        ctdv = em.merge(ctdv); // Cập nhật đối tượng và lấy bản sao được quản lý
+	        em.getTransaction().commit(); // Commit transaction
+	        return true;
+	    } catch (Exception e) {
+	        if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback transaction nếu có lỗi
+	        }
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
+	@Override
+	public boolean deleteChiTietDV(String maSanPham) {
+	    try {
+	        em.getTransaction().begin(); // Bắt đầu một transaction
+	        String jpql = "SELECT c FROM ChiTietDichVu c WHERE c.sanPham.maSanPham = :maSanPham";
+	        ChiTietDichVu ctdv = em.createQuery(jpql, ChiTietDichVu.class)
+	                                .setParameter("maSanPham", maSanPham)
+	                                .getSingleResult();
+	        if (ctdv != null) {
+	            em.remove(ctdv); // Xóa đối tượng khỏi cơ sở dữ liệu
+	            em.getTransaction().commit(); // Commit transaction
+	            return true;
+	        }
+	        em.getTransaction().rollback(); // Rollback transaction nếu không tìm thấy đối tượng
+	        return false;
+	    } catch (Exception e) {
+	        if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback transaction nếu có lỗi
+	        }
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
+	@Override
+	public boolean deleteChiTietDV2(String maHD, String maSanPham, String maPhong) {
+	    try {
+	        em.getTransaction().begin(); // Bắt đầu một transaction
+	        String jpql = "DELETE FROM ChiTietDichVu c WHERE c.hoaDon.maHoaDon = :maHD AND c.sanPham.maSanPham = :maSanPham AND c.phong.maPhong = :maPhong";
+	        int deletedCount = em.createQuery(jpql)
+	                             .setParameter("maHD", maHD)
+	                             .setParameter("maSanPham", maSanPham)
+	                             .setParameter("maPhong", maPhong)
+	                             .executeUpdate();
+	        em.getTransaction().commit(); // Commit transaction
+	        return deletedCount > 0;
+	    } catch (Exception e) {
+	        if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback transaction nếu có lỗi
+	        }
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
 }
