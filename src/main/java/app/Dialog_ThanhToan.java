@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -264,7 +265,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		}else {
 			ChiTietHoaDon cthd_hienTaiTemp = null;
 			for(TempThanhToan tmp : tempTT_dao.getAllTemp()) {
-				ArrayList<ChiTietHoaDon> dsCTHDTemp = cthd_dao.getChiTietHoaDonTheoMaPhong(tmp.getMaPhong().trim());
+				List<ChiTietHoaDon> dsCTHDTemp = cthd_dao.getChiTietHoaDonTheoMaPhong(tmp.getMaPhong().trim());
 				for (ChiTietHoaDon cthd : dsCTHDTemp) {
 					cthd_hienTaiTemp = cthd;
 				}
@@ -672,7 +673,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 				
 				if (!tmp.getMaPhong().equals("000")) {
                     ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-				ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(tmp.getMaPhong());
+				List<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(tmp.getMaPhong());
 				for (ChiTietHoaDon cthd : dsCTHD) {
 					cthd_hienTaiCuaPhong = cthd;
 				}

@@ -394,13 +394,13 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 		try {
 			if (p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
 				ChiTietHoaDon cthd_hienTaiCuaPhong1 = null;
-				ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(ma);
+				List<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(ma);
 				for (ChiTietHoaDon cthd : dsCTHD) {
 					cthd_hienTaiCuaPhong1 = cthd;
 				}
 
 				ChiTietDichVu ctdv_hienTaiCuaPhong2 = null;
-				ArrayList<ChiTietDichVu> dsCTDV = ctdv_dao.getChiTietDichVuTheoMaPhong(ma);
+				List<ChiTietDichVu> dsCTDV = ctdv_dao.getChiTietDichVuTheoMaPhong(ma);
 				for (ChiTietDichVu ctdv : dsCTDV) {
 					ctdv_hienTaiCuaPhong2 = ctdv;
 				}
@@ -408,7 +408,7 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 				if (ctdv_hienTaiCuaPhong2 != null) {
 					if (cthd_hienTaiCuaPhong1.getHoaDon().getMaHoaDon()
 							.equals(ctdv_hienTaiCuaPhong2.getHoaDon().getMaHoaDon())) {
-						ArrayList<ChiTietDichVu> dsctdv = ctdv_dao
+						List<ChiTietDichVu> dsctdv = ctdv_dao
 								.getChiTietDichVuTheoMaHD(ctdv_hienTaiCuaPhong2.getHoaDon().getMaHoaDon());
 						maHoaDon = ctdv_hienTaiCuaPhong2.getHoaDon().getMaHoaDon();
 						for (ChiTietDichVu ctdv : dsctdv) {
@@ -664,7 +664,7 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 				}
 
 				ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-				ArrayList<ChiTietHoaDon> dsCTHD = new ArrayList<ChiTietHoaDon>();
+				List<ChiTietHoaDon> dsCTHD = new ArrayList<ChiTietHoaDon>();
 				try {
 					dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(lblPhong1.getText().trim());
 				} catch (RemoteException e1) {

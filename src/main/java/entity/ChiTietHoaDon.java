@@ -87,7 +87,7 @@ public class ChiTietHoaDon implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "ChiTietHoaDon [hoaDon=" + hoaDon + ", phong=" + phong + ", gioNhanPhong=" + gioNhanPhong
+		return "ChiTietHoaDon [hoaDon=" + hoaDon.getMaHoaDon() + ", phong=" + phong.getMaPhong() + ", gioNhanPhong=" + gioNhanPhong
 				+ ", gioTraPhong=" + gioTraPhong + ", soGioHat=" + soGioHat + "]";
 	}
 	

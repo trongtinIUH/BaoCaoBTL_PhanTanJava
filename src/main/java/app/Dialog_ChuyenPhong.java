@@ -180,7 +180,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 		panel_1.add(lblMaKH);
 
 		ChiTietHoaDon cthd_hienTaiCuaPhong2 = null;
-		ArrayList<ChiTietHoaDon> dsCTHD2 = cthd_dao.getChiTietHoaDonTheoMaPhong(maPhong);
+		List<ChiTietHoaDon> dsCTHD2 = cthd_dao.getChiTietHoaDonTheoMaPhong(maPhong);
 		for (ChiTietHoaDon cthd : dsCTHD2) {
 			cthd_hienTaiCuaPhong2 = cthd;
 		}
@@ -224,7 +224,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 		panel_1.add(lblTGHat);
 
 		ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-		ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(txtMa.getText());
+		List<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(txtMa.getText());
 		for (ChiTietHoaDon cthd : dsCTHD) {
 			cthd_hienTaiCuaPhong = cthd;
 		}
@@ -443,12 +443,12 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private void chuyenPhong() throws RemoteException {
 		int flag = 0;
 		ChiTietHoaDon cthd_hienTaiCuaPhong = null;
-		ArrayList<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(txtMa.getText());
+		List<ChiTietHoaDon> dsCTHD = cthd_dao.getChiTietHoaDonTheoMaPhong(txtMa.getText());
 		for (ChiTietHoaDon cthd : dsCTHD) {
 			cthd_hienTaiCuaPhong = cthd;
 		}
 		ChiTietHoaDon cthd_hienTai_Item = null;
-		ArrayList<ChiTietHoaDon> dsCTHD_Item = cthd_dao.getChiTietHoaDonTheoMaPhong(model.getValueAt(tblChuyenPhong.getSelectedRow(), 0).toString());
+		List<ChiTietHoaDon> dsCTHD_Item = cthd_dao.getChiTietHoaDonTheoMaPhong(model.getValueAt(tblChuyenPhong.getSelectedRow(), 0).toString());
 		if(dsCTHD_Item != null) {
 			for (ChiTietHoaDon cthd : dsCTHD_Item) {
 				cthd_hienTai_Item = cthd;
@@ -490,7 +490,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 					double thoiGianHat = soGioHat + soPhutHat / 60;
 
 					ChiTietHoaDon cthd_cu = null;
-					ArrayList<ChiTietHoaDon> dsCTHD1 = cthd_dao.getChiTietHoaDonTheoMaPhong(txtMa.getText());
+					List<ChiTietHoaDon> dsCTHD1 = cthd_dao.getChiTietHoaDonTheoMaPhong(txtMa.getText());
 					for (ChiTietHoaDon cthd : dsCTHD1) {
 						//if(cthd.getPhong().getMaPhong().equals(txtMa.getText())`) {
 							cthd_cu = cthd;
@@ -537,7 +537,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 					
 
 					//Chuyển dịch vụ sang phòng mới
-					ArrayList<ChiTietDichVu> dsChiTietDV = ctdv_dao.getChiTietDichVuTheoMaHDVaMaPhong(maHD, txtMa.getText());
+					List<ChiTietDichVu> dsChiTietDV = ctdv_dao.getChiTietDichVuTheoMaHDVaMaPhong(maHD, txtMa.getText());
 					if(dsChiTietDV != null) {
 						for(ChiTietDichVu ctdv : dsChiTietDV) {
 							ctdv_dao.deleteChiTietDV2(maHD, ctdv.getSanPham().getMaSanPham(), txtMa.getText());

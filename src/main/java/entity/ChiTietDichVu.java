@@ -2,12 +2,13 @@ package entity;
 
 import java.io.Serializable;
 
+
+
 import jakarta.persistence.*;
 
 @Entity
-@NamedQueries({ 
-	@NamedQuery(name = "ChiTietDichVu.getAllChiTietDichVu", 
-			query = "select c from ChiTietDichVu c"),
+@NamedQueries({
+	@NamedQuery(name = "ChiTietDichVu.getAllChiTietDichVu", query = "select s from ChiTietDichVu s")
 })
 public class ChiTietDichVu  implements Serializable{
 
@@ -83,8 +84,9 @@ public class ChiTietDichVu  implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "ChiTietDichVu [hoaDon=" + hoaDon + ", phong=" + phong + ", sanPham=" + sanPham + ", soLuong=" + soLuong
-				+ ", gia=" + gia + "]";
+	    return "ChiTietDichVu [hoaDonId=" + hoaDon.getMaHoaDon() + ", phongId=" + phong.getMaPhong() + 
+	    		", sanPhamId=" + sanPham.getMaSanPham() + ", soLuong=" + soLuong
+	            + ", gia=" + gia + "]";
 	}
 	
 }

@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.time.LocalDateTime;
 import javax.swing.JDialog;
@@ -620,7 +621,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 						}
 						if (p != null && p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
 							checkPSD = 1;
-							ArrayList<ChiTietHoaDon> dsChiTietHoaDon = cthd_dao
+							List<ChiTietHoaDon> dsChiTietHoaDon = cthd_dao
 									.getChiTietHoaDonTheoMaPhong(tmpDatPhong.getMaPhong());
 							for (ChiTietHoaDon cthd : dsChiTietHoaDon) {
 								maHoaDon = cthd.getHoaDon().getMaHoaDon();
