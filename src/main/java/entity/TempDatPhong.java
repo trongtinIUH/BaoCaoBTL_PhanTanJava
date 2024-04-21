@@ -12,11 +12,11 @@ import jakarta.persistence.*;
  */
 @Entity
 @NamedNativeQueries({
-        @NamedNativeQuery(name = "TempDatPhong.getAllTemp", query = "select * from TempDatPhong"),
-        @NamedNativeQuery(name = "TempDatPhong.addTemp", query = "insert into TempDatPhong values(?,?)"),
-        @NamedNativeQuery(name = "TempDatPhong.deleteALLTempDatPhong", query = "delete TempDatPhong where maPhong <> '000'"),
-        @NamedNativeQuery(name = "TempDatPhong.deleteTempDP", query = "delete TempDatPhong where maPhong=?"),
-        @NamedNativeQuery(name = "TempDatPhong.getTempDP", query = "update TempDatPhong set soNguoi=? where maPhong=?")
+        @NamedNativeQuery(name = "TempDatPhong.getAllTemp", query = "select * from TempDatPhong", resultClass = TempDatPhong.class),
+        @NamedNativeQuery(name = "TempDatPhong.addTemp", query = "insert into TempDatPhong values(?,?)", resultClass = TempDatPhong.class),
+        @NamedNativeQuery(name = "TempDatPhong.deleteALLTempDatPhong", query = "delete TempDatPhong where maPhong <> '000'", resultClass = TempDatPhong.class),
+        @NamedNativeQuery(name = "TempDatPhong.deleteTempDP", query = "delete TempDatPhong where maPhong=?", resultClass = TempDatPhong.class),
+        @NamedNativeQuery(name = "TempDatPhong.updateTempDP", query = "update TempDatPhong set soNguoiHat=? where maPhong=?", resultClass = TempDatPhong.class)
 })
 public class TempDatPhong implements Serializable {
     /**

@@ -33,7 +33,7 @@ public class SanPham implements Serializable {
 	 * 
 	 */
 	@Id
-	@Column(name="maSanPham", columnDefinition = "NVARCHAR(50)", nullable = false, unique = true)
+	@Column(name="maSanPham", columnDefinition = "VARCHAR(50)", nullable = false, unique = true)
 	private String maSanPham;
 	@Column(name = "tenSanPham", columnDefinition = "NVARCHAR(100)", nullable = false)
 	private String tenSanPham;

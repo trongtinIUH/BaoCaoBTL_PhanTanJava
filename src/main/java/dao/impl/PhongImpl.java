@@ -24,7 +24,6 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
 	
 	public PhongImpl() throws RemoteException {
 		try {
-
 			em = Persistence.createEntityManagerFactory("jpa-mssql").createEntityManager();
 		} catch (Exception e) {
 			System.out.println("Loi: " + e.getMessage());

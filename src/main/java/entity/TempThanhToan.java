@@ -14,11 +14,11 @@ import jakarta.persistence.*;
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name = "TempThanhToan.getAllTemp",
-                query = "select * from TempThanhToan"),
+                query = "select * from TempThanhToan", resultClass = TempThanhToan.class),
         @NamedNativeQuery(name="TempThanhToan.addTemp",
-                query = "insert into TempThanhToan values(?)"),
+                query = "insert into TempThanhToan values(?)", resultClass = TempThanhToan.class),
         @NamedNativeQuery(name="TempThanhToan.deleteALLTempThanhToan",
-                query = "delete TempThanhToan where maPhong <> '000'"),
+                query = "delete TempThanhToan where maPhong <> '000'", resultClass = TempThanhToan.class),
 
 })
 public class TempThanhToan implements Serializable {

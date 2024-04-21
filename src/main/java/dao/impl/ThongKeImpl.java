@@ -90,7 +90,7 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 
         for (Object[] result : results) {
             ModelThongKe model = new ModelThongKe();
-            model.setYear((String) result[0]);
+            model.setYear(Integer.toString((Integer) result[0]));
             model.setTongDoanhThu((Double) result[1]);
             model.setDoanhThuPhong((Double) result[2]);
             model.setDoanhThuDichVu((Double) result[3]);
@@ -102,7 +102,8 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 
     @Override
     public ArrayList<ModelThongKeDTNhieuNam> thongKeTheoNhieuNam(int yearStart, int yearEnd) throws RemoteException {
-    	String sql = "DECLARE @namBatDau int = "+yearStart+ "DECLARE @namKetThuc int = "+yearEnd+" "
+    	String sql = "DECLARE @namBatDau int = :yearStart "
+        	    + "DECLARE @namKetThuc int = :yearEnd "
 				+ "SELECT "
 				+ "    YEAR(ngayLapHoaDon) AS nam, "
 				+ "    COUNT(DISTINCT maHoaDon) AS tongSoHoaDon,"
@@ -146,7 +147,7 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 				+ "        ( "
 				+ "            SELECT  "
 				+ "                ctdv.maHoaDon,  "
-				+ "                SUM(ctdv.giaBan * ctdv.soLuong) AS tienDichVu  "
+				+ "                SUM(ctdv.gia * ctdv.soLuong) AS tienDichVu  "
 				+ "            FROM "
 				+ "                ChiTietDichVu ctdv "
 				+ "            GROUP BY "
@@ -170,7 +171,7 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 
         for (Object[] result : results) {
             ModelThongKeDTNhieuNam model = new ModelThongKeDTNhieuNam();
-            model.setNam((String) result[0]);
+            model.setNam(Integer.toString((Integer) result[0]));
             model.setTongSoHoaDon((Integer) result[1]);
             model.setTongDoanhThu((Double) result[2]);
             model.setTongDoanhThuPhongThuong((Double) result[3]);
@@ -197,7 +198,7 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 
         for (Object result : results) {
             ModelThongKe model = new ModelThongKe();
-            model.setYear((String) result);
+            model.setYear(Integer.toString((Integer) result));
             yearLists.add(model);
         }
 
@@ -217,7 +218,7 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 
         for (Object result : results) {
             ModelThongKe modelTK = new ModelThongKe();
-            modelTK.setMonth((String) result);
+            modelTK.setMonth(Integer.toString((Integer) result));
             lists.add(modelTK);
         }
 
@@ -226,7 +227,7 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 
     @Override
     public ArrayList<ModelThongKeKH> getTop10KhachHangHatNhieuNhat() throws RemoteException {
-    	String sql = "SELECT TOP 10 "
+    	String sql = "SELECT "
 				+ "kh.maKhachHang, "
 				+ "kh.hoTen, "
 				+ "kh.soDienThoai, "
@@ -263,27 +264,27 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 
     @Override
     public ArrayList<ModelThongKeKH> getTop10KhachHangHatNhieuNhatTheoNam(String year) throws RemoteException {
-    	String sql = "SELECT TOP 10 "
-				+ "kh.maKhachHang, "
-				+ "kh.hoTen, "
-				+ "kh.soDienThoai, "
-				+ "kh.gioiTinh, "
-				+ "SUM(cthd.soGioHat) as TongSoGioHat "
-				+ "FROM "
-				+ "KhachHang kh "
-				+ "JOIN "
-				+ "HoaDonDatPhong hddp ON kh.maKhachHang = hddp.maKhachHang "
-				+ "JOIN "
-				+ "ChiTietHoaDon cthd ON hddp.maHoaDon = cthd.maHoaDon "
-				+ "where YEAR(hddp.ngayLapHoaDon) = "+year+" "
-				+ "GROUP BY  "
-				+ "YEAR(hddp.ngayLapHoaDon), "
-				+ "kh.maKhachHang, "
-				+ "kh.hoTen, "
-				+ "kh.soDienThoai, "
-				+ "kh.gioiTinh "
-				+ "ORDER BY "
-				+ "TongSoGioHat DESC";
+    	String sql = "SELECT "
+    	        + "kh.maKhachHang, "
+    	        + "kh.hoTen, "
+    	        + "kh.soDienThoai, "
+    	        + "kh.gioiTinh, "
+    	        + "SUM(cthd.soGioHat) as TongSoGioHat "
+    	        + "FROM "
+    	        + "KhachHang kh "
+    	        + "JOIN "
+    	        + "HoaDonDatPhong hddp ON kh.maKhachHang = hddp.maKhachHang "
+    	        + "JOIN "
+    	        + "ChiTietHoaDon cthd ON hddp.maHoaDon = cthd.maHoaDon "
+    	        + "where YEAR(hddp.ngayLapHoaDon) = :year "
+    	        + "GROUP BY  "
+    	        + "YEAR(hddp.ngayLapHoaDon), "
+    	        + "kh.maKhachHang, "
+    	        + "kh.hoTen, "
+    	        + "kh.soDienThoai, "
+    	        + "kh.gioiTinh "
+    	        + "ORDER BY "
+    	        + "TongSoGioHat DESC";
 
         Query query = em.createNativeQuery(sql);
         query.setParameter("year", year);
@@ -303,7 +304,7 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 
     @Override
     public ArrayList<ModelThongKeKH> getTop10KhachHangHatNhieuNhatTheoThang(String year, String month) throws RemoteException {
-    	String sql = "SELECT TOP 10 "
+    	String sql = "SELECT "
 				+ "kh.maKhachHang, "
 				+ "kh.hoTen, "
 				+ "kh.soDienThoai, "
@@ -315,7 +316,9 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 				+ "HoaDonDatPhong hddp ON kh.maKhachHang = hddp.maKhachHang "
 				+ "JOIN "
 				+ "ChiTietHoaDon cthd ON hddp.maHoaDon = cthd.maHoaDon "
-				+ "where YEAR(hddp.ngayLapHoaDon) = "+year+" and MONTH(hddp.ngayLapHoaDon) = "+month+ "GROUP BY  "
+				+ "where YEAR(hddp.ngayLapHoaDon) = :year "
+				+ "AND MONTH(hddp.ngayLapHoaDon) = :month "
+				+ "GROUP BY  "
 				+ "YEAR(hddp.ngayLapHoaDon), "
 				+ "MONTH(hddp.ngayLapHoaDon), "
 				+ "kh.maKhachHang, "
@@ -330,7 +333,8 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
         query.setParameter("month", month);
         query.setMaxResults(10);
 
-        List<Object[]> results = query.getResultList();
+        @SuppressWarnings("unchecked")
+		List<Object[]> results = query.getResultList();
         ArrayList<ModelThongKeKH> lists = new ArrayList<ModelThongKeKH>();
 
         for (Object[] result : results) {
@@ -340,10 +344,5 @@ public class ThongKeImpl extends UnicastRemoteObject implements ThongKeServices 
 
         return lists;
     }
-
-	@Override
-	public String hello() throws RemoteException {
-		return "Hello world!";
-	}
 
 }
