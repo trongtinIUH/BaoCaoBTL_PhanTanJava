@@ -36,11 +36,9 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.DateTimePicker;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 
-import dao.ChiTietDichVuServices;
-import dao.ChiTietHoaDonServices;
-import dao.HoaDonDatPhong_dao;
-import dao.KhachHang_dao;
-import dao.KhuyenMai_dao;
+import dao.HoaDonDatPhongServices;
+import dao.KhachHangServices;
+import dao.KhuyenMaiServices;
 import dao.NhanVienService;
 import dao.PhongService;
 import dao.ThongKeServices;
@@ -49,6 +47,9 @@ import dao.impl.PhongImpl;
 import dao.impl.ThongKeImpl;
 import dao.impl.ChiTietDichVu_dao_impl;
 import dao.impl.ChiTietHoaDon_dao_impl;
+import dao.impl.HoaDonDatPhongImpl;
+import dao.impl.KhachHangImpl;
+import dao.impl.KhuyenMaiImpl;
 import entity.HoaDonDatPhong;
 import utils.CurveLineChart;
 import utils.DoanhThuLoaiPhong;
@@ -59,36 +60,35 @@ import utils.ModelThongKeDTNhieuNam;
 import utils.ModelThongKeKH;
 import utils.PieChart;
 
-public class GD_ThongKe extends JPanel implements ActionListener{
+public class GD_ThongKe extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final String[] col = {"STT", "Mã hóa đơn","Ngày lập hóa đơn", "Tên khách hàng",
-			"Số điện thoại", "Khuyến mãi", "Tổng tiền", "Tên nhân viên"};
-	private final String[] colKH = {"STT", "Mã khách hàng","Họ tên", "Số điện thoại", "Giới tính",
-			"Số giờ hát"};
+	private final String[] col = { "STT", "Mã hóa đơn", "Ngày lập hóa đơn", "Tên khách hàng", "Số điện thoại",
+			"Khuyến mãi", "Tổng tiền", "Tên nhân viên" };
+	private final String[] colKH = { "STT", "Mã khách hàng", "Họ tên", "Số điện thoại", "Giới tính", "Số giờ hát" };
 	private final DefaultTableModel model;
-    private final DefaultTableModel modelKH;
+	private final DefaultTableModel modelKH;
 	private final JTable table;
-    private final JTable tblKH;
+	private final JTable tblKH;
 	private final JScrollPane scroll;
-    private final JScrollPane scrollKH;
-	JLabel lblTitle, lblThongKe, lblLoaihinhTK, lblDate, lblTongDoanhThu, lblChartTitle,
-	lblTongHoaDon, lblDoanhThuPhongThuong, lblDoanhThuPhongVIP, lblTongSoGioHat, lblDoanhThuDichVu, lblYearStart, lblYearEnd;
+	private final JScrollPane scrollKH;
+	JLabel lblTitle, lblThongKe, lblLoaihinhTK, lblDate, lblTongDoanhThu, lblChartTitle, lblTongHoaDon,
+			lblDoanhThuPhongThuong, lblDoanhThuPhongVIP, lblTongSoGioHat, lblDoanhThuDichVu, lblYearStart, lblYearEnd;
 	JComboBox<String> cbThongKe, cbDate, cbYearStart, cbYearEnd, cbYear, cbMonth, cbMonthKH, cbYearKH;
 	JButton btnThongKe, btnLamMoi, btnProfile;
-	private final HoaDonDatPhong_dao hoadon_dao;
-	private final KhachHang_dao khachhang_dao;
+	private final HoaDonDatPhongServices hoadon_dao;
+	private final KhachHangServices khachhang_dao;
 	private final PhongService p_Service;
-	private  ChiTietDichVu_dao_impl chitietdichvu_dao;
-	private  ChiTietHoaDon_dao_impl chitiethoadon_dao;
-	private final KhuyenMai_dao khuyenmai_dao;
+	private ChiTietDichVu_dao_impl chitietdichvu_dao;
+	private ChiTietHoaDon_dao_impl chitiethoadon_dao;
+	private final KhuyenMaiServices khuyenmai_dao;
 	private final JPanel pnTable;
-    private final JPanel pnContent;
-    private final JPanel pnPieChart;
-    private final JPanel pnCurveLineChart;
-    private final JPanel pnTableKH;
+	private final JPanel pnContent;
+	private final JPanel pnPieChart;
+	private final JPanel pnCurveLineChart;
+	private final JPanel pnTableKH;
 	private final DecimalFormat df;
 	private final PieChart pieChart;
 	private final CurveLineChart lineChart;
@@ -103,16 +103,17 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 	private CategoryDataset dataset;
 	private JFreeChart barChart;
 	private final ChartPanel pnBarChart;
+
 	public GD_ThongKe() throws RemoteException {
 		dialog_user = new Dialog_User();
 		df = new DecimalFormat("#,###,### VNĐ");
 		setLayout(null);
 		setBackground(Color.decode("#FAFAFF"));
-		hoadon_dao = new HoaDonDatPhong_dao();
-		khachhang_dao = new KhachHang_dao();
+		hoadon_dao = new HoaDonDatPhongImpl();
+		khachhang_dao = new KhachHangImpl();
 		p_Service = new PhongImpl();
 		chitietdichvu_dao = new ChiTietDichVu_dao_impl();
-		khuyenmai_dao = new KhuyenMai_dao();
+		khuyenmai_dao = new KhuyenMaiImpl();
 		chitiethoadon_dao = new ChiTietHoaDon_dao_impl();
 		thongke_dao = new ThongKeImpl();
 		nhanvien_dao = new NhanVienImpl();
@@ -152,7 +153,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		addItemIntoCbDate();
 		cbDate.setFont(new Font("Arial", Font.PLAIN, 18));
 		cbDate.setBounds(222, 85, 187, 24);
-		
+
 		pnMenu.add(lblYearStart = new JLabel("Năm bắt đầu"));
 		lblYearStart.setFont(new Font("Arial", Font.BOLD, 18));
 		lblYearStart.setBounds(500, 25, 120, 24);
@@ -161,14 +162,14 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		cbYearStart.setEnabled(false);
 		cbYearStart.setBounds(630, 25, 80, 24);
 		cbYearStart.setVisible(true);
-		
+
 		cbMonthKH = new JComboBox<String>();
 		cbMonthKH.setFont(new Font("Arial", Font.PLAIN, 18));
 		cbMonthKH.setVisible(false);
 		cbMonthKH.setEnabled(false);
-	    cbMonthKH.setBounds(630, 25, 80, 24);
-	    pnMenu.add(cbMonthKH);
-		
+		cbMonthKH.setBounds(630, 25, 80, 24);
+		pnMenu.add(cbMonthKH);
+
 		pnMenu.add(lblYearEnd = new JLabel("Năm kết thúc"));
 		lblYearEnd.setFont(new Font("Arial", Font.BOLD, 18));
 		lblYearEnd.setBounds(500, 85, 120, 24);
@@ -176,14 +177,14 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		cbYearEnd.setFont(new Font("Arial", Font.PLAIN, 18));
 		cbYearEnd.setBounds(630, 85, 80, 24);
 		cbYearEnd.setEnabled(false);
-		
+
 		cbYearKH = new JComboBox<String>();
 		cbYearKH.setFont(new Font("Arial", Font.PLAIN, 18));
 		cbYearKH.setVisible(false);
 		cbYearKH.setEnabled(false);
 		cbYearKH.setBounds(630, 85, 80, 24);
-	    pnMenu.add(cbYearKH);
-		
+		pnMenu.add(cbYearKH);
+
 		pnMenu.add(btnThongKe = new JButton("Thống kê"));
 		btnThongKe.setBounds(800, 15, 184, 42);
 		btnThongKe.setBackground(Color.decode("#0D99FF"));
@@ -191,7 +192,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		btnThongKe.setFont(new Font("Arial", Font.BOLD, 18));
 		btnThongKe.setIcon(new ImageIcon("icon\\ThongKe_icon.png"));
 		btnThongKe.setBorder(new RoundedBorder(5));
-		btnThongKe.setHorizontalTextPosition(SwingConstants.RIGHT); 
+		btnThongKe.setHorizontalTextPosition(SwingConstants.RIGHT);
 		btnThongKe.setIconTextGap(18);
 		pnMenu.add(btnLamMoi = new JButton("Làm mới"));
 		btnLamMoi.setBounds(800, 70, 184, 42);
@@ -199,7 +200,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		btnLamMoi.setForeground(Color.white);
 		btnLamMoi.setFont(new Font("Arial", Font.BOLD, 18));
 		btnLamMoi.setIcon(new ImageIcon("icon\\Refresh_icon.png"));
-		btnLamMoi.setHorizontalTextPosition(SwingConstants.RIGHT); 
+		btnLamMoi.setHorizontalTextPosition(SwingConstants.RIGHT);
 		btnLamMoi.setBorder(new RoundedBorder(5));
 		btnLamMoi.setIconTextGap(18);
 		add(pnMenu);
@@ -210,52 +211,52 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		pnContent.add(lblDate = new JLabel("Chọn ngày"));
 		lblDate.setFont(new Font("Arial", Font.BOLD, 18));
 		lblDate.setBounds(15, 20, 120, 34);
-		
+
 		now = LocalDateTime.now();
 
-        dateSettings = new DatePickerSettings();
-        dateSettings.setLocale(new Locale("vi","VN")); // Set the locale to English
-        dateSettings.setFormatForDatesCommonEra("yyyy-MM-dd"); // Set the date format
+		dateSettings = new DatePickerSettings();
+		dateSettings.setLocale(new Locale("vi", "VN")); // Set the locale to English
+		dateSettings.setFormatForDatesCommonEra("yyyy-MM-dd"); // Set the date format
 
-        timeSettings = new TimePickerSettings();
-        timeSettings.setDisplaySpinnerButtons(true);
+		timeSettings = new TimePickerSettings();
+		timeSettings.setDisplaySpinnerButtons(true);
 
-	    dateTimePicker = new DateTimePicker(dateSettings, timeSettings);
-	    dateTimePicker.getTimePicker().setVisible(false);
-	    dateTimePicker.getDatePicker().getComponentDateTextField().setFont(new Font("Tahoma", Font.PLAIN, 12));
-	    dateTimePicker.getTimePicker().getComponentTimeTextField().setFont(new Font("Tahoma", Font.PLAIN, 12));
-	    dateTimePicker.getTimePicker().getComponentSpinnerPanel().setBounds(80, 0, 0, 25);
-	    dateTimePicker.getTimePicker().getComponentToggleTimeMenuButton().setBounds(75, 0, 26, 25);
-	    dateTimePicker.getTimePicker().getComponentTimeTextField().setBounds(0, 0, 70, 25);
-	    dateTimePicker.getTimePicker().getComponentToggleTimeMenuButton().setFont(new Font("Tahoma", Font.BOLD, 12));
-	    dateTimePicker.getDatePicker().getComponentToggleCalendarButton().setFont(new Font("Tahoma", Font.BOLD, 12));
-	    dateTimePicker.timePicker.setBounds(141, 0, 80, 25);
-	    dateTimePicker.datePicker.setBounds(0, 0, 136, 25);
-	    dateTimePicker.getTimePicker().setBounds(150, 0, 110, 25);
-	    dateTimePicker.getTimePicker().setLayout(null);
-	    dateTimePicker.getTimePicker().setBackground(Color.white);
-	    dateTimePicker.getDatePicker().setBounds(0, 0, 136, 25);
-	    dateTimePicker.setDateTimePermissive(now);
-	    dateTimePicker.setBackground(Color.white);
-	    dateTimePicker.setBackground(Color.white);
+		dateTimePicker = new DateTimePicker(dateSettings, timeSettings);
+		dateTimePicker.getTimePicker().setVisible(false);
+		dateTimePicker.getDatePicker().getComponentDateTextField().setFont(new Font("Tahoma", Font.PLAIN, 12));
+		dateTimePicker.getTimePicker().getComponentTimeTextField().setFont(new Font("Tahoma", Font.PLAIN, 12));
+		dateTimePicker.getTimePicker().getComponentSpinnerPanel().setBounds(80, 0, 0, 25);
+		dateTimePicker.getTimePicker().getComponentToggleTimeMenuButton().setBounds(75, 0, 26, 25);
+		dateTimePicker.getTimePicker().getComponentTimeTextField().setBounds(0, 0, 70, 25);
+		dateTimePicker.getTimePicker().getComponentToggleTimeMenuButton().setFont(new Font("Tahoma", Font.BOLD, 12));
+		dateTimePicker.getDatePicker().getComponentToggleCalendarButton().setFont(new Font("Tahoma", Font.BOLD, 12));
+		dateTimePicker.timePicker.setBounds(141, 0, 80, 25);
+		dateTimePicker.datePicker.setBounds(0, 0, 136, 25);
+		dateTimePicker.getTimePicker().setBounds(150, 0, 110, 25);
+		dateTimePicker.getTimePicker().setLayout(null);
+		dateTimePicker.getTimePicker().setBackground(Color.white);
+		dateTimePicker.getDatePicker().setBounds(0, 0, 136, 25);
+		dateTimePicker.setDateTimePermissive(now);
+		dateTimePicker.setBackground(Color.white);
+		dateTimePicker.setBackground(Color.white);
 
-	    // Add the DateTimePicker to your user interface, e.g. to a JPanel
-	    // panel.add(dateTimePicker);
-	    dateTimePicker.setBounds(208, 20, 164, 34);
-	    pnContent.add(dateTimePicker);
-	    
-	    cbMonth = new JComboBox<String>();
-	    cbMonth.setFont(new Font("Arial", Font.PLAIN, 18));
-	    cbMonth.setVisible(false);
-	    cbMonth.setBounds(208, 20, 80, 34);
-	    pnContent.add(cbMonth);
-	    
-	    cbYear = new JComboBox<String>();
-	    cbYear.setFont(new Font("Arial", Font.PLAIN, 18));
-	    cbYear.setVisible(false);
-	    cbYear.setBounds(308, 20, 84, 34);
-	    pnContent.add(cbYear);
-		
+		// Add the DateTimePicker to your user interface, e.g. to a JPanel
+		// panel.add(dateTimePicker);
+		dateTimePicker.setBounds(208, 20, 164, 34);
+		pnContent.add(dateTimePicker);
+
+		cbMonth = new JComboBox<String>();
+		cbMonth.setFont(new Font("Arial", Font.PLAIN, 18));
+		cbMonth.setVisible(false);
+		cbMonth.setBounds(208, 20, 80, 34);
+		pnContent.add(cbMonth);
+
+		cbYear = new JComboBox<String>();
+		cbYear.setFont(new Font("Arial", Font.PLAIN, 18));
+		cbYear.setVisible(false);
+		cbYear.setBounds(308, 20, 84, 34);
+		pnContent.add(cbYear);
+
 		JPanel pnLine = new JPanel();
 		pnLine.setBounds(0, 71, 400, 2);
 		pnLine.setBackground(Color.decode("#CCCCCC"));
@@ -305,7 +306,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		pnTable = new JPanel();
 		pnTable.setLayout(null);
 		pnTable.setBounds(400, 192, 670, 535);
-		model = new DefaultTableModel(col,0);
+		model = new DefaultTableModel(col, 0);
 		table = new JTable(model);
 		table.setSelectionBackground(Color.pink);
 		table.getTableHeader().setBackground(new Color(238, 233, 233));
@@ -318,10 +319,10 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		table.getColumnModel().getColumn(6).setMaxWidth(80);
 		table.getColumnModel().getColumn(7).setMaxWidth(100);
 		scroll = new JScrollPane(table);
-		scroll.setBounds(0,0,670,535);
+		scroll.setBounds(0, 0, 670, 535);
 		pnTable.add(scroll);
 		add(pnTable);
-		
+
 		pnPieChart = new JPanel();
 		pnPieChart.setLayout(null);
 		pnPieChart.setBounds(400, 192, 670, 535);
@@ -345,13 +346,12 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		lineChart.addLegend("Doanh thu dịch vụ", Color.decode("#0099F7"), Color.decode("#F11712"));
 		pnCurveLineChart.setVisible(false);
 		add(pnCurveLineChart);
-		
-		
+
 //		Table Thống kê khách hàng
 		pnTableKH = new JPanel();
 		pnTableKH.setLayout(null);
 		pnTableKH.setBounds(0, 182, 480, 548);
-		modelKH = new DefaultTableModel(colKH,0);
+		modelKH = new DefaultTableModel(colKH, 0);
 		tblKH = new JTable(modelKH);
 		tblKH.setSelectionBackground(Color.pink);
 		tblKH.getTableHeader().setBackground(new Color(238, 233, 233));
@@ -362,7 +362,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		tblKH.getColumnModel().getColumn(4).setMaxWidth(70);
 		tblKH.getColumnModel().getColumn(5).setMaxWidth(90);
 		scrollKH = new JScrollPane(tblKH);
-		scrollKH.setBounds(0,0,480,548);
+		scrollKH.setBounds(0, 0, 480, 548);
 		pnTableKH.add(scrollKH);
 		pnTableKH.setVisible(false);
 		add(pnTableKH);
@@ -373,41 +373,45 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		pnBarChart.setBounds(480, 182, 600, 548);
 		pnBarChart.setVisible(false);
 		add(pnBarChart);
-		
+
 		add(pnNorth);
-		
+
 		dateTimePicker.addDateTimeChangeListener(event -> {
-			if(DataManager.getRole().equals("NV")) {
+			if (DataManager.getRole().equals("NV")) {
 				JOptionPane.showMessageDialog(null, "Nhân viên không có quyền thống kê doanh thu");
 			} else {
 				resetField();
-			    clearDataDoanhThuTheoNgay();
-			    try {
+				clearDataDoanhThuTheoNgay();
+				try {
 					loadDataDoanhThuTheoNgay();
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} 
-			    try {
-			        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to match your SQL Server date/time format
-			        String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
+				}
+				try {
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this
+																										// pattern to
+																										// match your
+																										// SQL Server
+																										// date/time
+																										// format
+					String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
 
-			        DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoNgay(formattedDateTime);
-			        if(dtlp != null) {
-			            lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
-			            lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
-			        }
-			        double soGioHat = chitiethoadon_dao.tinhSoGioHatTheoNgay(formattedDateTime);
-			        double soGioHatSauKhiLamTron = Math.round(soGioHat * 100.0) / 100.0;
-			        lblTongSoGioHat.setText(soGioHatSauKhiLamTron+"");
-			    } catch (Exception e2) {
-			        e2.printStackTrace();
-			    }
-			    if(model.getRowCount() <= 0) {
-			    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY");
-			        String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
-			    	JOptionPane.showMessageDialog(this, "Không có dữ liệu thống kê của ngày: " + formattedDateTime);
-			    }
+					DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoNgay(formattedDateTime);
+					if (dtlp != null) {
+						lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
+						lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
+					}
+					double soGioHat = chitiethoadon_dao.tinhSoGioHatTheoNgay(formattedDateTime);
+					double soGioHatSauKhiLamTron = Math.round(soGioHat * 100.0) / 100.0;
+					lblTongSoGioHat.setText(soGioHatSauKhiLamTron + "");
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+				if (model.getRowCount() <= 0) {
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY");
+					String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
+					JOptionPane.showMessageDialog(this, "Không có dữ liệu thống kê của ngày: " + formattedDateTime);
+				}
 			}
 		});
 		btnThongKe.addActionListener(this);
@@ -416,186 +420,184 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		updateYearCbo();
 		updateMonthYearCbo();
 	}
-	
+
 	public void addItemIntoCbDate() {
 		cbDate.addItem("Ngày");
 		cbDate.addItem("Tháng");
 		cbDate.addItem("Năm");
 	}
-	
+
 	public void setCurveLineChartData() throws RemoteException {
 		String yearStart = cbYearStart.getSelectedItem().toString();
 		String yearEnd = cbYearEnd.getSelectedItem().toString();
-		for (ModelThongKe tk: thongke_dao.thongKeTheoNam(yearStart, yearEnd)) {
-			lineChart.addData(new ModelChart(tk.getYear(), new double[]{tk.getTongDoanhThu(), tk.getDoanhThuPhong(), tk.getDoanhThuDichVu()}));
+		for (ModelThongKe tk : thongke_dao.thongKeTheoNam(yearStart, yearEnd)) {
+			lineChart.addData(new ModelChart(tk.getYear(),
+					new double[] { tk.getTongDoanhThu(), tk.getDoanhThuPhong(), tk.getDoanhThuDichVu() }));
 		}
 		lineChart.start();
 	}
-	
+
 	public void loadDataDoanhThuTheoNgay() throws RemoteException {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to match your SQL Server date/time format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to
+																							// match your SQL Server
+																							// date/time format
 		String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
 		double tongDoanhThu = 0;
 		double doanhThuDV = 0;
 		int i = 0;
 		for (HoaDonDatPhong hd : hoadon_dao.getHoaDonTheoNgayLapHD(formattedDateTime)) {
 			i++;
-			tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
-					chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), 
+			tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+					chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
 					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()));
 			doanhThuDV += chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon());
-			Object[] row = { i, hd.getMaHoaDon(), 
-			hd.getNgayLapHoaDon(),
-			khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getHoTen(), 
-			khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getSoDienThoai(),
-			khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()),
-			df.format(hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
-			chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), 
-			khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai())
-			)),
-			nhanvien_dao.findByID(hd.getNhanVien().getMaNhanVien()).getHoTen(), hd.getNgayLapHoaDon(),
-			};
+			Object[] row = { i, hd.getMaHoaDon(), hd.getNgayLapHoaDon(),
+					khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getHoTen(),
+					khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getSoDienThoai(),
+					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()),
+					df.format(hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+							chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
+							khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()))),
+					nhanvien_dao.findByID(hd.getNhanVien().getMaNhanVien()).getHoTen(), hd.getNgayLapHoaDon(), };
 			model.addRow(row);
 		}
-		if(i > 0) {
+		if (i > 0) {
 			lblTongDoanhThu.setText(df.format(tongDoanhThu));
 			lblDoanhThuDichVu.setText(df.format(doanhThuDV));
-			lblTongHoaDon.setText(i+"");
+			lblTongHoaDon.setText(i + "");
 		}
 	}
-	
+
 	public void clearDataDoanhThuTheoNgay() {
 		model.setRowCount(0);
 	}
-	
+
 	private void ThongKeMonth() throws RemoteException {
-		  pieChart.setSelectedIndex(-1);
-		  pieChart.clearData();
-		  int month = Integer.valueOf(cbMonth.getSelectedItem().toString());
-		  String m = "";
-		  if(month < 10) {
-			  m = "0"+month;
-		  } else {
-			  m = month + "";
-		  }
-		  int year = Integer.parseInt(cbYear.getSelectedItem().toString());
-		  double tongDoanhThu = 0;
-		  double doanhThuDV = 0;
-			int i = 0;
-			for (HoaDonDatPhong hd : hoadon_dao.getHoaDonTheoThang(m, year)) {
-				i++;
-				tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
-						chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), 
-						khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()));
-				doanhThuDV += chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon());
+		pieChart.setSelectedIndex(-1);
+		pieChart.clearData();
+		int month = Integer.valueOf(cbMonth.getSelectedItem().toString());
+		String m = "";
+		if (month < 10) {
+			m = "0" + month;
+		} else {
+			m = month + "";
+		}
+		int year = Integer.parseInt(cbYear.getSelectedItem().toString());
+		double tongDoanhThu = 0;
+		double doanhThuDV = 0;
+		int i = 0;
+		for (HoaDonDatPhong hd : hoadon_dao.getHoaDonTheoThang(m, year)) {
+			i++;
+			tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+					chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
+					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()));
+			doanhThuDV += chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon());
+		}
+		lblTongDoanhThu.setText(df.format(tongDoanhThu));
+		lblDoanhThuDichVu.setText(df.format(doanhThuDV));
+		lblTongHoaDon.setText(i + "");
+		try {
+			DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoThang(m, year);
+			if (dtlp != null) {
+				lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
+				lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
+				if (dtlp.getDoanhThuPhongThuong() > 0) {
+					pieChart.addData(new ModelPieChart("Doanh thu phòng thường", dtlp.getDoanhThuPhongThuong(),
+							new Color(23, 126, 238)));
+				}
+				if (dtlp.getDoanhThuPhongVIP() > 0) {
+					pieChart.addData(new ModelPieChart("Doanh thu phòng VIP", dtlp.getDoanhThuPhongVIP(),
+							new Color(221, 65, 65)));
+				}
 			}
-			lblTongDoanhThu.setText(df.format(tongDoanhThu));
-			lblDoanhThuDichVu.setText(df.format(doanhThuDV));
-			lblTongHoaDon.setText(i+"");
-			try {
-		    	DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoThang(m, year);
-			    if(dtlp != null) {
-			    	lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
-				    lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
-				    if(dtlp.getDoanhThuPhongThuong() > 0) {
-				    	pieChart.addData(new ModelPieChart("Doanh thu phòng thường", dtlp.getDoanhThuPhongThuong(), new Color(23, 126, 238)));
-				    }
-					if(dtlp.getDoanhThuPhongVIP() > 0) {
-						pieChart.addData(new ModelPieChart("Doanh thu phòng VIP", dtlp.getDoanhThuPhongVIP(), new Color(221, 65, 65)));
-					}
-			    }
-			    double soGioHat = chitiethoadon_dao.tinhSoGioHatTheoThang(m, year);
-			    double soGioHatSauKhiLamTron = Math.round(soGioHat * 100.0) / 100.0;
-			    lblTongSoGioHat.setText(soGioHatSauKhiLamTron+ "");
-		    } catch (Exception e2) {
-		    	e2.printStackTrace();
-			}
-			if(doanhThuDV > 0) {
-				pieChart.addData(new ModelPieChart("Doanh thu dịch vụ", doanhThuDV, new Color(47, 157, 64)));
-			}
+			double soGioHat = chitiethoadon_dao.tinhSoGioHatTheoThang(m, year);
+			double soGioHatSauKhiLamTron = Math.round(soGioHat * 100.0) / 100.0;
+			lblTongSoGioHat.setText(soGioHatSauKhiLamTron + "");
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+		if (doanhThuDV > 0) {
+			pieChart.addData(new ModelPieChart("Doanh thu dịch vụ", doanhThuDV, new Color(47, 157, 64)));
+		}
 	}
-	
+
 	private void ThongKeYear() throws RemoteException {
-			pieChart.setSelectedIndex(-1);
-			pieChart.clearData();
-			int year = Integer.parseInt(cbYearEnd.getSelectedItem().toString());
-			double tongDoanhThu = 0;
-			double doanhThuDV = 0;
-			int i = 0;
-			for (HoaDonDatPhong hd : hoadon_dao.getHoaDonTheoNam(year)) {
-				i++;
-				tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()), 
-						chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), 
-						khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()));
-				doanhThuDV += chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon());
+		pieChart.setSelectedIndex(-1);
+		pieChart.clearData();
+		int year = Integer.parseInt(cbYearEnd.getSelectedItem().toString());
+		double tongDoanhThu = 0;
+		double doanhThuDV = 0;
+		int i = 0;
+		for (HoaDonDatPhong hd : hoadon_dao.getHoaDonTheoNam(year)) {
+			i++;
+			tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+					chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
+					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()));
+			doanhThuDV += chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon());
+		}
+		lblTongDoanhThu.setText(df.format(tongDoanhThu));
+		lblDoanhThuDichVu.setText(df.format(doanhThuDV));
+		lblTongHoaDon.setText(i + "");
+		try {
+			DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoNam(year);
+			if (dtlp != null) {
+				lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
+				lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
+				if (dtlp.getDoanhThuPhongThuong() > 0) {
+					pieChart.addData(new ModelPieChart("Doanh thu phòng thường", dtlp.getDoanhThuPhongThuong(),
+							new Color(23, 126, 238)));
+				}
+				if (dtlp.getDoanhThuPhongVIP() > 0) {
+					pieChart.addData(new ModelPieChart("Doanh thu phòng VIP", dtlp.getDoanhThuPhongVIP(),
+							new Color(221, 65, 65)));
+				}
 			}
-			lblTongDoanhThu.setText(df.format(tongDoanhThu));
-			lblDoanhThuDichVu.setText(df.format(doanhThuDV));
-			lblTongHoaDon.setText(i+"");
-			try {
-		    	DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoNam(year);
-			    if(dtlp != null) {
-			    	lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
-				    lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
-				    if(dtlp.getDoanhThuPhongThuong() > 0) {
-				    	pieChart.addData(new ModelPieChart("Doanh thu phòng thường", dtlp.getDoanhThuPhongThuong(), new Color(23, 126, 238)));
-				    }
-					if(dtlp.getDoanhThuPhongVIP() > 0) {
-						pieChart.addData(new ModelPieChart("Doanh thu phòng VIP", dtlp.getDoanhThuPhongVIP(), new Color(221, 65, 65)));
-					}
-			    }
-			    double soGioHat = chitiethoadon_dao.tinhSoGioHatTheoNam(year);
-			    double soGioHatSauKhiLamTron = Math.round(soGioHat * 100.0) / 100.0;
-			    lblTongSoGioHat.setText(soGioHatSauKhiLamTron+ "");
-		    } catch (Exception e2) {
-		    	e2.printStackTrace();
-			}
-			if(doanhThuDV > 0) {
-				pieChart.addData(new ModelPieChart("Doanh thu dịch vụ", doanhThuDV, new Color(47, 157, 64)));
-			}
+			double soGioHat = chitiethoadon_dao.tinhSoGioHatTheoNam(year);
+			double soGioHatSauKhiLamTron = Math.round(soGioHat * 100.0) / 100.0;
+			lblTongSoGioHat.setText(soGioHatSauKhiLamTron + "");
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+		if (doanhThuDV > 0) {
+			pieChart.addData(new ModelPieChart("Doanh thu dịch vụ", doanhThuDV, new Color(47, 157, 64)));
+		}
 	}
-	
+
 	private void loadDataTKKHALL() throws RemoteException {
 		int i = 0;
-		for(ModelThongKeKH customer: thongke_dao.getTop10KhachHangHatNhieuNhat()) {
+		for (ModelThongKeKH customer : thongke_dao.getTop10KhachHangHatNhieuNhat()) {
 			i++;
-			Object[] row = { i, customer.getMaKH(), customer.getTenKH(), 
-					customer.getSoDienThoai(), customer.isGioiTinh() ? "Nam" : "Nữ", 
-							customer.getTongSoGioHat()
-			};
+			Object[] row = { i, customer.getMaKH(), customer.getTenKH(), customer.getSoDienThoai(),
+					customer.isGioiTinh() ? "Nam" : "Nữ", customer.getTongSoGioHat() };
 			modelKH.addRow(row);
 		}
-			
+
 	}
-	
+
 	private void loadDataTKKHMonth(String year, String month) throws RemoteException {
 		int i = 0;
-		for(ModelThongKeKH customer: thongke_dao.getTop10KhachHangHatNhieuNhatTheoThang(year, month)) {
+		for (ModelThongKeKH customer : thongke_dao.getTop10KhachHangHatNhieuNhatTheoThang(year, month)) {
 			i++;
-			Object[] row = { i, customer.getMaKH(), customer.getTenKH(), 
-					customer.getSoDienThoai(), customer.isGioiTinh() ? "Nam" : "Nữ", 
-							customer.getTongSoGioHat()
-					};
-					modelKH.addRow(row);
+			Object[] row = { i, customer.getMaKH(), customer.getTenKH(), customer.getSoDienThoai(),
+					customer.isGioiTinh() ? "Nam" : "Nữ", customer.getTongSoGioHat() };
+			modelKH.addRow(row);
 		}
 	}
-	
+
 	private void loadDataTKKHYear(String year) throws RemoteException {
 		int i = 0;
-		for(ModelThongKeKH customer: thongke_dao.getTop10KhachHangHatNhieuNhatTheoNam(year)) {
+		for (ModelThongKeKH customer : thongke_dao.getTop10KhachHangHatNhieuNhatTheoNam(year)) {
 			i++;
-			Object[] row = { i, customer.getMaKH(), customer.getTenKH(), 
-					customer.getSoDienThoai(), customer.isGioiTinh() ? "Nam" : "Nữ", 
-							customer.getTongSoGioHat()
-					};
-					modelKH.addRow(row);
+			Object[] row = { i, customer.getMaKH(), customer.getTenKH(), customer.getSoDienThoai(),
+					customer.isGioiTinh() ? "Nam" : "Nữ", customer.getTongSoGioHat() };
+			modelKH.addRow(row);
 		}
 	}
-	
-	private void clearTableKH() { 
+
+	private void clearTableKH() {
 		modelKH.setRowCount(0);
 	}
-	
+
 	private void ThongKeManyYear(int yearStart, int yearEnd) throws RemoteException {
 		int tongHoaDon = 0;
 		double tongDoanhThu = 0;
@@ -604,7 +606,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		double tongDoanhThuDichVu = 0;
 		double tongSoGioHat = 0;
 		try {
-			for(ModelThongKeDTNhieuNam tk: thongke_dao.thongKeTheoNhieuNam(yearStart, yearEnd)) {
+			for (ModelThongKeDTNhieuNam tk : thongke_dao.thongKeTheoNhieuNam(yearStart, yearEnd)) {
 				tongDoanhThu += tk.getTongDoanhThu();
 				tongHoaDon += tk.getTongSoHoaDon();
 				tongDoanhThuPhongThuong += tk.getTongDoanhThuPhongThuong();
@@ -613,64 +615,59 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 				tongSoGioHat += tk.getTongSoGioHat();
 			}
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		lblTongDoanhThu.setText(df.format(tongDoanhThu));
 		lblDoanhThuDichVu.setText(df.format(tongDoanhThuDichVu));
-		lblTongHoaDon.setText(tongHoaDon+"");
+		lblTongHoaDon.setText(tongHoaDon + "");
 		lblDoanhThuPhongThuong.setText(df.format(tongDoanhThuPhongThuong));
-	    lblDoanhThuPhongVIP.setText(df.format(tongDoanhThuPhongVIP));
-	    double soGioHatSauKhiLamTron = Math.round(tongSoGioHat * 100.0) / 100.0;
-	    lblTongSoGioHat.setText(soGioHatSauKhiLamTron+ "");
+		lblDoanhThuPhongVIP.setText(df.format(tongDoanhThuPhongVIP));
+		double soGioHatSauKhiLamTron = Math.round(tongSoGioHat * 100.0) / 100.0;
+		lblTongSoGioHat.setText(soGioHatSauKhiLamTron + "");
 	}
-	
+
 	public void updateYearCbo() throws RemoteException {
 		try {
-			for (ModelThongKe tk: thongke_dao.updateCboYear()) {
+			for (ModelThongKe tk : thongke_dao.updateCboYear()) {
 				cbYearStart.addItem(tk.getYear());
 				cbYearEnd.addItem(tk.getYear());
 				cbYear.addItem(tk.getYear());
 			}
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void updateMonthYearCbo() {
 		try {
-			for (ModelThongKe tk: thongke_dao.updateCboMonth()) {
+			for (ModelThongKe tk : thongke_dao.updateCboMonth()) {
 				cbMonth.addItem(tk.getMonth());
 			}
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void updateYearKHCbo() {
 		try {
-			for (ModelThongKe tk: thongke_dao.updateCboYear()) {
+			for (ModelThongKe tk : thongke_dao.updateCboYear()) {
 				cbYearKH.addItem(tk.getYear());
 			}
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void updateMonthYearKHCbo() {
 		try {
-			for (ModelThongKe tk: thongke_dao.updateCboMonth()) {
+			for (ModelThongKe tk : thongke_dao.updateCboMonth()) {
 				cbMonthKH.addItem(tk.getMonth());
 			}
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void resetField() {
 		lblTongDoanhThu.setText("0 VNĐ");
 		lblTongHoaDon.setText("0");
@@ -679,108 +676,103 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 		lblDoanhThuDichVu.setText("0 VNĐ");
 		lblTongSoGioHat.setText("0");
 	}
-	
+
 	private CategoryDataset createDataset() {
-	    // Call getTop10KhachHangHatNhieuNhat to get the top 10 customers
-	    ArrayList<ModelThongKeKH> top10Customers = null;
+		// Call getTop10KhachHangHatNhieuNhat to get the top 10 customers
+		ArrayList<ModelThongKeKH> top10Customers = null;
 		try {
 			top10Customers = thongke_dao.getTop10KhachHangHatNhieuNhat();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-	    // Create a DefaultCategoryDataset
-	    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		// Create a DefaultCategoryDataset
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-	    // Iterate over the list of customers and add each customer's TongSoGioHat to the dataset
-	    // with the customer's tenKH as the category key
-	    for (ModelThongKeKH customer : top10Customers) {
-	        dataset.addValue(customer.getTongSoGioHat(), "Khách hàng ", customer.getTenKH());
-	    }
+		// Iterate over the list of customers and add each customer's TongSoGioHat to
+		// the dataset
+		// with the customer's tenKH as the category key
+		for (ModelThongKeKH customer : top10Customers) {
+			dataset.addValue(customer.getTongSoGioHat(), "Khách hàng ", customer.getTenKH());
+		}
 
-	    return dataset;
+		return dataset;
 	}
-	
+
 	private CategoryDataset createDatasetByYear(String year) {
-	    // Call getTop10KhachHangHatNhieuNhat to get the top 10 customers
-	    ArrayList<ModelThongKeKH> top10Customers = null;
+		// Call getTop10KhachHangHatNhieuNhat to get the top 10 customers
+		ArrayList<ModelThongKeKH> top10Customers = null;
 		try {
 			top10Customers = thongke_dao.getTop10KhachHangHatNhieuNhatTheoNam(year);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-	    // Create a DefaultCategoryDataset
-	    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		// Create a DefaultCategoryDataset
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-	    // Iterate over the list of customers and add each customer's TongSoGioHat to the dataset
-	    // with the customer's tenKH as the category key
-	    for (ModelThongKeKH customer : top10Customers) {
-	        dataset.addValue(customer.getTongSoGioHat(), "Khách hàng ", customer.getTenKH());
-	    }
+		// Iterate over the list of customers and add each customer's TongSoGioHat to
+		// the dataset
+		// with the customer's tenKH as the category key
+		for (ModelThongKeKH customer : top10Customers) {
+			dataset.addValue(customer.getTongSoGioHat(), "Khách hàng ", customer.getTenKH());
+		}
 
-	    return dataset;
+		return dataset;
 	}
-	
+
 	private CategoryDataset createDatasetByMonthYear(String year, String month) {
-	    // Call getTop10KhachHangHatNhieuNhat to get the top 10 customers
-	    ArrayList<ModelThongKeKH> top10Customers = null;
+		// Call getTop10KhachHangHatNhieuNhat to get the top 10 customers
+		ArrayList<ModelThongKeKH> top10Customers = null;
 		try {
 			top10Customers = thongke_dao.getTop10KhachHangHatNhieuNhatTheoThang(year, month);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-	    // Create a DefaultCategoryDataset
-	    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		// Create a DefaultCategoryDataset
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-	    // Iterate over the list of customers and add each customer's TongSoGioHat to the dataset
-	    // with the customer's tenKH as the category key
-	    for (ModelThongKeKH customer : top10Customers) {
-	        dataset.addValue(customer.getTongSoGioHat(), "Khách hàng ", customer.getTenKH());
-	    }
+		// Iterate over the list of customers and add each customer's TongSoGioHat to
+		// the dataset
+		// with the customer's tenKH as the category key
+		for (ModelThongKeKH customer : top10Customers) {
+			dataset.addValue(customer.getTongSoGioHat(), "Khách hàng ", customer.getTenKH());
+		}
 
-	    return dataset;
+		return dataset;
 	}
 
 	private JFreeChart createChart(final CategoryDataset dataset) {
-	    final JFreeChart chart = ChartFactory.createBarChart(
-	            "Top 10 khách hàng có số giờ hát nhiều nhất", "Khách hàng", "Số giờ hát", dataset,
-	            PlotOrientation.VERTICAL, true, true, false);
+		final JFreeChart chart = ChartFactory.createBarChart("Top 10 khách hàng có số giờ hát nhiều nhất", "Khách hàng",
+				"Số giờ hát", dataset, PlotOrientation.VERTICAL, true, true, false);
 
-	    // Get the plot and the x-axis
-	    CategoryPlot plot = (CategoryPlot) chart.getPlot();
-	    CategoryAxis xAxis = plot.getDomainAxis();
+		// Get the plot and the x-axis
+		CategoryPlot plot = (CategoryPlot) chart.getPlot();
+		CategoryAxis xAxis = plot.getDomainAxis();
 
-	    // Rotate labels 45 degrees
-	    xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+		// Rotate labels 45 degrees
+		xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 
-	    // Decrease font size
-	    xAxis.setTickLabelFont(new Font("Dialog", Font.BOLD, 16));
+		// Decrease font size
+		xAxis.setTickLabelFont(new Font("Dialog", Font.BOLD, 16));
 
-	    return chart;
+		return chart;
 	}
-	
-	
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		Object o = e.getSource();
-		if(o.equals(btnThongKe)) {
-			if(cbThongKe.getSelectedItem().toString().equals("Doanh thu")) {
-				if(DataManager.getRole().equals("NV")) {
+		if (o.equals(btnThongKe)) {
+			if (cbThongKe.getSelectedItem().toString().equals("Doanh thu")) {
+				if (DataManager.getRole().equals("NV")) {
 					pnContent.setVisible(false);
 					pnTable.setVisible(false);
 					JOptionPane.showMessageDialog(null, "Nhân viên không có quyền thống kê doanh thu");
 				} else {
 					pnTableKH.setVisible(false);
 					cbDate.removeItem("Toàn");
-					if(cbDate.getItemCount() < 3) {
+					if (cbDate.getItemCount() < 3) {
 						cbDate.addItem("Ngày");
 					}
 					cbYearStart.setVisible(true);
@@ -790,35 +782,44 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 					cbMonthKH.setVisible(false);
 					cbYearKH.setVisible(false);
 					pnBarChart.setVisible(false);
-					if(cbDate.getSelectedItem().toString().equals("Ngày")) {
+					if (cbDate.getSelectedItem().toString().equals("Ngày")) {
 						clearDataDoanhThuTheoNgay();
 						resetField();
 						try {
 							loadDataDoanhThuTheoNgay();
 						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						try {
-					        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust this pattern to match your SQL Server date/time format
-					        String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust
+																												// this
+																												// pattern
+																												// to
+																												// match
+																												// your
+																												// SQL
+																												// Server
+																												// date/time
+																												// format
+							String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
 
-					        DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoNgay(formattedDateTime);
-					        if(dtlp != null) {
-					            lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
-					            lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
-					        }
-					        double tongSoGioHat = chitiethoadon_dao.tinhSoGioHatTheoNgay(formattedDateTime);
-					        double soGioHatSauKhiLamTron = Math.round(tongSoGioHat * 100.0) / 100.0;
-						    lblTongSoGioHat.setText(soGioHatSauKhiLamTron+ "");
-					    } catch (Exception e2) {
-					        e2.printStackTrace();
-					    }
-					    if(model.getRowCount() <= 0) {
-					    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY");
-					        String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
-					    	JOptionPane.showMessageDialog(this, "Không có dữ liệu thống kê của ngày: " + formattedDateTime);
-					    }
+							DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoNgay(formattedDateTime);
+							if (dtlp != null) {
+								lblDoanhThuPhongThuong.setText(df.format(dtlp.getDoanhThuPhongThuong()));
+								lblDoanhThuPhongVIP.setText(df.format(dtlp.getDoanhThuPhongVIP()));
+							}
+							double tongSoGioHat = chitiethoadon_dao.tinhSoGioHatTheoNgay(formattedDateTime);
+							double soGioHatSauKhiLamTron = Math.round(tongSoGioHat * 100.0) / 100.0;
+							lblTongSoGioHat.setText(soGioHatSauKhiLamTron + "");
+						} catch (Exception e2) {
+							e2.printStackTrace();
+						}
+						if (model.getRowCount() <= 0) {
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY");
+							String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
+							JOptionPane.showMessageDialog(this,
+									"Không có dữ liệu thống kê của ngày: " + formattedDateTime);
+						}
 						cbYearStart.setEnabled(false);
 						cbYearEnd.setEnabled(false);
 						pnCurveLineChart.setVisible(false);
@@ -829,13 +830,14 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 						cbYear.setVisible(false);
 						pnContent.setVisible(true);
 						pnTable.setVisible(true);
-						if(model.getRowCount() <= 0) {
-					    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY");
-					        String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
-					    	JOptionPane.showMessageDialog(this, "Không có dữ liệu thống kê của ngày: " + formattedDateTime);
-					    }
+						if (model.getRowCount() <= 0) {
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY");
+							String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
+							JOptionPane.showMessageDialog(this,
+									"Không có dữ liệu thống kê của ngày: " + formattedDateTime);
+						}
 					} else if (cbDate.getSelectedItem().toString().equals("Tháng")) {
-						if(DataManager.getRole().equals("QL")) {
+						if (DataManager.getRole().equals("QL")) {
 							pnContent.setVisible(true);
 							cbYearStart.setEnabled(false);
 							cbYearEnd.setEnabled(false);
@@ -851,17 +853,15 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 							try {
 								ThongKeMonth();
 							} catch (RemoteException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-							if(lblTongDoanhThu.getText().equals("0 VNĐ")) {
+							if (lblTongDoanhThu.getText().equals("0 VNĐ")) {
 								JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê của tháng: "
-								+ cbMonth.getSelectedItem() + " năm: " + cbYear.getSelectedItem()
-								);
+										+ cbMonth.getSelectedItem() + " năm: " + cbYear.getSelectedItem());
 							}
 						}
-					} else if(cbDate.getSelectedItem().toString().equals("Năm")) {
-						if(DataManager.getRole().equals("QL")) {
+					} else if (cbDate.getSelectedItem().toString().equals("Năm")) {
+						if (DataManager.getRole().equals("QL")) {
 							cbMonth.setVisible(false);
 							cbYear.setVisible(false);
 							pnPieChart.setVisible(false);
@@ -871,11 +871,11 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 							pnTable.setVisible(false);
 							int nambd = Integer.valueOf(cbYearStart.getSelectedItem().toString());
 							int namkt = Integer.valueOf(cbYearEnd.getSelectedItem().toString());
-							if(nambd == namkt) {
+							if (nambd == namkt) {
 								pnContent.setVisible(true);
 								pnCurveLineChart.setVisible(false);
 								pnPieChart.setVisible(true);
-								lblDate.setText("Tổng quan doanh thu năm "+namkt);
+								lblDate.setText("Tổng quan doanh thu năm " + namkt);
 								lblDate.setSize(400, 50);
 								pnPieChart.setVisible(true);
 								dateTimePicker.setVisible(false);
@@ -884,47 +884,40 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 								try {
 									ThongKeYear();
 								} catch (RemoteException e1) {
-									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								}
 								lblChartTitle.setText("BIỂU ĐỒ THỐNG KÊ DOANH THU THEO NĂM");
-								if(lblTongDoanhThu.getText().equals("0 VNĐ")) {
-									JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê của năm "
-									+nambd
-									);
+								if (lblTongDoanhThu.getText().equals("0 VNĐ")) {
+									JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê của năm " + nambd);
 								}
 							}
-							if(namkt > nambd) {
+							if (namkt > nambd) {
 								String yearStart = cbYearStart.getSelectedItem().toString();
 								String yearEnd = cbYearEnd.getSelectedItem().toString();
 								lineChart.clear();
 								try {
 									setCurveLineChartData();
 								} catch (RemoteException e1) {
-									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								}
 								pnContent.setVisible(true);
 								pnContent.setBounds(0, 192, 400, 535);
 								dateTimePicker.setVisible(false);
-								lblDate.setText("Tổng quan doanh thu từ năm "+yearStart+" đến "+yearEnd);
+								lblDate.setText("Tổng quan doanh thu từ năm " + yearStart + " đến " + yearEnd);
 								lblDate.setFont(new Font("Arial", Font.BOLD, 17));
 								lblDate.setSize(400, 50);
 								resetField();
 								try {
 									ThongKeManyYear(nambd, namkt);
 								} catch (RemoteException e1) {
-									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								}
-								if(lblTongDoanhThu.getText().equals("0 VNĐ")) {
-									JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê của năm "
-									+nambd
-									);
+								if (lblTongDoanhThu.getText().equals("0 VNĐ")) {
+									JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê của năm " + nambd);
 								}
 								pnCurveLineChart.setVisible(true);
 							}
-							if(nambd > namkt) {
+							if (nambd > namkt) {
 								JOptionPane.showMessageDialog(null, "Năm bắt đầu phải nhỏ hơn năm kết thúc!");
 								pnPieChart.setVisible(false);
 								pnContent.setVisible(false);
@@ -933,7 +926,7 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 						}
 					}
 				}
-			} else if(cbThongKe.getSelectedItem().toString().equals("Khách hàng")) {
+			} else if (cbThongKe.getSelectedItem().toString().equals("Khách hàng")) {
 				pnContent.setVisible(false);
 				pnTable.setVisible(false);
 				pnPieChart.setVisible(false);
@@ -947,16 +940,16 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 				cbMonthKH.setVisible(true);
 				cbYearKH.setVisible(true);
 				pnTableKH.setVisible(true);
-				if(cbMonthKH.getItemCount() == 0) {
+				if (cbMonthKH.getItemCount() == 0) {
 					updateMonthYearKHCbo();
 				}
-				if(cbYearKH.getItemCount() == 0) {
+				if (cbYearKH.getItemCount() == 0) {
 					updateYearKHCbo();
 				}
-				if(cbDate.getItemCount() < 3) {
+				if (cbDate.getItemCount() < 3) {
 					cbDate.addItem("Toàn");
 				}
-				if(cbDate.getSelectedItem().toString().equals("Tháng")) {
+				if (cbDate.getSelectedItem().toString().equals("Tháng")) {
 					cbMonthKH.setEnabled(true);
 					cbYearKH.setEnabled(true);
 					String selectedYear = cbYearKH.getSelectedItem().toString();
@@ -965,59 +958,57 @@ public class GD_ThongKe extends JPanel implements ActionListener{
 					try {
 						loadDataTKKHMonth(selectedYear, selectedMonth);
 					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				    dataset = createDatasetByMonthYear(selectedYear, selectedMonth);
-				    if (dataset.getRowCount() == 0) {
-				    	pnBarChart.setVisible(false);
-				        JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê cho tháng "+selectedMonth + " năm "+selectedYear);
-				    } else {
-					    barChart = createChart(dataset);
-					    pnBarChart.setChart(barChart); 
-					    pnBarChart.setVisible(true);
-				    }
-				} else if(cbDate.getSelectedItem().toString().equals("Năm")) {
+					dataset = createDatasetByMonthYear(selectedYear, selectedMonth);
+					if (dataset.getRowCount() == 0) {
+						pnBarChart.setVisible(false);
+						JOptionPane.showMessageDialog(null,
+								"Không có dữ liệu thống kê cho tháng " + selectedMonth + " năm " + selectedYear);
+					} else {
+						barChart = createChart(dataset);
+						pnBarChart.setChart(barChart);
+						pnBarChart.setVisible(true);
+					}
+				} else if (cbDate.getSelectedItem().toString().equals("Năm")) {
 					cbMonthKH.setEnabled(false);
-				    cbYearKH.setEnabled(true);
-				    String selectedYear = cbYearKH.getSelectedItem().toString();
-				    clearTableKH();
-				    try {
+					cbYearKH.setEnabled(true);
+					String selectedYear = cbYearKH.getSelectedItem().toString();
+					clearTableKH();
+					try {
 						loadDataTKKHYear(selectedYear);
 					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				    dataset = createDatasetByYear(selectedYear);
-				    if (dataset.getRowCount() == 0) {
-				    	pnBarChart.setVisible(false);
-				        JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê cho năm: "+selectedYear);
-				    } else {
-				        barChart = createChart(dataset);
-				        pnBarChart.setChart(barChart); 
-				        pnBarChart.setVisible(true);
-				    }
-				} else if(cbDate.getSelectedItem().toString().equals("Toàn")) {
+					dataset = createDatasetByYear(selectedYear);
+					if (dataset.getRowCount() == 0) {
+						pnBarChart.setVisible(false);
+						JOptionPane.showMessageDialog(null, "Không có dữ liệu thống kê cho năm: " + selectedYear);
+					} else {
+						barChart = createChart(dataset);
+						pnBarChart.setChart(barChart);
+						pnBarChart.setVisible(true);
+					}
+				} else if (cbDate.getSelectedItem().toString().equals("Toàn")) {
 					clearTableKH();
 					try {
 						loadDataTKKHALL();
 					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					cbMonthKH.setEnabled(false);
 					cbYearKH.setEnabled(false);
 					pnBarChart.setVisible(true);
 					dataset = createDataset();
-				    barChart = createChart(dataset);
-				    pnBarChart.setChart(barChart); 
-				    pnBarChart.setVisible(true);
+					barChart = createChart(dataset);
+					pnBarChart.setChart(barChart);
+					pnBarChart.setVisible(true);
 				}
 			}
-		} else if(o.equals(btnLamMoi)) {
+		} else if (o.equals(btnLamMoi)) {
 			cbThongKe.setSelectedItem("Doanh thu");
 			cbDate.setSelectedItem("Ngày");
-		} else if(o.equals(btnProfile)) {
+		} else if (o.equals(btnProfile)) {
 			dialog_user.setVisible(true);
 		}
 	}

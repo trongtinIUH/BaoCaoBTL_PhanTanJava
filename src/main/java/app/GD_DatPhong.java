@@ -32,6 +32,9 @@ import java.util.Date;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
+
+import dao.impl.KhachHangImpl;
+import dao.impl.LoaiPhongImpl;
 import dao.impl.PhieuDatPhongImpl;
 import dao.impl.PhongImpl;
 import dao.impl.TempDatPhongImpl;
@@ -43,8 +46,8 @@ import entity.PhieuDatPhong;
 import entity.Phong;
 import entity.TempDatPhong;
 import entity.TempThanhToan;
-import dao.KhachHang_dao;
-import dao.LoaiPhong_dao;
+import dao.KhachHangServices;
+import dao.LoaiPhongServices;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
 import dao.TempDatPhongServices;
@@ -79,7 +82,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 	private Dialog_PhongCho dialog_PhongCho;
 	private Dialog_DatPhongCho dialog_DatPhongCho;
 	PhongService p_Service;
-	LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	LoaiPhongServices lp_dao = new LoaiPhongImpl();
 	private JButton btnPhong;
 	ArrayList<JButton> btnPhongList = new ArrayList<>();
 	private final JPanel panel_ChuaPhong;
@@ -107,7 +110,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 	private final JButton btnBackHuyThanhToan;
 	private final PhieuDatPhongService pdp_Service = new PhieuDatPhongImpl();
 	private KhachHang kh= new KhachHang();
-	private final KhachHang_dao kh_dao= new KhachHang_dao();
+	private final KhachHangServices kh_dao= new KhachHangImpl();
 	Timer timerChayThongBao;
 	private final JButton btnBackPhongCho;
 
@@ -336,7 +339,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 						setEnabledBtnDatPhong();
 					}
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				try {
@@ -344,13 +346,11 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 						try {
 							sizeDSTemp_TT = tempTT_dao.getAllTemp().size();
 						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						setEnabledBtnDatPhong();
 					}
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
@@ -375,21 +375,18 @@ public class GD_DatPhong extends JPanel implements ActionListener {
                 try {
 					btnBackToBook.setEnabled(tmp_dao.getAllTemp().size() != 1);
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
                 try {
 					btnBackThanhToan.setEnabled(tempTT_dao.getAllTemp().size() != 0);
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
                 try {
 					btnBackHuyThanhToan.setEnabled(tempTT_dao.getAllTemp().size() != 0);
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
@@ -412,7 +409,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				try {
 					dsMaPhongDatTruoc = pdp_Service.getMaPhongDatTruoc();
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				if (dsMaPhongDatTruoc.size() != 0) {
@@ -421,7 +417,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 						try {
 							p = p_Service.getPhongTheoMaPhong(pdp.getPhong().getMaPhong());
 						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						if (p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
@@ -456,7 +451,11 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 							int gioNhanPhong = pdp.getNgayGioNhanPhong().getHour();
 							int phutNhanPhong = pdp.getNgayGioNhanPhong().getMinute();
 							String mkh = pdp.getKhachHang().getMaKhachHang();
-							kh = kh_dao.getKhachHangTheoMaKH(mkh);
+							try {
+								kh = kh_dao.getKhachHangTheoMaKH(mkh);
+							} catch (RemoteException e1) {
+								e1.printStackTrace();
+							}
 							if (gioHT == gioNhanPhong && phutHT < phutNhanPhong && (phutNhanPhong - phutHT == 20)) {
 								JOptionPane.showMessageDialog(null, "Phòng " + pdp.getPhong().getMaPhong()
 										+ " Còn 20p nữa đến thời gian nhận phòng vui lòng liên hệ KH:"+kh.getSoDienThoai());
@@ -678,7 +677,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				panel_ChuaPhong.add(btnPhong);
 			}
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -706,7 +704,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 						kiemTra = false;
 				}
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			try {
@@ -716,7 +713,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 						kiemTra = false;
 				}
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -729,7 +725,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		try {
 			i = p_Service.getallPhongs().size();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (i <= 15) {
@@ -741,7 +736,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		}
 	}
 
-	private void loadTimKiem(List<Phong> DSPhong) {
+	private void loadTimKiem(List<Phong> DSPhong) throws RemoteException {
 		// chỉnh sửa kích thước các icon thường______________________
 		int i = 0;
 		int x = 40;
@@ -808,7 +803,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		scrollPane_Phong.setViewportView(outerPanel);
 	}
 
-	private void Tim() {
+	private void Tim() throws RemoteException {
 		thoat: if (btnTimKiem.getText().equals("Tìm kiếm")) {
 			List<Phong> dsPhong = new ArrayList<Phong>();
 			int soNguoi = 0;
@@ -843,12 +838,10 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 							try {
 								dsPhong.add(p_Service.getPhongTheoMaPhong(txtMaPhong.getText()));
 							} catch (RemoteException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else if (!comboBox_LoaiPhong.getSelectedItem().toString().equals("")
@@ -856,7 +849,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					try {
 						dsPhong = p_Service.getPhongTKTheoTenLoaiPhong(loaiPhong, soNguoi);
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else if (comboBox_LoaiPhong.getSelectedItem().toString().equals("")
@@ -864,7 +856,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					try {
 						dsPhong = p_Service.getPhongTKTheoTrangThai(trangThai, soNguoi);
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else if (!comboBox_LoaiPhong.getSelectedItem().toString().equals("")
@@ -872,7 +863,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					try {
 						dsPhong = p_Service.getPhongTKTheoTenLoaiPhongVaTrangThai(loaiPhong, trangThai, soNguoi);
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else if (comboBox_LoaiPhong.getSelectedItem().toString().equals("")
@@ -880,7 +870,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					try {
 						dsPhong = p_Service.getPhongTKTheoSoNguoiHat(soNguoi);
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -906,13 +895,16 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 			dialog_user.setVisible(true);
 		}
 		if (o.equals(btnTimKiem)) {
-			Tim();
+			try {
+				Tim();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(btnTimKiemPDP)) {
 			try {
 				dialog_TimPhieuDatPhong = new Dialog_TimPhieuDatPhong();
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			dialog_TimPhieuDatPhong.setModal(true);
@@ -928,13 +920,11 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					try {
 						dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(TOOL_TIP_TEXT_KEY, null, null, 0, trangChu);
 					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					dialog_DatPhongTrong_2.setVisible(true);
 				}
 			} catch (HeadlessException | RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -946,13 +936,11 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					try {
 						dialog_ThanhToan = new Dialog_ThanhToan(txtMaPhong.getText());
 					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					dialog_ThanhToan.setVisible(true);
 				}
 			} catch (HeadlessException | RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -964,7 +952,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					tempTT_dao.deleteALLTempThanhToan();
 				}
 			} catch (HeadlessException | RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -974,17 +961,19 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				try {
 					p = p_Service.getPhongTheoMaPhong(DataManager.getMaPhongDatCho());
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				LoaiPhong lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
+				LoaiPhong lp = null;
+				try {
+					lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
+				} catch (RemoteException e1) {
+					e1.printStackTrace();
+				}
 				try {
 					dialog_DatPhongCho = new Dialog_DatPhongCho(p.getMaPhong(), p, lp, Integer.parseInt(DataManager.getSoNguoiHatDatCho()), trangChu);
 				} catch (NumberFormatException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				dialog_DatPhongCho.setVisible(true);
@@ -1002,17 +991,14 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 					try {
 						p = p_Service.getPhongTheoMaPhong(maPhong);
 					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					if (p.getTrangThai() == Enum_TrangThai.Trong) {
 						try {
 							dialog_htPhong = new Dialog_HienThiPhong(maPhong, trangChu);
 						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						// dialog_htPhong.setModal(true);
 						dialog_htPhong.setVisible(true);
 						return;
 					}
@@ -1021,10 +1007,8 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 						try {
 							dialog_PhongCho = new Dialog_PhongCho(maPhong, trangChu);
 						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						// dialog_PhongCho.setModal(true);
 						dialog_PhongCho.setVisible(true);
 						break;
 					}
@@ -1033,7 +1017,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 						try {
 							dialog_PhongDangSD = new Dialog_PhongDangSD(maPhong, this);
 						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						dialog_PhongDangSD.setModal(true);
@@ -1045,7 +1028,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 						try {
 							dialog_htPhongSuaChua = new Dialog_HienThiPhongSuaChua(maPhong);
 						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						dialog_htPhongSuaChua.setModal(true);

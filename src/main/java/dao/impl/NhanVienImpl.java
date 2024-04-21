@@ -76,19 +76,16 @@ public class NhanVienImpl extends UnicastRemoteObject implements NhanVienService
 
 	@Override
 	public List<NhanVien> findAllNhanVien() throws RemoteException {
-		// TODO Auto-generated method stub
 		return em.createNamedQuery("NhanVien.findAll", NhanVien.class).getResultList();
 	}
 
 	@Override
 	public NhanVien findByID(String maNV) throws RemoteException {
-		// TODO Auto-generated method stub
 		return em.find(NhanVien.class, maNV);
 	}
 
 	@Override
 	public List<NhanVien> findByName(String name) throws RemoteException {
-		// TODO Auto-generated method stub
 		return em.createNamedQuery("NhanVien.findByName", NhanVien.class)
 				.setParameter("hoTen", "%"+name+"%")
 				.getResultList();

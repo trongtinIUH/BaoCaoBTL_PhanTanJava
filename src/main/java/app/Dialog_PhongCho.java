@@ -28,11 +28,13 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.DateTimePicker;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 
-import dao.KhachHang_dao;
-import dao.LoaiPhong_dao;
+import dao.KhachHangServices;
+import dao.LoaiPhongServices;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
 import dao.TempDatPhongServices;
+import dao.impl.KhachHangImpl;
+import dao.impl.LoaiPhongImpl;
 import dao.impl.PhieuDatPhongImpl;
 import dao.impl.PhongImpl;
 import dao.impl.TempDatPhongImpl;
@@ -61,9 +63,9 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
     private final JButton btn_HuyPhong;
 
 	private final PhongService p_Service = new PhongImpl();
-	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final LoaiPhongServices lp_dao = new LoaiPhongImpl();
 	private final PhieuDatPhongService pdp_Service = new PhieuDatPhongImpl();
-	private final KhachHang_dao kh_dao = new KhachHang_dao();
+	private final KhachHangServices kh_dao = new KhachHangImpl();
 	private Phong p;
 	private LoaiPhong lp;
 	private PhieuDatPhong pdp;
@@ -315,7 +317,7 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 		setEnabledBtnDatPhong(maPhong);
 	}
 
-	public void laydulieu(String maPhong) {
+	public void laydulieu(String maPhong) throws RemoteException {
 		try {
 			pdp = pdp_Service.getPDPDatTruocTheoMaPhong(maPhong);
 		} catch (RemoteException e) {

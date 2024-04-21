@@ -8,9 +8,18 @@ import java.util.Set;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedNativeQueries;
+import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.OneToMany;
 
 @Entity
+@NamedNativeQueries({
+	@NamedNativeQuery(name = "KhachHang.getAllKhachHangs", query = "SELECT maKhachHang, hoTen, soDienThoai, gioiTinh FROM KhachHang", resultClass = KhachHang.class),
+
+	@NamedNativeQuery(name = "KhachHang.getKhachHangTheoTenKH", query = "SELECT maKhachHang, hoTen, soDienThoai, gioiTinh FROM KhachHang WHERE hoTen LIKE CONCAT('%', :tenKhachHang, '%')", resultClass = KhachHang.class),
+
+	@NamedNativeQuery(name = "KhachHang.getKhachHangTheoSDT", query = "SELECT maKhachHang, hoTen, soDienThoai, gioiTinh FROM KhachHang WHERE soDienThoai = :sdt", resultClass = KhachHang.class)
+})
 public class KhachHang implements Serializable {
 
 	/**

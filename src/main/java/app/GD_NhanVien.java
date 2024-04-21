@@ -14,7 +14,6 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -388,7 +387,6 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 					model.addRow(row);
 				}
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}
@@ -410,7 +408,6 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 					sl++;
 			}
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String slString = String.format("%03d", sl + 1);
@@ -502,7 +499,6 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 						loadMa();
 					}
 				} catch (HeadlessException | RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -521,7 +517,6 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 				try {
 					nv_dao.deleteNhanVien(model.getValueAt(row, 1).toString());
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				model.removeRow(row);
@@ -564,7 +559,6 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 						JOptionPane.showMessageDialog(null, "Sửa thành công!!");
 					}
 				} catch (HeadlessException | RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else {
@@ -581,7 +575,6 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 				try {
 					nv = nv_dao.findByID(txtTuKhoaTim.getText());
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if (nv != null) {
@@ -598,7 +591,6 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 				try {
 					dsNhanVien = nv_dao.findByName(txtTuKhoaTim.getText());
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if (dsNhanVien != null) {
@@ -683,13 +675,11 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 				wordbook.write(file_out);
 				file_out.close();
 			} catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
 
 			JOptionPane.showMessageDialog(this, "In file danh sách thành công!!");
 		} catch (Exception e1) {
-			// TODO: handle exception
 			e1.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Không in được");
 		}
@@ -707,13 +697,11 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		Object obj = e.getSource();
 		if (obj.equals(btnThem)) {
 			try {
 				them();
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		} else if (obj.equals(btnXoa)) {
@@ -740,7 +728,6 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 		int row = table.getSelectedRow();
 		txtMa.setText(model.getValueAt(row, 1).toString());
 		txtHoTen.setText(model.getValueAt(row, 2).toString());
@@ -753,8 +740,8 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 		try {
 			modelNgaySinh.setValue((java.sql.Date) model.getValueAt(row, 5));
 		} catch (Exception e2) {
-			// TODO: handle exception
-		}
+            e2.printStackTrace();
+        }
 
 		cbChucVu.setSelectedItem(model.getValueAt(row, 6));
 		imageLabel.setIcon(new ImageIcon(model.getValueAt(row, 7).toString()));
@@ -763,25 +750,21 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 }

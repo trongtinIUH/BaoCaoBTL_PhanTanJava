@@ -10,7 +10,6 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -33,12 +32,12 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-
+import dao.impl.LoaiPhongImpl;
 import dao.impl.PhongImpl;
 import entity.Enum_TrangThai;
 import entity.LoaiPhong;
 import entity.Phong;
-import dao.LoaiPhong_dao;
+import dao.LoaiPhongServices;
 import dao.PhongService;
 
 public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseListener {
@@ -68,7 +67,7 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 	private final JButton btnSua;
 	private final JButton btnLamMoi;
 	private PhongService p_Service;
-	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final LoaiPhongServices lp_dao = new LoaiPhongImpl();
 	private XSSFWorkbook wordbook;
 	private final JComboBox<String> cbLau;
 	private final JTextField txtMa;
@@ -332,7 +331,6 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 		int row = table.getSelectedRow();
 		txtMa.setText(model.getValueAt(row, 1).toString());
 		cbLoaiPhong.setSelectedItem(model.getValueAt(row, 2));
@@ -346,25 +344,21 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -373,7 +367,6 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 		try {
 			p_Service = new PhongImpl();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
@@ -394,7 +387,6 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 				}
 			}
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -482,7 +474,6 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 				try {
 					p_Service.deletePhong(model.getValueAt(row, 1).toString());
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				model.removeRow(row);
@@ -534,7 +525,7 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 		}
 	}
 
-	private void tim() {
+	private void tim() throws RemoteException {
 		int i = 1;
 		if (btnTimKiem.getText().equals("Tìm kiếm")) {
 			if (cbLoaiTim.getSelectedItem().equals("Mã phòng")) {
@@ -542,7 +533,6 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 				try {
 					p = p_Service.getPhongTheoMaPhong(txtTuKhoaTim.getText());
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if (p != null) {
@@ -560,7 +550,6 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 				try {
 					dsPhong = p_Service.getPhongTheoSucChua(txtTuKhoaTim.getText());
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if (dsPhong != null) {
@@ -636,13 +625,11 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 				wordbook.write(file_out);
 				file_out.close();
 			} catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
 
 			JOptionPane.showMessageDialog(this, "In file danh sách thành công!!");
 		} catch (Exception e1) {
-			// TODO: handle exception
 			e1.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Không in được");
 		}
@@ -650,7 +637,6 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		Object obj = e.getSource();
 		if (obj.equals(btnUser)) {
 			dialog_user.setVisible(true);
@@ -659,7 +645,6 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			try {
 				them();
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		} else if (obj.equals(btnXoa)) {
@@ -668,10 +653,8 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			try {
 				sua();
 			} catch (HeadlessException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		} else if (obj.equals(btnLamMoi)) {
@@ -680,7 +663,11 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			loadData();
 			loadMa();
 		} else if (obj.equals(btnTimKiem)) {
-			tim();
+			try {
+				tim();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnXuatExcel)) {
 			xuatExcel();
 		} else if (obj.equals(cbLau)) {

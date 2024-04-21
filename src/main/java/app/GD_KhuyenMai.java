@@ -2,6 +2,7 @@ package app;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -39,7 +40,8 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
-import dao.KhuyenMai_dao;
+import dao.KhuyenMaiServices;
+import dao.impl.KhuyenMaiImpl;
 import entity.KhuyenMai;
 import utils.DateLabelFormatter;
 
@@ -79,12 +81,11 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 	private final JDatePanelImpl datePanelkt;
 	private final JDatePickerImpl datePickerkt;
 	private final JComboBox<String> cbLoaiTim1;
-	private final KhuyenMai_dao km_dao = new KhuyenMai_dao();
+	private final KhuyenMaiServices km_dao = new KhuyenMaiImpl();
 	private XSSFWorkbook wordbook;
 	private final Dialog_User dialog_User= new Dialog_User();
 
 	public GD_KhuyenMai() throws RemoteException{
-		// TODO Auto-generated constructor stub
 		setBackground(new Color(246, 245, 255));
 		setLayout(null);
 
@@ -325,10 +326,10 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 		}
 	}
 
-	private void loadData() {
+	private void loadData() throws RemoteException {
 		clearTable();
 		int i = 0;
-		for (KhuyenMai km : km_dao.getallKhuyenMais()) {
+		for (KhuyenMai km : km_dao.getAllKhuyenMais()) {
 			if (!km.getMaKhuyenMai().equals("NULL")) {
 				i++;
 				Object[] row = { i, km.getMaKhuyenMai(), km.getTenKhuyenMai(), km.getNgayBatDau(), km.getNgayKetThuc(),
@@ -353,7 +354,7 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 		txtMa.setText(ma);
 	}
 
-	private void them() {
+	private void them() throws HeadlessException, RemoteException {
 		loadMa();
 		if (txtMa.getText().equals("") || txtTenKhuyenMai.getText().equals("")) {
 			JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!!");
@@ -375,7 +376,7 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 		}
 	}
 
-	private void xoa() {
+	private void xoa() throws RemoteException {
 		if (table.getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(null, "Bạn chưa chọn dòng để xóa!!");
 		} else if (table.getSelectedRowCount() > 1) {
@@ -391,7 +392,7 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 		}
 	}
 
-	private void sua() {
+	private void sua() throws HeadlessException, RemoteException {
 		if (txtMa.getText().equals("") || txtTenKhuyenMai.getText().equals("")) {
 			JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!!");
 		} else {
@@ -412,14 +413,14 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 		}
 	}
 
-	private void lamMoi() {
+	private void lamMoi() throws RemoteException {
 		txtTenKhuyenMai.setText("");
 		txtPhanTramKM.setText("");
 		loadData();
 		loadMa();
 	}
 
-	private void timKiem() {
+	private void timKiem() throws RemoteException {
 		int i = 1;
 		if (btnTimKiem.getText().equals("Tìm kiếm")) {
 			if (cbLoaiTim.getSelectedItem().equals("Mã khuyến mãi")) {
@@ -474,7 +475,7 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 			} else if (cbLoaiTim.getSelectedItem().equals("") && cbLoaiTim1.getSelectedItem().equals("")) {
 				JOptionPane.showMessageDialog(this, "Bạn chưa chọn loại cần tìm");
 			} else if (cbLoaiTim.getSelectedItem().equals("")) {
-				ArrayList<KhuyenMai> dsKhuyenMai = km_dao.getallKhuyenMais();
+				ArrayList<KhuyenMai> dsKhuyenMai = km_dao.getAllKhuyenMais();
 				ArrayList<KhuyenMai> dsCanTim = new ArrayList<KhuyenMai>();
 				if (dsKhuyenMai != null) {
 					Date currentDate = getCurrentSqlDate();
@@ -542,25 +543,25 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 			cell = row.createCell(5, CellType.STRING);
 			cell.setCellValue("Phần trăm khuyến mãi");
 
-			for (int i = 0; i < km_dao.getallKhuyenMais().size(); i++) {
+			for (int i = 0; i < km_dao.getAllKhuyenMais().size(); i++) {
 				row = sheet.createRow(3 + i); // Bỏ qua 2 dòng trống
 
 				cell = row.createCell(0, CellType.NUMERIC);
 				cell.setCellValue(i + 1);
 				cell = row.createCell(1, CellType.STRING);
-				cell.setCellValue(km_dao.getallKhuyenMais().get(i).getMaKhuyenMai());
+				cell.setCellValue(km_dao.getAllKhuyenMais().get(i).getMaKhuyenMai());
 				cell = row.createCell(2, CellType.STRING);
-				cell.setCellValue(km_dao.getallKhuyenMais().get(i).getTenKhuyenMai());
+				cell.setCellValue(km_dao.getAllKhuyenMais().get(i).getTenKhuyenMai());
 				cell = row.createCell(5, CellType.STRING);
-				cell.setCellValue(km_dao.getallKhuyenMais().get(i).getPhanTramKhuyenMai());
+				cell.setCellValue(km_dao.getAllKhuyenMais().get(i).getPhanTramKhuyenMai());
 
 				cell = row.createCell(3, CellType.STRING);
 				DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-				String ngay = df.format(km_dao.getallKhuyenMais().get(i).getNgayBatDau());
+				String ngay = df.format(km_dao.getAllKhuyenMais().get(i).getNgayBatDau());
 				cell.setCellValue(ngay);
 
 				cell = row.createCell(4, CellType.STRING);
-				ngay = df.format(km_dao.getallKhuyenMais().get(i).getNgayBatDau());
+				ngay = df.format(km_dao.getAllKhuyenMais().get(i).getNgayBatDau());
 				cell.setCellValue(ngay);
 			}
 
@@ -570,13 +571,11 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 				wordbook.write(file_out);
 				file_out.close();
 			} catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
 
 			JOptionPane.showMessageDialog(this, "In file danh sách thành công!!");
 		} catch (Exception e1) {
-			// TODO: handle exception
 			e1.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Không in được");
 		}
@@ -584,22 +583,41 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			them();
+			try {
+				them();
+			} catch (HeadlessException | RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(btnXoa)) {
-			xoa();
+			try {
+				xoa();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(btnSua)) {
-			sua();
+			try {
+				sua();
+			} catch (HeadlessException | RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(btnLamMoi)) {
-			lamMoi();
+			try {
+				lamMoi();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(btnTimKiem)) {
-			timKiem();
+			try {
+				timKiem();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(cbLoaiTim)) {
 			if (cbLoaiTim.getSelectedItem().equals("Mã khuyến mãi")) {
@@ -622,7 +640,6 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 		int row = table.getSelectedRow();
 		txtMa.setText(model.getValueAt(row, 1).toString());
 		txtTenKhuyenMai.setText(model.getValueAt(row, 2).toString());
@@ -630,13 +647,13 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 		try {
 			modelBatDau.setValue((java.sql.Date) model.getValueAt(row, 3));
 		} catch (Exception e2) {
-			// TODO: handle exception
+			e2.printStackTrace();
 		}
 
 		try {
 			modelKetThuc.setValue((java.sql.Date) model.getValueAt(row, 4));
 		} catch (Exception e2) {
-			// TODO: handle exception
+			e2.printStackTrace();
 		}
 
 		txtPhanTramKM.setText(model.getValueAt(row, 5).toString());
@@ -644,25 +661,21 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 }

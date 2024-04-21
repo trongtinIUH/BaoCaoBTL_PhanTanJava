@@ -29,7 +29,6 @@ public class ChiTietHoaDon implements Serializable {
 	private double soGioHat;
 	public ChiTietHoaDon() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public ChiTietHoaDon(HoaDonDatPhong hoaDon, Phong phong,  Timestamp gioNhanPhong, Timestamp gioTraPhong, double soGioHat) {
 		super();

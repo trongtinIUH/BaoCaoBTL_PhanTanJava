@@ -99,13 +99,11 @@ public class SanPhamImpl extends UnicastRemoteObject implements SanPhamService{
 
 	@Override
 	public List<SanPham> getAllSanPhams() throws RemoteException {
-		// TODO Auto-generated method stub
 		return em.createNamedQuery("Product.getallSanPhams", SanPham.class).getResultList();
 	}
 
 	@Override
 	public SanPham getSanPhamTheoMaSP(String maSP) throws RemoteException {
-		// TODO Auto-generated method stub
 		return em.find(SanPham.class, maSP);
 	}
 
@@ -124,13 +122,11 @@ public class SanPhamImpl extends UnicastRemoteObject implements SanPhamService{
 
 	@Override
 	public List<SanPham> getSanPhamTheoTenSanPham(String tenSP) throws RemoteException {
-		// TODO Auto-generated method stub
 		return em.createNamedQuery("Product.findByProductName", SanPham.class).setParameter("tenSanPham", "%"+tenSP+"%").getResultList();
 	}
 
 	@Override
 	public List<SanPham> getSanPhamTheoLoaiSanPham(String loaiSP) throws RemoteException {
-		// TODO Auto-generated method stub
 		return em.createNamedQuery("Product.findByProductCategory", SanPham.class).setParameter("loaiSanPham", loaiSP).getResultList();
 	}
 

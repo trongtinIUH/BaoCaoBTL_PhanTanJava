@@ -22,12 +22,13 @@ import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
+import dao.impl.LoaiPhongImpl;
 import dao.impl.PhongImpl;
 import dao.impl.TempDatPhongImpl;
 import entity.LoaiPhong;
 import entity.Phong;
 import entity.TempDatPhong;
-import dao.LoaiPhong_dao;
+import dao.LoaiPhongServices;
 import dao.PhongService;
 import dao.TempDatPhongServices;
 
@@ -50,7 +51,7 @@ public class Dialog_HienThiPhong extends JDialog implements ActionListener {
     private final JLabel lblPhong_1;
 	private final JButton btnDatPhong;
 	private final PhongService p_Service = new PhongImpl();
-	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final LoaiPhongServices lp_dao = new LoaiPhongImpl();
 
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
 	private Dialog_DatPhongCho dialog_DatPhongCho;

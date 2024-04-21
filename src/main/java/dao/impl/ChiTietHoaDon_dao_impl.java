@@ -1,6 +1,5 @@
 package dao.impl;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
@@ -23,7 +22,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 
 	public ChiTietHoaDon_dao_impl() throws RemoteException {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	/**
 	 * 
@@ -36,7 +34,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Connection con = ConnectDB.getConnection();
@@ -61,7 +58,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Connection con = ConnectDB.getConnection();
@@ -85,7 +81,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Connection con = ConnectDB.getConnection();
@@ -109,7 +104,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Connection con = ConnectDB.getConnection();
@@ -123,7 +117,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 				soGioHat = rs.getDouble("TongSoGioHat");
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return soGioHat;
@@ -134,7 +127,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Connection con = ConnectDB.getConnection();
@@ -150,7 +142,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 				soGioHat = rs.getDouble("TongSoGioHat");
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return soGioHat;
@@ -161,7 +152,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Connection con = ConnectDB.getConnection();
@@ -178,7 +168,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 				soGioHat = rs.getDouble("TongSoGioHat");
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return soGioHat;
@@ -189,7 +178,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Connection con = ConnectDB.getConnection();
@@ -204,7 +192,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 				soGioHat = rs.getDouble("TongSoGioHat");
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return soGioHat;
@@ -214,7 +201,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Connection con = ConnectDB.getConnection();
@@ -229,13 +215,11 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 	        stmt.setDouble(5, cthd.getSoGioHat());
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
 			} catch (SQLException e2) {
-				// TODO: handle exception
 				e2.printStackTrace();
 			}
 
@@ -247,7 +231,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement stmt = null;
@@ -262,13 +245,11 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 			stmt.setString(5, cthd.getHoaDon().getMaHoaDon());
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
 			} catch (SQLException e2) {
-				// TODO: handle exception
 				e2.printStackTrace();
 			}
 
@@ -280,7 +261,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement stmt = null;
@@ -294,13 +274,11 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 			stmt.setString(4, cthd.getHoaDon().getMaHoaDon());
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
 			} catch (SQLException e2) {
-				// TODO: handle exception
 				e2.printStackTrace();
 			}
 
@@ -312,7 +290,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Connection con = ConnectDB.getConnection();
@@ -323,13 +300,11 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 			stmt.setString(1, maPhong);
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
 			} catch (SQLException e2) {
-				// TODO: handle exception
 				e2.printStackTrace();
 			}
 
@@ -342,7 +317,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Connection con = ConnectDB.getConnection();

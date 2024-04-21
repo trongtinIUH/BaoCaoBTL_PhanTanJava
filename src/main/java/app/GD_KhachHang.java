@@ -2,6 +2,7 @@ package app;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -37,7 +38,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import dao.KhachHang_dao;
+import dao.KhachHangServices;
+import dao.impl.KhachHangImpl;
 import entity.KhachHang;
 
 public class GD_KhachHang extends JPanel implements ActionListener, MouseListener {
@@ -67,7 +69,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 	private final JRadioButton radNu;
 	private final JButton btnThem;
 	private final JLabel lblGioiTinh;
-	private final KhachHang_dao kh_dao;
+	private final KhachHangServices kh_dao;
 	private final JTextField txtHoTen;
 	private final JTextField txtMa;
 	private XSSFWorkbook wordbook;
@@ -81,7 +83,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 		setBackground(new Color(242, 240, 255));
 		setLayout(null);
 		font = new Font("Arial", Font.BOLD, 18);
-		kh_dao = new KhachHang_dao();
+		kh_dao = new KhachHangImpl();
 
 		JPanel pnNorth = new JPanel();
 		pnNorth.setBounds(0, 0, 1078, 60);
@@ -179,7 +181,6 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 		Timer timerSDT = new Timer(1000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				if (DataManager.isLoadSDT()) {
 					txtSDT.setText(DataManager.getSoDienThoaiKHDat());
 					DataManager.setLoadSDT(false);
@@ -295,10 +296,10 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 	}
 
 	// ---- Mã khách hàng phát sinh tự động tăng dần bắt đầu từ 001
-	private int ThuTuKhachHangTrongNgay() {
+	private int ThuTuKhachHangTrongNgay() throws RemoteException {
 		int sl = 1;
 		String maKH = "";
-		for (KhachHang kh : kh_dao.getallKhachHangs()) {
+		for (KhachHang kh : kh_dao.getAllKhachHangs()) {
 			maKH = kh.getMaKhachHang(); // Chạy hết vòng for sẽ lấy được mã KH cuối danh sách
 		}
 		
@@ -314,7 +315,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 		return sl;
 	}
 
-	private String generateRandomCode() {
+	private String generateRandomCode() throws RemoteException {
 		String prefix = "KH";
 		DateFormat dateFormat = new SimpleDateFormat("yyMMdd");
 		date = new Date();
@@ -322,17 +323,17 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 		return prefix + dateFormat.format(date) + suffix;
 	}
 
-	private void loadMa() {
+	private void loadMa() throws RemoteException {
 		String code;
 		code = generateRandomCode();
 		txtMa.setText(code);
 	}
 	// ---------------------------------------------------------
 
-	public void loadData() {
+	public void loadData() throws RemoteException {
 		int i = 0;
 		String gioiTinh = "";
-		for (KhachHang kh : kh_dao.getallKhachHangs()) {
+		for (KhachHang kh : kh_dao.getAllKhachHangs()) {
 			i++;
 			if (kh.isGioiTinh()) {
 				gioiTinh = "Nam";
@@ -358,7 +359,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 		grSex.clearSelection();
 	}
 
-	public void them() {
+	public void them() throws HeadlessException, RemoteException {
 		if (txtMa.getText().equals("") || txtHoTen.getText().equals("") || txtSDT.getText().equals("")
 				|| (!radNam.isSelected() && !radNu.isSelected())) {
 			JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!!");
@@ -391,7 +392,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 		}
 	}
 
-	public void xoa() {
+	public void xoa() throws RemoteException {
 		if (table.getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(null, "Bạn chưa chọn dòng để xóa!!");
 		} else if (table.getSelectedRowCount() > 1) {
@@ -400,14 +401,18 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa khách hàng này không?", "Thông báo",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				int row = table.getSelectedRow();
-				kh_dao.deleteKhachHang(model.getValueAt(row, 1).toString());
+				try {
+					kh_dao.deleteKhachHang(model.getValueAt(row, 1).toString());
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
 				model.removeRow(row);
 				JOptionPane.showMessageDialog(this, "Xóa thành công!!");
 			}
 		}
 	}
 
-	public void sua() {
+	public void sua() throws HeadlessException, RemoteException {
 		if (table.getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(null, "Bạn chưa chọn dòng để sửa!!");
 		} else if (table.getSelectedRowCount() > 1) {
@@ -427,7 +432,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 		}
 	}
 
-	public void tim() {
+	public void tim() throws RemoteException {
 		int i = 0;
 		String gioitinh = "";
 		if (btnTimKiem.getText().equals("Tìm kiếm")) {
@@ -504,20 +509,20 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 			cell = row.createCell(4, CellType.STRING);
 			cell.setCellValue("Giới tính");
 
-			for (int i = 0; i < kh_dao.getallKhachHangs().size(); i++) {
+			for (int i = 0; i < kh_dao.getAllKhachHangs().size(); i++) {
 				row = sheet.createRow(3 + i); // Bỏ qua 2 dòng trống
 
 				cell = row.createCell(0, CellType.NUMERIC);
 				cell.setCellValue(i + 1);
 				cell = row.createCell(1, CellType.STRING);
-				cell.setCellValue(kh_dao.getallKhachHangs().get(i).getMaKhachHang());
+				cell.setCellValue(kh_dao.getAllKhachHangs().get(i).getMaKhachHang());
 				cell = row.createCell(2, CellType.STRING);
-				cell.setCellValue(kh_dao.getallKhachHangs().get(i).getHoTen());
+				cell.setCellValue(kh_dao.getAllKhachHangs().get(i).getHoTen());
 				cell = row.createCell(3, CellType.NUMERIC);
-				cell.setCellValue(kh_dao.getallKhachHangs().get(i).getSoDienThoai());
+				cell.setCellValue(kh_dao.getAllKhachHangs().get(i).getSoDienThoai());
 
 				String gioiTinhInExcel = "";
-				if (kh_dao.getallKhachHangs().get(i).isGioiTinh()) {
+				if (kh_dao.getAllKhachHangs().get(i).isGioiTinh()) {
 					gioiTinhInExcel = "Nam";
 				} else
 					gioiTinhInExcel = "Nữ";
@@ -531,13 +536,11 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 				wordbook.write(file_out);
 				file_out.close();
 			} catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
 
 			JOptionPane.showMessageDialog(this, "In file danh sách thành công!!");
 		} catch (Exception e1) {
-			// TODO: handle exception
 			e1.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Không in được");
 		}
@@ -545,19 +548,38 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		Object obj = e.getSource();
 		if (obj.equals(btnThem)) {
-			them();
+			try {
+				them();
+			} catch (HeadlessException | RemoteException e1) {
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnXoa)) {
-			xoa();
+			try {
+				xoa();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnSua)) {
-			sua();
+			try {
+				sua();
+			} catch (HeadlessException | RemoteException e1) {
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnLamMoi)) {
 			xoaTrang();
-			loadMa();
+			try {
+				loadMa();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnTimKiem)) {
-			tim();
+			try {
+				tim();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		} else if (obj.equals(btnXuatExcel)) {
 			xuatExcel();
 		} else if (obj.equals(btnUser)) {
@@ -567,7 +589,6 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 		int row = table.getSelectedRow();
 		txtMa.setText(model.getValueAt(row, 1).toString());
 		txtHoTen.setText(model.getValueAt(row, 2).toString());
@@ -581,25 +602,21 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 }

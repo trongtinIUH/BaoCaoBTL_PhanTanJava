@@ -44,13 +44,16 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
-import dao.HoaDonDatPhong_dao;
-import dao.KhachHang_dao;
-import dao.LoaiPhong_dao;
+import dao.HoaDonDatPhongServices;
+import dao.KhachHangServices;
+import dao.LoaiPhongServices;
 import dao.NhanVienService;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
 import dao.TempDatPhongServices;
+import dao.impl.HoaDonDatPhongImpl;
+import dao.impl.KhachHangImpl;
+import dao.impl.LoaiPhongImpl;
 import dao.impl.NhanVienImpl;
 import dao.impl.PhieuDatPhongImpl;
 import dao.impl.PhongImpl;
@@ -98,21 +101,21 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 	private static final long serialVersionUID = 1L;
 	private final JTextField txtLoaiTimKiem;
 	private final PhieuDatPhongService pdp_Service = new PhieuDatPhongImpl();
-    private final KhachHang_dao kh_dao = new KhachHang_dao();
+    private final KhachHangServices kh_dao = new KhachHangImpl();
 	private KhachHang kh = new KhachHang();
 	private NhanVien nv = new NhanVien();
 	private final NhanVienService nv_dao = new NhanVienImpl();
 
 	private PhieuDatPhong pdp = new PhieuDatPhong();
 	private HoaDonDatPhong hd = new HoaDonDatPhong();
-	private final HoaDonDatPhong_dao hd_dao = new HoaDonDatPhong_dao();
+	private final HoaDonDatPhongServices hd_dao = new HoaDonDatPhongImpl();
 	private Phong p = new Phong();
 	private Dialog_PhongCho dialog_PhongCho;
 	private XSSFWorkbook wordbook;
 	private final TempDatPhongServices tmp_dao;
 	private Dialog_DatPhongTrong_2 dialog_DatPhongTrong_2;
 	private GD_TrangChu trangChu;
-	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final LoaiPhongServices lp_dao = new LoaiPhongImpl();
 	private LoaiPhong lp;
 	private Dialog_PhongDangSD dialog_PhongDangSD;
 	private Dialog_TimPDP_DaThanhToan dialog_TimPDP_DaThanhToan;
@@ -308,7 +311,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 	}
 
 	// hàm load sữ liệu
-	public void loadData() {
+	public void loadData() throws RemoteException {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm");
 		String hinhthuc;
 		String trangthai;
@@ -316,7 +319,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 		try {
 			allPhieuDatPhong = pdp_Service.getAllsPhieuDatPhong();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
@@ -334,7 +336,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			try {
 				pdp = pdp_Service.getPhieuDatPhongTheoMaPDP(mp);
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			p = pdp.getPhong();
@@ -344,7 +345,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			try {
 				nv = nv_dao.findByID(x.getNhanVien().getMaNhanVien());
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -372,7 +372,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 	}
 
 	// hàm tìm
-	public void tim() {
+	public void tim() throws RemoteException {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm");
 		String hinhthuc = "";
 		String trangthai = "";
@@ -410,7 +410,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			    try {
 					pdp = pdp_Service.getPhieuDatPhongTheoMaPDP("PDP"+thongtinTimKiem);
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			    kh = kh_dao.getKhachHangTheoMaKH(pdp.getKhachHang().getMaKhachHang());
@@ -418,7 +417,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			    try {
 					nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -460,7 +458,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 					try {
 						pdps = pdp_Service.getPhieuDatPhongTheoMaKH(kh.getMaKhachHang());
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 			        for (PhieuDatPhong pdp : pdps) {
@@ -474,7 +471,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			            try {
 							nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
 						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 
@@ -524,7 +520,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 						try {
 							pdps = pdp_Service.getPhieuDatPhongTheoMaKH(kh.getMaKhachHang());
 						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						for (PhieuDatPhong pdp : pdps) {
@@ -533,7 +528,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 								try {
 									nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
 								} catch (RemoteException e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 
@@ -578,7 +572,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				        try {
 							dsPDPtheoNgay = pdp_Service.getPDPTheoNgayNhan(ngaynhan);
 						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					    if (!dsPDPtheoNgay.isEmpty()) {
@@ -596,7 +589,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 					                try {
 										nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
 									} catch (RemoteException e) {
-										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
 					                hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
@@ -634,7 +626,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			        try {
 						dsPDPtheoNgay = pdp_Service.getPDPTheoThangNhan(thangNhan);
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				    if (!dsPDPtheoNgay.isEmpty()) {
@@ -652,7 +643,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				                try {
 									nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
 								} catch (RemoteException e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 				                hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
@@ -690,7 +680,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			        try {
 						dsPDPtheoNgay = pdp_Service.getPDPTheoNamNhan(namNhan);
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				    if (!dsPDPtheoNgay.isEmpty()) {
@@ -708,7 +697,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				                try {
 									nv = nv_dao.findByID(pdp.getNhanVien().getMaNhanVien());
 								} catch (RemoteException e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 				                hd = hd_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
@@ -836,13 +824,16 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			setVisible(false);
 		}
 		if (o.equals(btnTimKiem)) {
-			tim();
+			try {
+				tim();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(btn_XemPhong)) {
 			try {
 				xemPhong();
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -853,24 +844,34 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			try {
 				nhanPhong();
 			} catch (NumberFormatException | RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			clearTable();
-			loadData();
+			try {
+				loadData();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(btnLamMoi)) {
 			comboBox_TrangThai_1.setSelectedIndex(0);
 			txtLoaiTimKiem.setText("");
 			comboBox_TrangThai.setSelectedIndex(0);
 			clearTable();
-			loadData();
+			try {
+				loadData();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if (o.equals(btn_HuyPhong)) {
 			try {
-				HuyPhieu();
+				try {
+					HuyPhieu();
+				} catch (RemoteException e1) {
+					e1.printStackTrace();
+				}
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -962,29 +963,25 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
-	public void HuyPhieu() throws SQLException {
+	public void HuyPhieu() throws SQLException, RemoteException {
 		int row = tblPhieuDatPhong.getSelectedRow();
 		String maphong = (String) tblPhieuDatPhong.getValueAt(row, 1);
 		String hinhthuc = (String) tblPhieuDatPhong.getValueAt(row, 7);
@@ -1012,7 +1009,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 					try {
 						p_Service.updatePhong(phong, maphong);
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					model.removeRow(row);
@@ -1041,7 +1037,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 		try {
 			p = p_Service.getPhongTheoMaPhong(maphong);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -1050,7 +1045,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				try {
 					dialog_PhongCho = new Dialog_PhongCho(maphong, trangChu);
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				DataManager.setDatPhongCho(true);
@@ -1060,7 +1054,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				try {
 					dialog_PhongDangSD = new Dialog_PhongDangSD(maphong, null);
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				DataManager.setDatPhong(true);
@@ -1071,7 +1064,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				try {
 					dialog_PhongDangSD = new Dialog_PhongDangSD(maphong, null);
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				DataManager.setDatPhong(true);
@@ -1082,7 +1074,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				try {
 					dialog_TimPDP_DaThanhToan = new Dialog_TimPDP_DaThanhToan(maphong, maPDP);
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -1102,13 +1093,11 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 		try {
 			pdp = pdp_Service.getPDPDatTruocTheoMaPhong(maphong);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			p = p_Service.getPhongTheoMaPhong(maphong);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
@@ -1127,7 +1116,6 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				try {
 					pdp = pdp_Service.getPDPDatTruocTheoMaPhong(maphong);
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				int gio_np = pdp.getNgayGioNhanPhong().getHour();
@@ -1150,10 +1138,8 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 							dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(maphong, p, lp, Integer.parseInt(songuoi),
 									trangChu);
 						} catch (NumberFormatException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						dispose();
@@ -1305,13 +1291,11 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				wordbook.write(file_out);
 				file_out.close();
 			} catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
 
 			JOptionPane.showMessageDialog(this, "In file danh sách thành công!!");
 		} catch (Exception e1) {
-			// TODO: handle exception
 			e1.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Không in được");
 		}

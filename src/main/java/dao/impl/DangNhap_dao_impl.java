@@ -1,6 +1,5 @@
 package dao.impl;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
@@ -22,7 +21,6 @@ public class DangNhap_dao_impl  extends UnicastRemoteObject implements DangNhapS
 	
 	public DangNhap_dao_impl() throws RemoteException {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -50,7 +48,6 @@ public class DangNhap_dao_impl  extends UnicastRemoteObject implements DangNhapS
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// TODO: handle exception
 		}
 		return dsTK;
 	}
@@ -178,7 +175,6 @@ public class DangNhap_dao_impl  extends UnicastRemoteObject implements DangNhapS
 		try {
 			ConnectDB.getInstance();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Connection con = ConnectDB.getConnection();
@@ -193,12 +189,12 @@ public class DangNhap_dao_impl  extends UnicastRemoteObject implements DangNhapS
 	        psmt.setString(5, tk.getNhanVien().getMaNhanVien()); // Giả sử rằng bạn có phương thức getNhanVien() trả về đối tượng NhanVien và phương thức getMaNhanVien() trả về mã nhân viên
 	        n = psmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		} finally {
 			try {
 				psmt.close();
 			} catch (Exception e2) {
-				// TODO: handle exception
+				e2.printStackTrace();
 			}
 		}
 		return n > 0;

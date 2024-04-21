@@ -8,9 +8,20 @@ import java.util.Set;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 
 @Entity
+@NamedQueries({
+    	@NamedQuery(name = "LoaiPhong.getAllLoaiPhongs", query = "SELECT lp FROM LoaiPhong lp"),
+    	@NamedQuery(name = "LoaiPhong.getLoaiPhongTheoMaLoaiPhong", query = "SELECT lp FROM LoaiPhong lp WHERE lp.maLoaiPhong = :maLoaiPhong"),
+    	@NamedQuery(name = "LoaiPhong.getLoaiPhongTheoSucChua", query = "SELECT lp FROM LoaiPhong lp WHERE lp.sucChua = :sucChua"),
+    	@NamedQuery(name = "LoaiPhong.getLoaiPhongTheoDonGia", query = "SELECT lp FROM LoaiPhong lp WHERE lp.donGiaTheoGio = :donGiaTheoGio"),
+    	@NamedQuery(name = "LoaiPhong.getTenLoaiPhongTheoMaLoaiPhong", query = "SELECT lp.tenLoaiPhong FROM LoaiPhong lp WHERE lp.maLoaiPhong = :maLoaiPhong"),
+    	@NamedQuery(name = "LoaiPhong.getSucChuaTheoMaLoaiPhong", query = "SELECT lp.sucChua FROM LoaiPhong lp WHERE lp.maLoaiPhong = :maLoaiPhong"),
+    	@NamedQuery(name = "LoaiPhong.getDonGiaTheoMaLoaiPhong", query = "SELECT lp.donGiaTheoGio FROM LoaiPhong lp WHERE lp.maLoaiPhong = :maLoaiPhong")
+})
 public class LoaiPhong implements Serializable {
 
 	/**

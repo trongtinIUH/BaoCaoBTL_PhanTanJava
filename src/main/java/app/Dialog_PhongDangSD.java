@@ -27,9 +27,9 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import dao.ChiTietHoaDonServices;
-import dao.HoaDonDatPhong_dao;
-import dao.KhachHang_dao;
-import dao.LoaiPhong_dao;
+import dao.HoaDonDatPhongServices;
+import dao.KhachHangServices;
+import dao.LoaiPhongServices;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
 import dao.TempDatPhongServices;
@@ -41,6 +41,9 @@ import dao.impl.TempDatPhongImpl;
 import dao.impl.TempPhongBiChuyenImpl;
 import dao.impl.TempThanhToanImpl;
 import dao.impl.ChiTietHoaDon_dao_impl;
+import dao.impl.HoaDonDatPhongImpl;
+import dao.impl.KhachHangImpl;
+import dao.impl.LoaiPhongImpl;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
 import entity.HoaDonDatPhong;
@@ -79,7 +82,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	private Dialog_ThemDichVu dialog_ThemDichVu;
 	private Dialog_ThanhToan dialog_ThanhToan;
 	private PhongService p_Service = new PhongImpl();
-	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final LoaiPhongServices lp_dao = new LoaiPhongImpl();
 	private Phong p;
 	private LoaiPhong lp;
 	private  ChiTietHoaDonServices cthd_dao;
@@ -87,11 +90,11 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	private final Date phutHienTai;
 	private double soGioHat;
 	private double soPhutHat;
-	private final KhachHang_dao kh_dao;
+	private final KhachHangServices kh_dao;
 	private final PhieuDatPhongService pdp_Service = new PhieuDatPhongImpl();
 	private PhieuDatPhong pdp_of_room;
 	private final TempDatPhongServices tmp_dao;
-	private final HoaDonDatPhong_dao hd_dao = new HoaDonDatPhong_dao();
+	private final HoaDonDatPhongServices hddp_Service = new HoaDonDatPhongImpl();
 	private GD_TrangChu trangChu;
 	private final TempThanhToanServices tempTT_dao;
 	@SuppressWarnings("unused")
@@ -116,7 +119,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 		tempChuyen_dao  = new TempPhongBiChuyenImpl();
 
 		cthd_dao = new ChiTietHoaDon_dao_impl();
-		kh_dao = new KhachHang_dao();
+		kh_dao = new KhachHangImpl();
 		
 		p_Service = new PhongImpl();
 
@@ -392,7 +395,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 						cthd_hienTaiCuaPhong = cthd;
 					}
 					HoaDonDatPhong hd = null;
-					hd = hd_dao.getHoaDonTheoMaHoaDon(cthd_hienTaiCuaPhong.getHoaDon().getMaHoaDon());
+					hd = hddp_Service.getHoaDonTheoMaHoaDon(cthd_hienTaiCuaPhong.getHoaDon().getMaHoaDon());
 					
 					List<Phong> dsPhongTheoMaHoaDon = p_Service.getPhongTheoMaCTHD(hd.getMaHoaDon());
 					if(dsPhongTheoMaHoaDon.size() == 1) {
@@ -424,7 +427,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 							for (ChiTietHoaDon cthd : dsCTHD_ht) {
 								cthd_ht = cthd;
 							}
-							HoaDonDatPhong hd_ht = hd_dao.getHoaDonTheoMaHoaDon(cthd_ht.getHoaDon().getMaHoaDon());
+							HoaDonDatPhong hd_ht = hddp_Service.getHoaDonTheoMaHoaDon(cthd_ht.getHoaDon().getMaHoaDon());
 							
 							String maCt = "";
 							ArrayList<TempPhongBiChuyen> ds_PhongBiChuyen = tempChuyen_dao.getAllTemp();
@@ -464,7 +467,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 						for (ChiTietHoaDon cthd : dsCTHD_ht) {
 							cthd_ht = cthd;
 						}
-						HoaDonDatPhong hd_ht = hd_dao.getHoaDonTheoMaHoaDon(cthd_ht.getHoaDon().getMaHoaDon());
+						HoaDonDatPhong hd_ht = hddp_Service.getHoaDonTheoMaHoaDon(cthd_ht.getHoaDon().getMaHoaDon());
 
 						String maCt = "";
 						ArrayList<TempPhongBiChuyen> ds_PhongBiChuyen = tempChuyen_dao.getAllTemp();
@@ -518,7 +521,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 					for (ChiTietHoaDon cthd : dsCTHD_ht) {
 						cthd_ht = cthd;
 					}
-					HoaDonDatPhong hd_ht = hd_dao.getHoaDonTheoMaHoaDon(cthd_ht.getHoaDon().getMaHoaDon());
+					HoaDonDatPhong hd_ht = null;
+					try {
+						hd_ht = hddp_Service.getHoaDonTheoMaHoaDon(cthd_ht.getHoaDon().getMaHoaDon());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
 					String maCt = "";
 					ArrayList<TempPhongBiChuyen> ds_PhongBiChuyen = null;
@@ -651,7 +660,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 				e1.printStackTrace();
 			}
 			TempDatPhong tmp = null;
-			KhachHang kh = kh_dao.getKhachHangTheoMaKH(pdp_of_room.getKhachHang().getMaKhachHang());
+			KhachHang kh = null;
+			try {
+				kh = kh_dao.getKhachHangTheoMaKH(pdp_of_room.getKhachHang().getMaKhachHang());
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 			List<PhieuDatPhong> DsPDP_Tmp = null;
 			try {
@@ -687,7 +702,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 					pdp_PhongHT = pdp;
 			}
 
-			String maHD_PhongHT = hd_dao.getHoaDonDatPhongTheoMaPDP(pdp_PhongHT.getMaPhieu()).getMaHoaDon();
+			String maHD_PhongHT = null;
+			try {
+				maHD_PhongHT = hddp_Service.getHoaDonDatPhongTheoMaPDP(pdp_PhongHT.getMaPhieu()).getMaHoaDon();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			for (PhieuDatPhong pdp : DsPDP) {
 				Phong p = null;
 				try {
@@ -696,7 +717,13 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				HoaDonDatPhong hd = hd_dao.getHoaDonDatPhongTheoMaPDP(pdp.getMaPhieu());
+				HoaDonDatPhong hd = null;
+				try {
+					hd = hddp_Service.getHoaDonDatPhongTheoMaPDP(pdp.getMaPhieu());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				if (p.getTrangThai() == Enum_TrangThai.Dang_su_dung && hd.getMaHoaDon().equals(maHD_PhongHT)) {
 					tmp = new TempDatPhong(pdp.getPhong().getMaPhong(), pdp.getSoNguoiHat());
 					try {

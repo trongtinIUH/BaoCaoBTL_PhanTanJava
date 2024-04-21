@@ -33,9 +33,9 @@ import javax.swing.table.DefaultTableModel;
 
 import dao.ChiTietDichVuServices;
 import dao.ChiTietHoaDonServices;
-import dao.HoaDonDatPhong_dao;
-import dao.KhachHang_dao;
-import dao.LoaiPhong_dao;
+import dao.HoaDonDatPhongServices;
+import dao.KhachHangServices;
+import dao.LoaiPhongServices;
 import dao.NhanVienService;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
@@ -46,6 +46,9 @@ import dao.impl.PhongImpl;
 import dao.impl.TempPhongBiChuyenImpl;
 import dao.impl.ChiTietDichVu_dao_impl;
 import dao.impl.ChiTietHoaDon_dao_impl;
+import dao.impl.HoaDonDatPhongImpl;
+import dao.impl.KhachHangImpl;
+import dao.impl.LoaiPhongImpl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -77,7 +80,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private final DefaultTableModel model;
 	private final String[] col = { "Mã Phòng", "Loại Phòng", "Sức Chứa", "Đơn Giá", "Trạng Thái" };
 	private final PhongService p_Service;
-	private final LoaiPhong_dao loaiPhong_dao;
+	private final LoaiPhongServices loaiPhong_dao;
 	private final JLabel lblPhongHienTai_1_1;
 	private final JPanel panel_1;
 	private final JLabel lblPhongHT;
@@ -100,8 +103,8 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private final JLabel lblMaKH;
 	private final JTextField txtMaKH;
 	private final NhanVienService nv_dao;
-	private final HoaDonDatPhong_dao hd_dao;
-	private final KhachHang_dao kh_dao;
+	private final HoaDonDatPhongServices hd_dao;
+	private final KhachHangServices kh_dao;
 	private LocalDateTime ngayGioDatPhong;
 	private LocalDateTime ngay_GioNhanPhong;
 	private String loaiPhong;
@@ -117,12 +120,12 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	    this.setIconImage(icon.getImage());
 	    
 	    p_Service = new PhongImpl();
-		loaiPhong_dao = new LoaiPhong_dao();
+		loaiPhong_dao = new LoaiPhongImpl();
 		cthd_dao = new ChiTietHoaDon_dao_impl();
 		pdp_Service = new PhieuDatPhongImpl();
 		nv_dao = new NhanVienImpl();
-		hd_dao = new HoaDonDatPhong_dao();
-		kh_dao = new KhachHang_dao();
+		hd_dao = new HoaDonDatPhongImpl();
+		kh_dao = new KhachHangImpl();
 		tempChuyen_dao = new TempPhongBiChuyenImpl();
 		ctdv_dao = new ChiTietDichVu_dao_impl();
 		this.addWindowListener(new WindowAdapter() {
@@ -386,7 +389,7 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	}
 
 	@SuppressWarnings("unused")
-	private void timKiemPhong() {
+	private void timKiemPhong() throws NumberFormatException, RemoteException {
         if (btnTimKiem.getText().equals("Tìm kiếm")) {
             List<Phong> dsPhong = new ArrayList<Phong>();
             loaiPhong = comboBox_LoaiPhong.getSelectedItem().toString();
@@ -599,7 +602,12 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 		if (o.equals(btn_QuayLai)) {
 			setVisible(false);
 		} else if (o.equals(btnTimKiem)) {
-			timKiemPhong(); 
+			try {
+				timKiemPhong();
+			} catch (NumberFormatException | RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
 		} else if (o.equals(btn_ChuyenPhong)) {
 			try {
 				chuyenPhong();

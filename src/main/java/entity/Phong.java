@@ -154,7 +154,6 @@ public class Phong implements Serializable {
 
 	public Phong() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 

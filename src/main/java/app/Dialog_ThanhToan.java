@@ -43,10 +43,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import dao.ChiTietDichVuServices;
 import dao.ChiTietHoaDonServices;
-import dao.HoaDonDatPhong_dao;
-import dao.KhachHang_dao;
-import dao.KhuyenMai_dao;
-import dao.LoaiPhong_dao;
+import dao.HoaDonDatPhongServices;
+import dao.KhachHangServices;
+import dao.KhuyenMaiServices;
+import dao.LoaiPhongServices;
 import dao.NhanVienService;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
@@ -61,6 +61,10 @@ import dao.impl.TempPhongBiChuyenImpl;
 import dao.impl.TempThanhToanImpl;
 import dao.impl.ChiTietDichVu_dao_impl;
 import dao.impl.ChiTietHoaDon_dao_impl;
+import dao.impl.HoaDonDatPhongImpl;
+import dao.impl.KhachHangImpl;
+import dao.impl.KhuyenMaiImpl;
+import dao.impl.LoaiPhongImpl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.Enum_TrangThai;
@@ -121,13 +125,13 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private final JButton btnQuayLai;
 	private final NhanVienService nv_dao;
 	private  ChiTietHoaDonServices cthd_dao;
-	private final HoaDonDatPhong_dao hd_dao;
-	private final KhachHang_dao kh_dao;
+	private final HoaDonDatPhongServices hd_dao;
+	private final KhachHangServices kh_dao;
 	private final JLabel lblMaHD;
 	private final JLabel lbl_MaHoaDon_1;
 	private final Date ngayTraPhong;
 	private final PhongService p_Service;
-	private final LoaiPhong_dao loaiPhong_dao;
+	private final LoaiPhongServices loaiPhong_dao;
 	private  ChiTietDichVuServices ctdv_dao;
 	private final SanPhamService sp_Service;
 	private int tongTienDichVu;
@@ -142,7 +146,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	private double tongSoPhutHat;
 	private double soGioHat_Item;
 	private double soPhutHat_Item;
-	private final KhuyenMai_dao km_dao;
+	private final KhuyenMaiServices km_dao;
 	private final JButton btnKiemTra;
 	private int xacNhan;
 	private final JTextField txtPhanTramKM;
@@ -175,12 +179,12 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		nv_dao = new NhanVienImpl();
 		cthd_dao = new ChiTietHoaDon_dao_impl();
 		ctdv_dao = new ChiTietDichVu_dao_impl ();
-		hd_dao = new HoaDonDatPhong_dao();
-		kh_dao = new KhachHang_dao();
+		hd_dao = new HoaDonDatPhongImpl();
+		kh_dao = new KhachHangImpl();
 		p_Service = new PhongImpl();
-		loaiPhong_dao = new LoaiPhong_dao();
+		loaiPhong_dao = new LoaiPhongImpl();
 		sp_Service = new SanPhamImpl();
-		km_dao = new KhuyenMai_dao();
+		km_dao = new KhuyenMaiImpl();
 		tempTT_dao = new TempThanhToanImpl();
 		temChuyen_dao = new TempPhongBiChuyenImpl();
 
@@ -190,7 +194,6 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 				try {
 					nv = nv_dao.findByID(DataManager.getUserName());
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				lbl_TenNV_1.setText(nv.getHoTen());
@@ -416,7 +419,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		DateFormat dateFormatNgayKM = new SimpleDateFormat("yyMMdd");
 		date = new Date();
 		int ngayKM = Integer.parseInt(dateFormatNgayKM.format(date));
-		ArrayList<KhuyenMai> dsKM = km_dao.getallKhuyenMais();
+		ArrayList<KhuyenMai> dsKM = km_dao.getAllKhuyenMais();
 		for(KhuyenMai km : dsKM) {
 			int ngayBatDauKM_Item = Integer.parseInt(dateFormatNgayKM.format(km.getNgayBatDau()));
 			int ngayKetThucKM_Item = Integer.parseInt(dateFormatNgayKM.format(km.getNgayKetThuc()));
@@ -595,7 +598,6 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 				try {
 					ph = p_Service.getPhongTheoMaPhong(cthd.getPhong().getMaPhong());
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				LoaiPhong loaiPhong = loaiPhong_dao.getLoaiPhongTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong());
@@ -645,7 +647,6 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 					try {
 						spdv = sp_Service.getSanPhamTheoMaSP(ctdv.getSanPham().getMaSanPham());
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					DecimalFormat f1 = new DecimalFormat("#.##");
@@ -744,7 +745,6 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 				try {
 					ph = p_Service.getPhongTheoMaPhong(cthd_hienTaiCuaPhong.getPhong().getMaPhong());
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				LoaiPhong loaiPhong = loaiPhong_dao.getLoaiPhongTheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong());
@@ -843,7 +843,6 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 					try {
 						spdv = sp_Service.getSanPhamTheoMaSP(ctdv.getSanPham().getMaSanPham());
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					DecimalFormat f1 = new DecimalFormat("#.##");
@@ -943,7 +942,6 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		try {
 			tienThua = Double.parseDouble(txtTienThua.getText().replaceAll(" VNĐ", "").replaceAll(",", ""));
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 
 		if (txtTienNhan.getText().trim().equals("") || tienThua < 0) {
@@ -962,7 +960,6 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 						try {
 							pdp = pdp_Service.getPhieuDatPhongPhongCho(maPhong_Item);
 						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						if (pdp != null)
@@ -1102,7 +1099,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		}
 	}
 	
-	public boolean kiemTra2() {
+	public boolean kiemTra2() throws RemoteException {
 		String maKhuyenMai = txtMaGiamGia.getText().trim();
 		KhuyenMai km = null;
 		km = km_dao.getKhuyenMaiTheoMaKhuyenMai(maKhuyenMai);
@@ -1134,7 +1131,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	}
 	
 
-	public boolean kiemTra() {
+	public boolean kiemTra() throws RemoteException {
 		String maKhuyenMai = txtMaGiamGia.getText().trim();
 		KhuyenMai km = null;
 		km = km_dao.getKhuyenMaiTheoMaKhuyenMai(maKhuyenMai);
@@ -1185,7 +1182,6 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 						model.getValueAt(tblThanhToan.getSelectedRow(), 1).toString(), lbl_MaHoaDon_1.getText(),
 						maPhongUngVoiSP(), this);
 			} catch (NumberFormatException | RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			dialog_TraSP.setModal(true);
@@ -1200,14 +1196,17 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 			try {
 				thanhToan();
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
 		} else if (o.equals(btnQuayLai)) {
 			setVisible(false);
 		} else if (o.equals(btnKiemTra)) {
-			kiemTra();
+			try {
+				kiemTra();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		} else if (o.equals(btnTraLaiSP)) {
 			traSP();
 		}

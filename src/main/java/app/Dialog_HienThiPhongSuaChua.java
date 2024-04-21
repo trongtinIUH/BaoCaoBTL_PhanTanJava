@@ -7,10 +7,12 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.rmi.RemoteException;
 import java.awt.Color;
+
+import dao.impl.LoaiPhongImpl;
 import dao.impl.PhongImpl;
 import entity.LoaiPhong;
 import entity.Phong;
-import dao.LoaiPhong_dao;
+import dao.LoaiPhongServices;
 import dao.PhongService;
 
 public class Dialog_HienThiPhongSuaChua extends JDialog {
@@ -30,7 +32,7 @@ public class Dialog_HienThiPhongSuaChua extends JDialog {
     private final JLabel lblgia_1;
     private final JLabel lblPhong_1;
 	private final PhongService p_Service = new PhongImpl();
-	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final LoaiPhongServices lp_dao = new LoaiPhongImpl();
 
 	private Phong p = new Phong();
 	private final LoaiPhong lp;

@@ -28,9 +28,10 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.DateTimePicker;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 
-import dao.KhachHang_dao;
+import dao.KhachHangServices;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
+import dao.impl.KhachHangImpl;
 import dao.impl.PhieuDatPhongImpl;
 import dao.impl.PhongImpl;
 import entity.Enum_TrangThai;
@@ -64,7 +65,7 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 	private final JLabel lbl_TenKH;
 	private final LocalDateTime now;
 
-	private KhachHang_dao khachHang_dao = new KhachHang_dao();
+	private KhachHangServices khachHang_dao = new KhachHangImpl();
 
 	private final JLabel lbl_Phong;
 	private final LocalDateTime now1;
@@ -292,7 +293,7 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 		btn_QuayLai.addActionListener(this);
 		if (!DataManager.getSoDienThoaiKHDatCho().equals("")) {
 			txtSDT.setText(DataManager.getSoDienThoaiKHDatCho());
-			khachHang_dao = new KhachHang_dao();
+			khachHang_dao = new KhachHangImpl();
 			String sdt = txtSDT.getText();
 			KhachHang khachHang = khachHang_dao.getKhachHangTheoSDT(sdt);
 			if (khachHang != null) {
@@ -313,9 +314,20 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 		}
 
 		if (o.equals(btn_DatPhong)) {
-			khachHang_dao = new KhachHang_dao();
+			try {
+				khachHang_dao = new KhachHangImpl();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			String sdt = txtSDT.getText();
-			KhachHang khachHang = khachHang_dao.getKhachHangTheoSDT(sdt);
+			KhachHang khachHang= null;
+			try {
+				khachHang = khachHang_dao.getKhachHangTheoSDT(sdt);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if (khachHang != null && khachHang.getHoTen().equals(lbl_TenKH_1.getText())) {
 				JOptionPane.showMessageDialog(this, "Đặt phòng thành công, thời gian bắt đầu được tính !");
 				DataManager.setSoDienThoaiKHDat("");
@@ -339,7 +351,12 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 				Phong ph1 = new Phong(maPhong);
 				String maNV = DataManager.getUserName();
 				NhanVien nv = new NhanVien(maNV);
-				kh = khachHang_dao.getKhachHangTheoSDT(sdt);
+				try {
+					kh = khachHang_dao.getKhachHangTheoSDT(sdt);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				String maKH = kh.getMaKhachHang();
 				KhachHang kh2 = new KhachHang(maKH);
 				ngayGioDatPhong = LocalDateTime.now();
@@ -369,9 +386,20 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 		if (o.equals(btn_KiemTraSDT))
 
 		{
-			khachHang_dao = new KhachHang_dao();
+			try {
+				khachHang_dao = new KhachHangImpl();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			String sdt = txtSDT.getText();
-			KhachHang khachHang = khachHang_dao.getKhachHangTheoSDT(sdt);
+			KhachHang khachHang = null;
+			try {
+				khachHang = khachHang_dao.getKhachHangTheoSDT(sdt);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if (khachHang != null) {
 				String hoTen = khachHang.getHoTen();
 				boolean gioiTinh = khachHang.isGioiTinh();

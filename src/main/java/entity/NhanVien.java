@@ -97,7 +97,6 @@ public class NhanVien implements Serializable {
 
 	public NhanVien() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getMaNhanVien() {

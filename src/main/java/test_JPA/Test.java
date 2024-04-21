@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.ChiTietDichVuServices;
-import dao.KhachHang_dao;
+import dao.KhachHangServices;
 import dao.PhongService;
 import dao.ThongKeServices;
 import dao.impl.ChiTietDichVu_dao_impl;
+import dao.impl.HoaDonDatPhongImpl;
 import dao.impl.PhongImpl;
 import dao.impl.ThongKeImpl;
 import entity.ChiTietDichVu;
+import entity.HoaDonDatPhong;
 import entity.KhachHang;
 import entity.Phong;
 import entity.SanPham;
@@ -39,11 +41,14 @@ public class Test {
 //            System.out.println(modelThongKe.getDoanhThuDichVu());
 //            System.out.println(modelThongKe.getTongDoanhThu());
 //        }
-		PhongService phongServices = new PhongImpl();
-		List<Phong> list = phongServices.getallPhongs();
-		list.forEach(System.out::println);
-//		ChiTietDichVuServices chiTietDichVuServices = new ChiTietDichVu_dao_impl();
+//		PhongService phongServices = new PhongImpl();
+//		List<Phong> list = phongServices.getallPhongs();
+//		list.forEach(System.out::println);
+////		ChiTietDichVuServices chiTietDichVuServices = new ChiTietDichVu_dao_impl();
 //		ArrayList<ChiTietDichVu> listCTDV = chiTietDichVuServices.getAllChiTietDichVu();
 //		listCTDV.forEach(System.out::println);
+		
+		HoaDonDatPhongImpl hoaDonDatPhongImpl = new HoaDonDatPhongImpl();
+		HoaDonDatPhong hoaDonDatPhong = hoaDonDatPhongImpl.getHoaDonTheoMaHoaDon("HD2108010001");
 	}
 }

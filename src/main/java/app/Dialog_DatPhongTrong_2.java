@@ -54,9 +54,9 @@ import com.github.lgooddatepicker.components.TimePickerSettings;
 
 import dao.ChiTietDichVuServices;
 import dao.ChiTietHoaDonServices;
-import dao.HoaDonDatPhong_dao;
-import dao.KhachHang_dao;
-import dao.LoaiPhong_dao;
+import dao.HoaDonDatPhongServices;
+import dao.KhachHangServices;
+import dao.LoaiPhongServices;
 import dao.NhanVienService;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
@@ -68,6 +68,9 @@ import dao.impl.PhongImpl;
 import dao.impl.SanPhamImpl;
 import dao.impl.ChiTietDichVu_dao_impl;
 import dao.impl.ChiTietHoaDon_dao_impl;
+import dao.impl.HoaDonDatPhongImpl;
+import dao.impl.KhachHangImpl;
+import dao.impl.LoaiPhongImpl;
 
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -100,7 +103,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 	private final JButton btn_DatThemPhong;
 	private final NhanVienService nv_dao;
 	private NhanVien nv;
-	private final HoaDonDatPhong_dao hddp_dao;
+	private final HoaDonDatPhongServices hddp_dao;
 	private   ChiTietHoaDonServices cthd_dao;
 	private  ChiTietDichVuServices ctdv_dao;
 
@@ -119,17 +122,17 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 	private final JButton btn_XoaPhongDat;
     private final JButton btnXoaDV;
 
-	private KhachHang_dao khachHang_dao;
+	private KhachHangServices khachHang_dao;
 	private final JLabel lblTieuDe;
 	private final TempDatPhongServices tmpDatPhong_dao;
 	private final PhongService p_Service;
-	private final LoaiPhong_dao lp_dao;
+	private final LoaiPhongServices lp_dao;
 	private final JLabel lbl_Loai;
 	private final JLabel lblMaPhong;
 	private final PhieuDatPhongService pdp_Service;
 	private Date ngayHienTai;
 	private Date date;
-	private final KhachHang_dao kh_dao;
+	private final KhachHangServices kh_dao;
 	private final DecimalFormat df;
 	private final SanPhamService sp_Service = new SanPhamImpl();
 
@@ -145,14 +148,14 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 		ImageIcon icon = new ImageIcon("icon\\icon_white.png");
 		this.setIconImage(icon.getImage());
 		nv_dao = new NhanVienImpl();
-		hddp_dao = new HoaDonDatPhong_dao();
+		hddp_dao = new HoaDonDatPhongImpl();
 		cthd_dao = new ChiTietHoaDon_dao_impl();
 		ctdv_dao = new ChiTietDichVu_dao_impl();
 		tmpDatPhong_dao = new TempDatPhongImpl();
 		p_Service = new PhongImpl();
-		lp_dao = new LoaiPhong_dao();
+		lp_dao = new LoaiPhongImpl();
 		pdp_Service = new PhieuDatPhongImpl();
-		kh_dao = new KhachHang_dao();
+		kh_dao = new KhachHangImpl();
 
 		// panel chứa tiêu đề--------------------------------------
 		JPanel panel = new JPanel();
@@ -444,7 +447,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 		}
 		if (!DataManager.getSoDienThoaiKHDat().equals("")) {
 			txtSDT.setText(DataManager.getSoDienThoaiKHDat());
-			khachHang_dao = new KhachHang_dao();
+			khachHang_dao = new KhachHangImpl();
 			String sdt = txtSDT.getText();
 			KhachHang khachHang = khachHang_dao.getKhachHangTheoSDT(sdt);
 			String hoTen = khachHang.getHoTen();
@@ -595,7 +598,13 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 		if (o.equals(btn_DatPhong)) {
 			int check = 0;
 			int checkPSD = 0;
-			String maHoaDon = TaoMaHDDP();
+			String maHoaDon;
+			try {
+				maHoaDon = TaoMaHDDP();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			HoaDonDatPhong hddp = null;
 			LocalDateTime ngayGioHT = LocalDateTime.now();
 			if (!lbl_TenKH_1.getText().equals("")) {
@@ -788,9 +797,20 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 
 		// kiem tra khach hang
 		if (o.equals(btn_KiemTraSDT)) {
-			khachHang_dao = new KhachHang_dao();
+			try {
+				khachHang_dao = new KhachHangImpl();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			String sdt = txtSDT.getText();
-			KhachHang khachHang = khachHang_dao.getKhachHangTheoSDT(sdt);
+			KhachHang khachHang = null;
+			try {
+				khachHang = khachHang_dao.getKhachHangTheoSDT(sdt);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if (khachHang != null) {
 				String hoTen = khachHang.getHoTen();
 				boolean gioiTinh = khachHang.isGioiTinh();
@@ -885,7 +905,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 		return prefix + dateFormat.format(date) + suffix;
 	}
 
-	private int ThuTuHoaDonDatPhongTrongNgay() {
+	private int ThuTuHoaDonDatPhongTrongNgay() throws RemoteException {
 		int sl = 1;
 		String maHDDP = "";
 		for (HoaDonDatPhong hddp : hddp_dao.getAllHoaDonDatPhong()) {
@@ -903,7 +923,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 		return sl;
 	}
 
-	private String TaoMaHDDP() {
+	private String TaoMaHDDP() throws RemoteException {
 		String prefix = "HD";
 		DateFormat dateFormat = new SimpleDateFormat("yyMMdd");
 		date = new Date();

@@ -63,7 +63,6 @@ public class SanPham implements Serializable {
 	}
 	public SanPham() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public SanPham(String maSanPham, String tenSanPham, Date ngaySanXuat, String loaiSanPham, double donGia,
 			String donViTinh, int soLuongTon, String hinhAnh) {

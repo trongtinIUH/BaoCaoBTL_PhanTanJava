@@ -2,18 +2,8 @@ package dao;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
-import connectDB.ConnectDB;
-import dao.impl.ChiTietDichVu_dao_impl;
-import dao.impl.DangNhap_dao_impl;
-import entity.NhanVien;
 import entity.TaiKhoan;
 
 public interface DangNhapServices extends Remote {

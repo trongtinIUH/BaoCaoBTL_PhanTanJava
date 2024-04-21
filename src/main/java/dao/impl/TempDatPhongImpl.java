@@ -22,7 +22,6 @@ public class TempDatPhongImpl extends UnicastRemoteObject implements TempDatPhon
     	   em = Persistence.createEntityManagerFactory("jpa-mssql").createEntityManager();
 		} catch (Exception e) {
 			System.out.println("Loi: " + e.getMessage());
-//			e.printStackTrace();
 		}
     }
 

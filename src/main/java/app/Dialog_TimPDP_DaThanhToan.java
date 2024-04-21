@@ -17,14 +17,18 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import dao.ChiTietDichVuServices;
 import dao.ChiTietHoaDonServices;
-import dao.HoaDonDatPhong_dao;
-import dao.KhachHang_dao;
-import dao.KhuyenMai_dao;
-import dao.LoaiPhong_dao;
+import dao.HoaDonDatPhongServices;
+import dao.KhachHangServices;
+import dao.KhuyenMaiServices;
+import dao.LoaiPhongServices;
 import dao.PhieuDatPhongService;
 import dao.PhongService;
 import dao.impl.ChiTietDichVu_dao_impl;
 import dao.impl.ChiTietHoaDon_dao_impl;
+import dao.impl.HoaDonDatPhongImpl;
+import dao.impl.KhachHangImpl;
+import dao.impl.KhuyenMaiImpl;
+import dao.impl.LoaiPhongImpl;
 import dao.impl.PhieuDatPhongImpl;
 import dao.impl.PhongImpl;
 import entity.ChiTietHoaDon;
@@ -56,7 +60,7 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 
 
 	private final PhongService p_Service = new PhongImpl();
-	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
+	private final LoaiPhongServices lp_dao = new LoaiPhongImpl();
 	private Phong p;
 	private LoaiPhong lp;
 	private final PhieuDatPhongService pdp_Service;
@@ -65,15 +69,15 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	private final Date phutHienTai;
 	private double soGioHat;
 	private double soPhutHat;
-	private final KhachHang_dao kh_dao;
+	private final KhachHangServices kh_dao;
 	private final JLabel lbl_ngayThanhToan;
 	private final JLabel lbl_TongTien;
 		
 	private HoaDonDatPhong hd= new HoaDonDatPhong();
-	private final HoaDonDatPhong_dao hd_dao= new HoaDonDatPhong_dao();
+	private final HoaDonDatPhongServices hd_dao= new HoaDonDatPhongImpl();
 	private final JLabel lblngaytt;
 	private final JLabel lbl_Tongtien_1;
-	private final KhuyenMai_dao khuyenmai_dao= new KhuyenMai_dao();
+	private final KhuyenMaiServices khuyenmai_dao= new KhuyenMaiImpl();
 
 	private ChiTietDichVuServices chitietdichvu_dao;
 	
@@ -90,7 +94,7 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 	    pdp_Service = new PhieuDatPhongImpl();
 		cthd_dao = new ChiTietHoaDon_dao_impl();
 		chitietdichvu_dao= new ChiTietDichVu_dao_impl();
-		kh_dao = new KhachHang_dao();
+		kh_dao = new KhachHangImpl();
 				
 		//các lbl góc trái-----------------------------------------------------------------------
 		lblPhong = new JLabel("Phòng:");
@@ -133,7 +137,6 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 		try {
 			p = p_Service.getPhongTheoMaPhong(maPhong);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
@@ -199,7 +202,6 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 		try {
 			p = p_Service.getPhongTheoMaPhong(maPhong);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
@@ -255,7 +257,6 @@ public class Dialog_TimPDP_DaThanhToan extends JDialog implements ActionListener
 					chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
 					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()))));
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		lbl_Tongtien_1.setFont(new Font("Arial", Font.BOLD, 18));
