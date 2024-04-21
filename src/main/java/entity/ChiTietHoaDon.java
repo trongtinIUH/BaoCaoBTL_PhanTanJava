@@ -9,10 +9,10 @@ import jakarta.persistence.*;
 @Entity
 public class ChiTietHoaDon implements Serializable {
 
-	/**
+/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3901969153102295736L;
 //	@EmbeddedId
 //	private ChiTietHoaDonID chiTietHoaDonID;
 	@Id

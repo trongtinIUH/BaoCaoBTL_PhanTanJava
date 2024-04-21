@@ -2,8 +2,10 @@ package app;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -11,8 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import dao.ChiTietDichVu_dao;
-import dao.SanPham_dao;
+import dao.impl.ChiTietDichVu_dao_impl;
+import dao.ChiTietDichVuServices;
+import dao.SanPhamService;
+import dao.impl.SanPhamImpl;
 import entity.ChiTietDichVu;
 import entity.HoaDonDatPhong;
 import entity.Phong;
@@ -32,14 +36,14 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 	private final JTextField txtSLTra;
 	private final JButton btnDongY;
 	private final JButton btnHuy;
-	private final ChiTietDichVu_dao ctdv_dao;
-	private final SanPham_dao sp_dao;
+	private  ChiTietDichVuServices ctdv_dao;
+	private final SanPhamService sp_Service;
 	private final String tenSp;
 	private final String maHD;
 	private final Dialog_ThanhToan thanhToan;
 	private final String maPhong;
 
-	public Dialog_TraSanPham(int soLuong, String tenSp, String maHD, String maPhong, Dialog_ThanhToan thanhToan) {
+	public Dialog_TraSanPham(int soLuong, String tenSp, String maHD, String maPhong, Dialog_ThanhToan thanhToan) throws RemoteException {
 		getContentPane().setBackground(Color.WHITE);
 		setSize(300, 180);
 		setLocationRelativeTo(null);
@@ -48,8 +52,8 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 		this.maHD = maHD;
 		this.tenSp = tenSp;
 		this.maPhong = maPhong;
-		ctdv_dao = new ChiTietDichVu_dao();
-		sp_dao = new SanPham_dao();
+		ctdv_dao = new ChiTietDichVu_dao_impl();
+		sp_Service = new SanPhamImpl();
 		
 		getContentPane().add(lblSLDaDat = new JLabel("Số lượng đã đặt"));
 		lblSLDaDat.setBounds(10, 10, 200, 30);
@@ -87,10 +91,16 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 		
 	}
 	
-	public void dongY() {
+	public void dongY() throws NumberFormatException, HeadlessException, RemoteException {
 		HoaDonDatPhong hd = new HoaDonDatPhong(maHD);
 		Phong ph = new Phong(maPhong);
-		SanPham s = sp_dao.getSanPhamTheoTen(tenSp);
+		SanPham s = null;
+		try {
+			s = sp_Service.getSanPhamTheoTenSanPham2(tenSp);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		SanPham sp = new SanPham(s.getMaSanPham());
 		if(Integer.parseInt(txtSLTra.getText()) < Integer.parseInt(txtSLDat.getText())
 				 && Integer.parseInt(txtSLTra.getText()) >= 0) {
@@ -106,11 +116,16 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 			}
 			ChiTietDichVu ctdv = new ChiTietDichVu(hd,ph,sp,soLuong,donGia);
 			
-			for(SanPham sanPham : sp_dao.getallSanPhams()) {
-				if(sanPham.getMaSanPham().equals(s.getMaSanPham())) {
-					sp_dao.updateSLTon(sanPham.getSoLuongTon() + Integer.parseInt(txtSLTra.getText()), sanPham.getMaSanPham());
-					break;
+			try {
+				for(SanPham sanPham : sp_Service.getAllSanPhams()) {
+					if(sanPham.getMaSanPham().equals(s.getMaSanPham())) {
+						sp_Service.updateSLTon(sanPham.getSoLuongTon() + Integer.parseInt(txtSLTra.getText()), sanPham.getMaSanPham());
+						break;
+					}
 				}
+			} catch (NumberFormatException | RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			if(ctdv_dao.UpdateChiTietDV(ctdv)) {
 				thanhToan.clearTable();
@@ -140,7 +155,12 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if(o.equals(btnDongY)){
-			dongY();
+			try {
+				dongY();
+			} catch (NumberFormatException | HeadlessException | RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}else if(o.equals(btnHuy)) {
 			setVisible(false);
 		}

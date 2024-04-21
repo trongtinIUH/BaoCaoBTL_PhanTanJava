@@ -2,15 +2,17 @@ package app;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.List;
 import java.sql.Date;
 import java.util.Properties;
 
@@ -38,7 +40,8 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
-import dao.SanPham_dao;
+import dao.SanPhamService;
+import dao.impl.SanPhamImpl;
 import entity.SanPham;
 import utils.DateLabelFormatter;
 
@@ -69,7 +72,7 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 	private final Properties p;
 	private final JDatePickerImpl datePicker;
 	private final JComboBox<String> cbDonViTinh;
-	private final SanPham_dao sp_dao;
+	private final SanPhamService sp_Service;
 	private XSSFWorkbook wordbook;
 	private final JTextField txtDonGia;
 	private final JTextField txtTen;
@@ -81,8 +84,8 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 
 	private final JButton btnUser;
 	private final Dialog_User dialog_User= new Dialog_User();
-	public GD_SanPham() {
-		sp_dao = new SanPham_dao();
+	public GD_SanPham() throws RemoteException{
+		sp_Service = new SanPhamImpl();
 		setBackground(new Color(242, 240, 255));
 		setLayout(null);
 
@@ -90,8 +93,6 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 		pnNorth.setBounds(0, 0, 1078, 60);
 		pnNorth.setLayout(null);
 		pnNorth.setBackground(new Color(181, 230, 251));
-		add(pnNorth);
-
 		lblTitle = new JLabel("SẢN PHẨM");
 
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -351,8 +352,13 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 	private int ThuTuSanPhamTrongNgay() {
 		int sl = 1;
 		String maSP = "";
-		for (SanPham sp : sp_dao.getallSanPhams()) {
-			maSP = sp.getMaSanPham(); // Chạy hết vòng for sẽ lấy được mã SP cuối danh sách
+		try {
+			for (SanPham sp : sp_Service.getAllSanPhams()) {
+				maSP = sp.getMaSanPham(); // Chạy hết vòng for sẽ lấy được mã SP cuối danh sách
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		int STTTrenMaSPCuoiDS = Integer.parseInt(maSP.substring(3, 5));
 		sl = STTTrenMaSPCuoiDS + 1;
@@ -386,11 +392,16 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 
 	public void loadData() {
 		int i = 0;
-		for (SanPham sp : sp_dao.getallSanPhams()) {
-			i++;
-			Object[] row = { i, sp.getMaSanPham(), sp.getTenSanPham(), sp.getNgaySanXuat(), sp.getloaiSanPham(),
-					sp.getDonGia(), sp.getDonViTinh(), sp.getSoLuongTon(), sp.getHinhAnh() };
-			model.addRow(row);
+		try {
+			for (SanPham sp : sp_Service.getAllSanPhams()) {
+				i++;
+				Object[] row = { i, sp.getMaSanPham(), sp.getTenSanPham(), sp.getNgaySanXuat(), sp.getloaiSanPham(),
+						sp.getDonGia(), sp.getDonViTinh(), sp.getSoLuongTon(), sp.getHinhAnh() };
+				model.addRow(row);
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -426,16 +437,21 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 			String donViTinh = (String) cbDonViTinh.getSelectedItem();
 			int soLuongTon = Integer.parseInt(txtSoLuong.getText().trim());
 			SanPham sp = new SanPham(ma, ten, ngaySX, loaiSP, donGia, donViTinh, soLuongTon, absolutePath);
-			if (sp_dao.addSanPham(sp)) {
-				model.addRow(new Object[] { model.getRowCount() + 1, ma, ten, ngaySX, loaiSP, donGia, donViTinh,
-						soLuongTon, absolutePath });
-				JOptionPane.showMessageDialog(this, "Thêm thành công!!");
-				xoaTrang();
-				loadMa();
-			} else {
-				JOptionPane.showMessageDialog(null, "Trùng mã");
-				xoaTrang();
-				loadMa();
+			try {
+				if (sp_Service.addSanPham(sp)) {
+					model.addRow(new Object[] { model.getRowCount() + 1, ma, ten, ngaySX, loaiSP, donGia, donViTinh,
+							soLuongTon, absolutePath });
+					JOptionPane.showMessageDialog(this, "Thêm thành công!!");
+					xoaTrang();
+					loadMa();
+				} else {
+					JOptionPane.showMessageDialog(null, "Trùng mã");
+					xoaTrang();
+					loadMa();
+				}
+			} catch (HeadlessException | RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
@@ -449,7 +465,7 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa Sản phẩm này không?", "Thông báo",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				int row = table.getSelectedRow();
-				sp_dao.deleteSanPham(model.getValueAt(row, 1).toString());
+				sp_Service.deleteSanPham(model.getValueAt(row, 1).toString());
 				model.removeRow(row);
 				JOptionPane.showMessageDialog(this, "Xóa thành công!!");
 			}
@@ -473,10 +489,15 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 			String donViTinh = (String) cbDonViTinh.getSelectedItem();
 			int soLuongTon = Integer.parseInt(txtSoLuong.getText().trim());
 			SanPham sp = new SanPham(ma, ten, ngaySX, loaiSP, donGia, donViTinh, soLuongTon, absolutePath);
-			if (sp_dao.updateSanPham(sp)) {
-				clearTable();
-				loadData();
-				JOptionPane.showMessageDialog(null, "Sửa thành công!!");
+			try {
+				if (sp_Service.updateSanPham(sp)) {
+					clearTable();
+					loadData();
+					JOptionPane.showMessageDialog(null, "Sửa thành công!!");
+				}
+			} catch (HeadlessException | RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
@@ -486,7 +507,12 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 		if (btnTimKiem.getText().equals("Tìm kiếm")) {
 			if (cbLoaiTimKiem.getSelectedItem().equals("Mã sản phẩm")) {
 				SanPham sp = null;
-				sp = sp_dao.getSanPhamTheoMaSP(txtTimKiem.getText());
+				try {
+					sp = sp_Service.getSanPhamTheoMaSP(txtTimKiem.getText());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if (sp != null) {
 					btnTimKiem.setText("Hủy tìm");
 					clearTable();
@@ -498,7 +524,13 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 					JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin!!");
 				}
 			} else if (cbLoaiTimKiem.getSelectedItem().equals("Tên sản phẩm")) {
-				ArrayList<SanPham> dsSanPham = sp_dao.getSanPhamTheoTenSanPham(txtTimKiem.getText());
+				List<SanPham> dsSanPham = null;
+				try {
+					dsSanPham = sp_Service.getSanPhamTheoTenSanPham(txtTimKiem.getText());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if (dsSanPham != null) {
 					btnTimKiem.setText("Hủy tìm");
 					clearTable();
@@ -512,7 +544,13 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 					JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin!!");
 				}
 			} else if (cbLoaiTimKiem.getSelectedItem().equals("Loại sản phẩm")) {
-				ArrayList<SanPham> dsSanPham = sp_dao.getSanPhamTheoLoaiSanPham(txtTimKiem.getText());
+				List<SanPham> dsSanPham = null;
+				try {
+					dsSanPham = sp_Service.getSanPhamTheoLoaiSanPham(txtTimKiem.getText());
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if (dsSanPham != null) {
 					btnTimKiem.setText("Hủy tìm");
 					clearTable();
@@ -560,31 +598,31 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 			cell = row.createCell(8, CellType.STRING);
 			cell.setCellValue("Hình ảnh");
 
-			for (int i = 0; i < sp_dao.getallSanPhams().size(); i++) {
+			for (int i = 0; i < sp_Service.getAllSanPhams().size(); i++) {
 				row = sheet.createRow(3 + i); // Bỏ qua 2 dòng trống
 
 				cell = row.createCell(0, CellType.NUMERIC);
 				cell.setCellValue(i + 1);
 				cell = row.createCell(1, CellType.STRING);
-				cell.setCellValue(sp_dao.getallSanPhams().get(i).getMaSanPham());
+				cell.setCellValue(sp_Service.getAllSanPhams().get(i).getMaSanPham());
 				cell = row.createCell(2, CellType.STRING);
-				cell.setCellValue(sp_dao.getallSanPhams().get(i).getTenSanPham());
+				cell.setCellValue(sp_Service.getAllSanPhams().get(i).getTenSanPham());
 
 				cell = row.createCell(3, CellType.STRING);
 				DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-				String ngay = df.format(sp_dao.getallSanPhams().get(i).getNgaySanXuat());
+				String ngay = df.format(sp_Service.getAllSanPhams().get(i).getNgaySanXuat());
 				cell.setCellValue(ngay);
 
 				cell = row.createCell(4, CellType.STRING);
-				cell.setCellValue(sp_dao.getallSanPhams().get(i).getloaiSanPham());
+				cell.setCellValue(sp_Service.getAllSanPhams().get(i).getloaiSanPham());
 				cell = row.createCell(5, CellType.NUMERIC);
-				cell.setCellValue(sp_dao.getallSanPhams().get(i).getDonGia());
+				cell.setCellValue(sp_Service.getAllSanPhams().get(i).getDonGia());
 				cell = row.createCell(6, CellType.STRING);
-				cell.setCellValue(sp_dao.getallSanPhams().get(i).getDonViTinh());
+				cell.setCellValue(sp_Service.getAllSanPhams().get(i).getDonViTinh());
 				cell = row.createCell(7, CellType.NUMERIC);
-				cell.setCellValue(sp_dao.getallSanPhams().get(i).getSoLuongTon());
+				cell.setCellValue(sp_Service.getAllSanPhams().get(i).getSoLuongTon());
 				cell = row.createCell(8, CellType.STRING);
-				cell.setCellValue(sp_dao.getallSanPhams().get(i).getHinhAnh());
+				cell.setCellValue(sp_Service.getAllSanPhams().get(i).getHinhAnh());
 
 			}
 

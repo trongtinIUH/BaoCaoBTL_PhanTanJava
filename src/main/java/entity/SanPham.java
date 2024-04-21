@@ -9,16 +9,29 @@ import java.util.Set;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "Product.getallSanPhams", query ="select s from SanPham s"),
+	@NamedQuery(name = "Product.findByProductName", query ="select s from SanPham s where s.tenSanPham like :tenSanPham"),
+	@NamedQuery(name = "Product.findByProductCategory", query ="select s from SanPham s where s.loaiSanPham = :loaiSanPham"),
+	@NamedQuery(name = "SanPham.getLoaiSanPhamByMaSanPham", query = "SELECT s.loaiSanPham FROM SanPham s WHERE s.maSanPham = :maSanPham"),
+	@NamedQuery( name = "updateSoLuongTon", query = "UPDATE SanPham s SET s.soLuongTon = :soLuongTon WHERE s.maSanPham = :maSanPham"),
+	@NamedQuery(name = "Product.getAllSanPhamByIndex", query ="select s.tenSanPham, s.soLuongTon, s.donGia from SanPham s")
+})
 public class SanPham implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8873778006362133238L;
+	/**
+	 * 
+	 */
 	@Id
 	@Column(name="maSanPham", columnDefinition = "NVARCHAR(50)", nullable = false, unique = true)
 	private String maSanPham;

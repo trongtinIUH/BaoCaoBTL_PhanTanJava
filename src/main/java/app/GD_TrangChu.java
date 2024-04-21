@@ -21,7 +21,8 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.border.CompoundBorder;
 
-import dao.TempDatPhong_dao;
+import dao.TempDatPhongServices;
+import dao.impl.TempDatPhongImpl;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -32,6 +33,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.awt.event.ActionEvent;
@@ -59,24 +61,27 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 	private final GD_DanhSachPhong danhSachPhong = new GD_DanhSachPhong();
 	private final GD_NhanVien nhanVien = new GD_NhanVien();
 	private final GD_KhachHang khachHang = new GD_KhachHang();
-	private final GD_HoaDon hoaDon = new GD_HoaDon();
+	private  GD_HoaDon hoaDon;
 	private final GD_SanPham sanPham = new GD_SanPham();
-	private final GD_ThongKe thongKe = new GD_ThongKe();
+	private final GD_ThongKe thongKe;
 	private final GD_KhuyenMai khuyenMai = new GD_KhuyenMai();
 	private final GD_TroGiup troGiup = new GD_TroGiup(this);
 	private JPanel panel_chuaTime;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TempDatPhongServices tmp_dao ;
 	private Dialog_User dialog_User= new Dialog_User();
 
-	public GD_TrangChu() {
+	public GD_TrangChu() throws RemoteException {
 		super("Karaoke 4T");
+		tmp_dao = new TempDatPhongImpl();
+		thongKe = new GD_ThongKe();
+		hoaDon	 = new GD_HoaDon();
 		datPhong = new GD_DatPhong(this);
 		ImageIcon icon = new ImageIcon("icon\\icon_Karaoke3.jpg");
 		this.setIconImage(icon.getImage());
 		initialize();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RemoteException{
 		GD_TrangChu home = new GD_TrangChu();
 		home.setVisible(true);
 	}
@@ -506,7 +511,12 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_F9) {
-                	dialog_User= new Dialog_User();
+                	try {
+						dialog_User= new Dialog_User();
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
                 	dialog_User.setVisible(true);
                 }
                 if (e.getKeyCode() == KeyEvent.VK_F10) {
@@ -607,7 +617,12 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 			resetActiveTab();
 			btnHoaDon.setBackground(Color.decode("#F2F0FF"));
 			hoaDon.clearTableOrderList();
-			hoaDon.loadOrderListData();
+			try {
+				hoaDon.loadOrderListData();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if(DataManager.getRole().equals("NV")) {
 				hoaDon.btnXoa.setEnabled(false);
 				hoaDon.btnSua.setEnabled(false);
@@ -644,7 +659,12 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 	@Override
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
-		tmp_dao.deleteALLTempDatPhong();
+		try {
+			tmp_dao.deleteALLTempDatPhong();
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 	@Override

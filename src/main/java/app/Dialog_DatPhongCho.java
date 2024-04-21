@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -28,8 +29,10 @@ import com.github.lgooddatepicker.components.DateTimePicker;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 
 import dao.KhachHang_dao;
-import dao.PhieuDatPhong_dao;
-import dao.Phong_dao;
+import dao.PhieuDatPhongService;
+import dao.PhongService;
+import dao.impl.PhieuDatPhongImpl;
+import dao.impl.PhongImpl;
 import entity.Enum_TrangThai;
 import entity.KhachHang;
 import entity.LoaiPhong;
@@ -78,8 +81,8 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 	private final JLabel lbl_NgayDatPhong;
 	private final JLabel lbl_NgayNhanPhong;
 
-	private final Phong_dao phong_dao = new Phong_dao();
-	private final PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
+	private final PhongService p_Service = new PhongImpl();
+	private final PhieuDatPhongService pdp_Service = new PhieuDatPhongImpl();
 	private KhachHang kh = new KhachHang();
 	private Date ngayHienTai;
 	private Date date;
@@ -87,7 +90,7 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 	private LocalDateTime ngayGioDatPhong;
 	private LocalDateTime ngay_GioNhanPhong;
 
-	public Dialog_DatPhongCho(String maPhong, Phong p, LoaiPhong lp, int songuoi, GD_TrangChu trangChu) {
+	public Dialog_DatPhongCho(String maPhong, Phong p, LoaiPhong lp, int songuoi, GD_TrangChu trangChu) throws RemoteException{
 
 		// màn
 		// hình******************************************************************************
@@ -323,7 +326,12 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 
 				Enum_TrangThai trangThai = Enum_TrangThai.Cho;
 				Phong phong = new Phong(lbl_Phong.getText(), trangThai);
-				phong_dao.updatePhong(phong, lbl_Phong.getText());
+				try {
+					p_Service.updatePhong(phong, lbl_Phong.getText());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
 				// Tạo Phiếu đặt phòng mới
 				String maPhieu = generateRandomCode();
@@ -340,7 +348,12 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 
 				PhieuDatPhong pdp = new PhieuDatPhong(maPhieu, ph1, nv, kh2, ngayGioDatPhong, ngay_GioNhanPhong,
 						songuoiHat);
-				pdp_dao.addPhieuDatPhong(pdp);
+				try {
+					pdp_Service.addPhieuDatPhong(pdp);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
 				setVisible(false);
 			} else if (khachHang != null && !khachHang.getHoTen().equals(lbl_TenKH_1.getText())) {
@@ -385,8 +398,13 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 	private int ThuTuPDPTrongNgay() {
 		int sl = 1;
 		String maPDP = "";
-		for (PhieuDatPhong pdp : pdp_dao.getAllsPhieuDatPhong()) {
-			maPDP = pdp.getMaPhieu(); // Chạy hết vòng for sẽ lấy được mã Phiếu đặt phòng cuối danh sách
+		try {
+			for (PhieuDatPhong pdp : pdp_Service.getAllsPhieuDatPhong()) {
+				maPDP = pdp.getMaPhieu(); // Chạy hết vòng for sẽ lấy được mã Phiếu đặt phòng cuối danh sách
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		int ngayTrenMaPDPCuoiDS = Integer.parseInt(maPDP.substring(3, 9));
 		DateFormat dateFormat = new SimpleDateFormat("yyMMdd"); // Format yyMMdd sẽ so sánh ngày được

@@ -10,12 +10,17 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "NhanVien")
+@NamedQueries({ //JPQL
+    @NamedQuery(name = "NhanVien.findAll", query = "select n from NhanVien n"),
+    @NamedQuery(name = "NhanVien.findByName", query = "select n from NhanVien n where n.hoTen like :hoTen"),
+    @NamedQuery(name="NhanVien.findNVToLogin", query = "select n.maNhanVien, n.hoTen, n.chucVu from NhanVien n where n.maNhanVien = :maNhanVien")
+})
 public class NhanVien implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3965347425631026906L;
 	@Id
 	@Column(name = "maNhanVien", columnDefinition = "varchar(20)", nullable = false, unique = true)
 	private String maNhanVien;

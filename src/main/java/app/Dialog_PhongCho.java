@@ -6,6 +6,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,15 +30,18 @@ import com.github.lgooddatepicker.components.TimePickerSettings;
 
 import dao.KhachHang_dao;
 import dao.LoaiPhong_dao;
-import dao.PhieuDatPhong_dao;
-import dao.Phong_dao;
-import dao.TempDatPhong_dao;
+import dao.PhieuDatPhongService;
+import dao.PhongService;
+import dao.TempDatPhongServices;
+import dao.impl.PhieuDatPhongImpl;
+import dao.impl.PhongImpl;
+import dao.impl.TempDatPhongImpl;
 import entity.Enum_TrangThai;
 import entity.KhachHang;
 import entity.LoaiPhong;
 import entity.PhieuDatPhong;
 import entity.Phong;
-import utils.TempDatPhong;
+import entity.TempDatPhong;
 
 public class Dialog_PhongCho extends JDialog implements ActionListener {
 
@@ -56,9 +60,9 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 	private final JButton btnNhanPhong;
     private final JButton btn_HuyPhong;
 
-	private final Phong_dao p_dao = new Phong_dao();
+	private final PhongService p_Service = new PhongImpl();
 	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
-	private final PhieuDatPhong_dao pdp_dao = new PhieuDatPhong_dao();
+	private final PhieuDatPhongService pdp_Service = new PhieuDatPhongImpl();
 	private final KhachHang_dao kh_dao = new KhachHang_dao();
 	private Phong p;
 	private LoaiPhong lp;
@@ -78,7 +82,7 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 	private final JLabel lbl_KhachHang;
 	private final JLabel lbl_KhachHang_1;
 	private final JLabel lbl_SoNguoi_1;
-	private final TempDatPhong_dao tmp_dao = new TempDatPhong_dao();
+	private final TempDatPhongServices tmp_dao;
 
 	private LocalDateTime ngayGioDatPhong;
 	private LocalDateTime ngayGioNhanPhong;
@@ -91,7 +95,8 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 	private Dialog_HienThiPhong dialog_HienThiPhong;
 	private final JButton btnDatPhong;
 
-	public Dialog_PhongCho(String maPhong, GD_TrangChu trangChu) {
+	public Dialog_PhongCho(String maPhong, GD_TrangChu trangChu) throws RemoteException {
+		tmp_dao = new TempDatPhongImpl();
 		this.trangChu = trangChu;
 		// kích thước giao diện
 		getContentPane().setBackground(Color.WHITE);
@@ -311,8 +316,18 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 	}
 
 	public void laydulieu(String maPhong) {
-		pdp = pdp_dao.getPDPDatTruocTheoMaPhong(maPhong);
-		p = p_dao.getPhongTheoMaPhong(maPhong);
+		try {
+			pdp = pdp_Service.getPDPDatTruocTheoMaPhong(maPhong);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			p = p_Service.getPhongTheoMaPhong(maPhong);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
 		kh = kh_dao.getKhachHangTheoMaKH(pdp.getKhachHang().getMaKhachHang());
 
@@ -336,7 +351,12 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 	}
 
 	private void setEnabledBtnDatPhong(String maPhong) {
-		pdp = pdp_dao.getPDPDatTruocTheoMaPhong(maPhong);
+		try {
+			pdp = pdp_Service.getPDPDatTruocTheoMaPhong(maPhong);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//Trước 90p để hát tối thiểu 60p -> Vì trước 90p khó demo đổi sang 30p
 		LocalDateTime check = pdp.getNgayGioNhanPhong().minusMinutes(30);
         btnDatPhong.setEnabled(!check.isBefore(LocalDateTime.now()));
@@ -347,13 +367,23 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 		Object o = e.getSource();
 		if (o.equals(btnDatPhong)) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm");
-			pdp = pdp_dao.getPDPDatTruocTheoMaPhong(lblPhong_1.getText());
+			try {
+				pdp = pdp_Service.getPDPDatTruocTheoMaPhong(lblPhong_1.getText());
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			String ngayGioNhan = pdp.getNgayGioNhanPhong().minusMinutes(30).format(formatter);
 			if (JOptionPane.showConfirmDialog(null,
 					"Nếu đặt phòng trực tiếp, chỉ được sử dụng trước " + ngayGioNhan
 							+ " Bạn có muốn tiếp tục đặt không?",
 					"Thông báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				dialog_HienThiPhong = new Dialog_HienThiPhong(lblPhong_1.getText(), trangChu);
+				try {
+					dialog_HienThiPhong = new Dialog_HienThiPhong(lblPhong_1.getText(), trangChu);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				setVisible(false);
 				dialog_HienThiPhong.setVisible(true);
 			}
@@ -364,7 +394,12 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 			int phut_ht = LocalDateTime.now().getMinute();
 			int tongsophut_ht = gio_ht * 60 + phut_ht;
 			// giờ phút nhận phòng
-			pdp = pdp_dao.getPDPDatTruocTheoMaPhong(lblPhong_1.getText());
+			try {
+				pdp = pdp_Service.getPDPDatTruocTheoMaPhong(lblPhong_1.getText());
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			int gio_np = pdp.getNgayGioNhanPhong().getHour();
 			int phut_np = pdp.getNgayGioNhanPhong().getMinute();
 			int tongsophut_np = gio_np * 60 + phut_np;
@@ -380,23 +415,56 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 				} else if (tongsophut_np - tongsophut_ht <= 30 && tongsophut_np - tongsophut_ht > -30) {
 					// Khách hàng đến đúng giờ
 					TempDatPhong tmp = new TempDatPhong(p.getMaPhong(), Integer.parseInt(lbl_SoNguoi_1.getText()));
-					tmp_dao.addTemp(tmp);
-					dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
-							Integer.parseInt(lbl_SoNguoi_1.getText()), trangChu);
+					try {
+						tmp_dao.addTemp(tmp);
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						try {
+							dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
+									Integer.parseInt(lbl_SoNguoi_1.getText()), trangChu);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					} catch (NumberFormatException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					try {
+						tmp_dao.addTemp(tmp);
+					} catch (RemoteException e12) {
+						// TODO Auto-generated catch block
+						e12.printStackTrace();
+					}
+					try {
+						dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
+								Integer.parseInt(lbl_SoNguoi_1.getText()), trangChu);
+					} catch (NumberFormatException | RemoteException e13) {
+						// TODO Auto-generated catch block
+						e13.printStackTrace();
+					}
 					dispose();
 					JOptionPane.showMessageDialog(this,
 							"Phòng " + p.getMaPhong() + " được thêm vào danh sách đặt phòng thành công.");
 					DataManager.setSoDienThoaiKHDat("");
 					dialog_DatPhongTrong_2.setVisible(true);
+				}
 				} else if (tongsophut_np - tongsophut_ht < -30) {
 					// Khách hàng đến trễ hơn giờ nhận phòng 30 phút
 					// Thực hiện công việc B
 					JOptionPane.showMessageDialog(this, "Phòng hủy do đến trễ quá 30 phút vui lòng đặt phòng khác để sử dụng phòng karaoke!");
-					pdp_dao.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
+					pdp_Service.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
 					DataManager.setDatPhongCho(true);
 					Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 					Phong phong = new Phong(lblPhong_1.getText(), trangThai);
-					p_dao.updatePhong(phong, lblPhong_1.getText());
+					try {
+						p_Service.updatePhong(phong, lblPhong_1.getText());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					setVisible(false);
 					Window[] windows = Window.getWindows();
 					for (Window window : windows) {
@@ -411,11 +479,16 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 				// Khách hàng đến trễ hơn giờ nhận phòng 30 phút
 				// Thực hiện công việc B
 				JOptionPane.showMessageDialog(this, "Phòng hủy do đến trễ quá 30 phút!");
-				pdp_dao.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
+				pdp_Service.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
 				DataManager.setDatPhongCho(true);
 				Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 				Phong phong = new Phong(lblPhong_1.getText(), trangThai);
-				p_dao.updatePhong(phong, lblPhong_1.getText());
+				try {
+					p_Service.updatePhong(phong, lblPhong_1.getText());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				setVisible(false);
 				Window[] windows = Window.getWindows();
 				for (Window window : windows) {
@@ -432,11 +505,16 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 					JOptionPane.YES_NO_OPTION);
 			if (tb == JOptionPane.YES_OPTION) {
 				JOptionPane.showMessageDialog(this, "Phòng hủy thành công!");
-				pdp_dao.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
+				pdp_Service.xoaPhieuDatPhongTheoMa(lblPhong_1.getText());
 				DataManager.setDatPhongCho(true);
 				Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 				Phong phong = new Phong(lblPhong_1.getText(), trangThai);
-				p_dao.updatePhong(phong, lblPhong_1.getText());
+				try {
+					p_Service.updatePhong(phong, lblPhong_1.getText());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				setVisible(false);
 
 				Window[] windows = Window.getWindows();

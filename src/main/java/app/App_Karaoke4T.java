@@ -1,15 +1,18 @@
 package app;
 import javax.swing.*;
 import java.awt.*;
+import java.rmi.RemoteException;
 
-public class App_Karaoke4T extends JFrame {
+public class App_Karaoke4T extends JFrame{
 	
     private static final long serialVersionUID = 1L;
-    private final JLabel label;
-    private final JProgressBar progressBar;
+    private  JLabel label;
+    private  JProgressBar progressBar;
 
-	public App_Karaoke4T() {
-        // Tạo một cửa sổ mới
+	public App_Karaoke4T() throws RemoteException {
+		label = new JLabel();
+        progressBar = new JProgressBar();
+     // Tạo một cửa sổ mới
         JWindow window = new JWindow();
         window.setLayout(new BorderLayout());
 
@@ -62,9 +65,10 @@ public class App_Karaoke4T extends JFrame {
         // Tạo cửa sổ chính của ứng dụng
         GD_TrangDangNhap trangDangNhap = new GD_TrangDangNhap();
 		trangDangNhap.setVisible(true);
+		
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RemoteException {
         new App_Karaoke4T();
     }
 }

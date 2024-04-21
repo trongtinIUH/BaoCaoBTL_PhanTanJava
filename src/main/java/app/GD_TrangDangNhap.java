@@ -2,12 +2,14 @@ package app;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 import java.sql.SQLException;
 
 import javax.swing.AbstractAction;
@@ -26,7 +28,8 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
 import connectDB.ConnectDB;
-import dao.DangNhap_dao;
+import dao.DangNhapServices;
+import dao.impl.DangNhap_dao_impl;
 
 public class GD_TrangDangNhap extends JFrame  implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -36,11 +39,11 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
     private final JButton btnLogin;
     private final JButton btnQuenMatKhau;
 	private final JLabel lblKaeaoke;
-	private DangNhap_dao dangNhap_dao;
+	private DangNhap_dao_impl dangNhap_dao;
 	private final GD_TrangChu gd_TrangChu;
 	private String username;
 
-	public GD_TrangDangNhap() {
+	public GD_TrangDangNhap() throws RemoteException {
 		setTitle("Đăng Nhập KARAOKE 4T");
 		setSize(720, 400);
 		setLocationRelativeTo(null);
@@ -51,6 +54,12 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
   			// TODO Auto-generated catch block
   			e1.printStackTrace();
   		}
+		try {
+			dangNhap_dao= new DangNhap_dao_impl();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		gd_TrangChu = new GD_TrangChu();
 		
 		ImageIcon icon = new ImageIcon("image\\\\hinh_trangdangnhap.jpg");
@@ -157,9 +166,15 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
         this.getRootPane().setDefaultButton(btnLogin);
         
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RemoteException {
 		ImageIcon img = new ImageIcon("icon\\icon_Karaoke3.jpg");
-		GD_TrangDangNhap trangDangNhap = new GD_TrangDangNhap();
+		GD_TrangDangNhap trangDangNhap = null;
+		try {
+			trangDangNhap = new GD_TrangDangNhap();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		trangDangNhap.setVisible(true);
 		trangDangNhap.setIconImage(img.getImage());
 	}
@@ -196,30 +211,35 @@ public class GD_TrangDangNhap extends JFrame  implements ActionListener{
 	          username = txtUsername.getText();
 	          char[] mk = ((JPasswordField) txtPassword).getPassword();
 	          String mkstr = new String(mk);
-	          dangNhap_dao = new DangNhap_dao();
-	          if (dangNhap_dao.Timkiem(username, mkstr)) {
-	        	  String roleName = dangNhap_dao.getRole(username, mkstr);
-	        	    try {
-	        	        if (roleName.equals("Quản lý")) {
-	        	        	DataManager.setRole("QL");
-	        	        	DataManager.setRolePassword("QLpassword");
-	        	            ConnectDB.getInstance().connect("QL", "QLpassword");
-	        	        } else if (roleName.equals("Nhân viên")) {
-	        	        	DataManager.setRole("NV");
-	        	        	DataManager.setRolePassword("NVpassword");
-	        	            ConnectDB.getInstance().connect("NV", "NVpassword");
-	        	            gd_TrangChu.btnDanhSachPhong.setEnabled(false);
-	        	            gd_TrangChu.btnNhanVien.setEnabled(false);
-	        	            gd_TrangChu.btnSanPham.setEnabled(false);
-	        	        }
-	        	    } catch (SQLException ex) {
-	        	    	ex.printStackTrace();
-	        	    }
-	              gd_TrangChu.setVisible(true);
-	              dispose();
-	          } else {
-	              JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!");
-	          }
+	        
+	          try {
+				if (dangNhap_dao.Timkiem(username, mkstr)) {
+					  String roleName = dangNhap_dao.getRole(username, mkstr);
+					    try {
+					        if (roleName.equals("Quản lý")) {
+					        	DataManager.setRole("QL");
+					        	DataManager.setRolePassword("QLpassword");
+					            ConnectDB.getInstance().connect("QL", "QLpassword");
+					        } else if (roleName.equals("Nhân viên")) {
+					        	DataManager.setRole("NV");
+					        	DataManager.setRolePassword("NVpassword");
+					            ConnectDB.getInstance().connect("NV", "NVpassword");
+					            gd_TrangChu.btnDanhSachPhong.setEnabled(false);
+					            gd_TrangChu.btnNhanVien.setEnabled(false);
+					            gd_TrangChu.btnSanPham.setEnabled(false);
+					        }
+					    } catch (SQLException ex) {
+					    	ex.printStackTrace();
+					    }
+				      gd_TrangChu.setVisible(true);
+				      dispose();
+				  } else {
+				      JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!");
+				  }
+			} catch (HeadlessException | RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 	      } else if (o.equals(btnQuenMatKhau)) {
 	          GD_QuenMatKhau quenmk = new GD_QuenMatKhau();
 	          quenmk.setVisible(true);

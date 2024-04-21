@@ -2,9 +2,11 @@ package app;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -15,7 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import dao.DangNhap_dao;
+import dao.DangNhapServices;
+import dao.impl.DangNhap_dao_impl;
 
 public class GD_QuenMatKhau extends JFrame implements ActionListener {
 	
@@ -36,7 +39,7 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 	private final JButton btnHuy;
     private final JButton btnXacNhan;
     private final JButton btnOTP;
-	private final DangNhap_dao dangNhap_dao = new DangNhap_dao();
+	private  DangNhap_dao_impl dangNhap_dao;
 	
 	// Thay thế bằng Account SID và Auth Token của bạn
     public static final String ACCOUNT_SID = "AC7f55b2559cf6d868c6c92f6733eafb65";
@@ -44,6 +47,12 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 
 
 	public  GD_QuenMatKhau() {
+		try {
+			 dangNhap_dao = new DangNhap_dao_impl();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		setTitle("Quên Mật Khẩu");
 		setSize(600, 350);
 		setLocationRelativeTo(null);
@@ -167,23 +176,34 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 			String mk_moi=new String(mk2);
 			
 
-				if(dangNhap_dao.TimkiemSDT(sdt)) {
-					if(mk_cu.equalsIgnoreCase(mk_moi)) {
-						JOptionPane.showMessageDialog(null, "Mật khẩu mới của bạn đã được cập nhật !");
-						dangNhap_dao.doiMatKhau(sdt, mk_moi);
-						GD_TrangDangNhap dn= new GD_TrangDangNhap();
-						dn.setVisible(true);	
-						dispose();
-					}else {
-						JOptionPane.showMessageDialog(null, "Mật khẩu mới và nhập lại mật khẩu mới không trùng nhau !");
-					}
-					
-				}else JOptionPane.showMessageDialog(null, "Số điện thoại không tồn tại!");
+				try {
+					if(dangNhap_dao.TimkiemSDT(sdt)) {
+						if(mk_cu.equalsIgnoreCase(mk_moi)) {
+							JOptionPane.showMessageDialog(null, "Mật khẩu mới của bạn đã được cập nhật !");
+							dangNhap_dao.doiMatKhau(sdt, mk_moi);
+							GD_TrangDangNhap dn= new GD_TrangDangNhap();
+							dn.setVisible(true);	
+							dispose();
+						}else {
+							JOptionPane.showMessageDialog(null, "Mật khẩu mới và nhập lại mật khẩu mới không trùng nhau !");
+						}
+						
+					}else JOptionPane.showMessageDialog(null, "Số điện thoại không tồn tại!");
+				} catch (HeadlessException | RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			
 		}
 		else if(o.equals(btnHuy)) {
 			// thêm joption thông báo rồi nhảy về trang đăng nhập//
-			GD_TrangDangNhap dn= new GD_TrangDangNhap();
+			GD_TrangDangNhap dn = null;
+			try {
+				dn = new GD_TrangDangNhap();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dn.setVisible(true);	
 			dispose();
 		}

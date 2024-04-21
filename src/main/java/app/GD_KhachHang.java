@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 	private final JButton btnUser;
 	private final Dialog_User dialog_User = new Dialog_User();
 
-	public GD_KhachHang() {
+	public GD_KhachHang() throws RemoteException{
 		setBackground(new Color(242, 240, 255));
 		setLayout(null);
 		font = new Font("Arial", Font.BOLD, 18);
@@ -300,6 +301,7 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 		for (KhachHang kh : kh_dao.getallKhachHangs()) {
 			maKH = kh.getMaKhachHang(); // Chạy hết vòng for sẽ lấy được mã KH cuối danh sách
 		}
+		
 		int ngayTrenMaKHCuoiDS = Integer.parseInt(maKH.substring(2, 8));
 		DateFormat dateFormat = new SimpleDateFormat("yyMMdd"); // Format yyMMdd sẽ so sánh ngày được
 		ngayHienTai = new Date();

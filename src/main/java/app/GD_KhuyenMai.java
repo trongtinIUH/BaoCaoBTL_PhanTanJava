@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -82,7 +83,7 @@ public class GD_KhuyenMai extends JPanel implements ActionListener, MouseListene
 	private XSSFWorkbook wordbook;
 	private final Dialog_User dialog_User= new Dialog_User();
 
-	public GD_KhuyenMai() {
+	public GD_KhuyenMai() throws RemoteException{
 		// TODO Auto-generated constructor stub
 		setBackground(new Color(246, 245, 255));
 		setLayout(null);

@@ -5,11 +5,13 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import java.awt.Font;
+import java.rmi.RemoteException;
 import java.awt.Color;
-import dao.Phong_dao;
+import dao.impl.PhongImpl;
 import entity.LoaiPhong;
 import entity.Phong;
 import dao.LoaiPhong_dao;
+import dao.PhongService;
 
 public class Dialog_HienThiPhongSuaChua extends JDialog {
 
@@ -27,13 +29,13 @@ public class Dialog_HienThiPhongSuaChua extends JDialog {
     private final JLabel lbltrangthai_1;
     private final JLabel lblgia_1;
     private final JLabel lblPhong_1;
-	private final Phong_dao p_dao = new Phong_dao();
+	private final PhongService p_Service = new PhongImpl();
 	private final LoaiPhong_dao lp_dao = new LoaiPhong_dao();
 
-	private final Phong p;
+	private Phong p = new Phong();
 	private final LoaiPhong lp;
 
-	public Dialog_HienThiPhongSuaChua(String maPhong) {
+	public Dialog_HienThiPhongSuaChua(String maPhong) throws RemoteException{
 		// kích thước
 		// dialog--------------*****************************************************************
 		getContentPane().setBackground(Color.WHITE);
@@ -75,7 +77,12 @@ public class Dialog_HienThiPhongSuaChua extends JDialog {
 		lblPhong_1.setBounds(130, 10, 120, 30);
 		getContentPane().add(lblPhong_1);
 
-		p = p_dao.getPhongTheoMaPhong(maPhong);
+		try {
+			p = p_Service.getPhongTheoMaPhong(maPhong);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		lp = lp_dao.getLoaiPhongTheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
 
 		lblLoai_1 = new JLabel(lp.getTenLoaiPhong());
