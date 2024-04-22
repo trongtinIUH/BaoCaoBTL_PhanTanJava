@@ -41,6 +41,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import dao.KhachHangServices;
 import dao.impl.KhachHangImpl;
 import entity.KhachHang;
+import jakarta.persistence.NoResultException;
 
 public class GD_KhachHang extends JPanel implements ActionListener, MouseListener {
 	/**
@@ -469,18 +470,23 @@ public class GD_KhachHang extends JPanel implements ActionListener, MouseListene
 				}
 			} else if (cbLoaiTimKiem.getSelectedItem().equals("Số điện thoại")) {
 				KhachHang kh = null;
-				kh = kh_dao.getKhachHangTheoSDT(txtTimKiem.getText());
-				if (kh != null) {
-					if (kh.isGioiTinh()) {
-						gioitinh = "Nam";
-					} else
-						gioitinh = "Nữ";
-					btnTimKiem.setText("Hủy tìm");
-					clearTable();
-					Object[] row = { ++i, kh.getMaKhachHang(), kh.getHoTen(), kh.getSoDienThoai(), gioitinh };
-					model.addRow(row);
-				} else {
-					JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin!!");
+				try {
+				    kh = kh_dao.getKhachHangTheoSDT(txtTimKiem.getText());
+				    if (kh != null) {
+				        if (kh.isGioiTinh()) {
+				            gioitinh = "Nam";
+				        } else {
+				            gioitinh = "Nữ";
+				        }
+				        btnTimKiem.setText("Hủy tìm");
+				        clearTable();
+				        Object[] row = { ++i, kh.getMaKhachHang(), kh.getHoTen(), kh.getSoDienThoai(), gioitinh };
+				        model.addRow(row);
+				    } else {
+				        JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin!!");
+				    }
+				} catch (NoResultException e) {
+				    JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin!!");
 				}
 			}
 		} else {

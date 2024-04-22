@@ -116,6 +116,8 @@ public class GD_SanPham extends JPanel implements ActionListener, MouseListener 
 		iconProfile = new ImageIcon(iconProfile.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
 		btnUser.setIcon(iconProfile);
 		pnNorth.add(btnUser);
+		
+		add(pnNorth);
 
 		JPanel pnlCenter = new JPanel();
 		pnlCenter.setLayout(null);
