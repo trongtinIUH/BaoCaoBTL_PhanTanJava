@@ -4,8 +4,11 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 import dao.HoaDonDatPhongServices;
+import entity.ChiTietDichVu;
+import entity.ChiTietHoaDon;
 import entity.HoaDonDatPhong;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -202,15 +205,34 @@ public class HoaDonDatPhongImpl extends UnicastRemoteObject implements HoaDonDat
 	}
 
 	@Override
-	public boolean deleteHoaDon(String maHD) throws RemoteException{
+	public boolean deleteHoaDon(String maHD) throws RemoteException {
 	    EntityTransaction transaction = em.getTransaction();
 	    transaction.begin();
 	    try {
-	        Query query = em.createNamedQuery("HoaDonDatPhong.deleteHoaDon");
-	        query.setParameter("maHD", maHD);
-	        int updatedRows = query.executeUpdate();
+	        // Tìm tất cả các ChiTietHoaDon liên quan đến HoaDonDatPhong
+	        String jpqlChiTietHoaDon = "SELECT c FROM ChiTietHoaDon c WHERE c.hoaDon.maHoaDon = :maHD";
+	        List<ChiTietHoaDon> chiTietHoaDons = em.createQuery(jpqlChiTietHoaDon, ChiTietHoaDon.class).setParameter("maHD", maHD).getResultList();
+
+	        // Xóa tất cả các ChiTietHoaDon liên quan
+	        for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDons) {
+	            em.remove(chiTietHoaDon);
+	        }
+
+	        // Tìm và xóa tất cả các ChiTietDichVu liên quan đến HoaDonDatPhong
+	        String jpqlChiTietDichVu = "SELECT c FROM ChiTietDichVu c WHERE c.hoaDon.maHoaDon = :maHD";
+	        List<ChiTietDichVu> chiTietDichVus = em.createQuery(jpqlChiTietDichVu, ChiTietDichVu.class).setParameter("maHD", maHD).getResultList();
+	        for (ChiTietDichVu chiTietDichVu : chiTietDichVus) {
+	            em.remove(chiTietDichVu);
+	        }
+
+	        // Tìm HoaDonDatPhong cần xóa
+	        HoaDonDatPhong hoaDonDatPhong = em.find(HoaDonDatPhong.class, maHD);
+	        if (hoaDonDatPhong != null) {
+	            em.remove(hoaDonDatPhong);
+	        }
+
 	        transaction.commit();
-	        return updatedRows > 0;
+	        return true;
 	    } catch (Exception e) {
 	        if (transaction.isActive()) {
 	            transaction.rollback();
@@ -219,6 +241,5 @@ public class HoaDonDatPhongImpl extends UnicastRemoteObject implements HoaDonDat
 	        return false;
 	    }
 	}
-
 
 }
