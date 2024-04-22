@@ -404,9 +404,19 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				List<PhieuDatPhong> dsMaPhongDatTruoc = new ArrayList<PhieuDatPhong>();
 				try {
-					dsMaPhongDatTruoc = pdp_Service.getMaPhongDatTruoc();
+				    dsMaPhongDatTruoc = pdp_Service.getMaPhongDatTruoc();
+//				    if (dsMaPhongDatTruoc == null || dsMaPhongDatTruoc.isEmpty()) {
+//				        System.out.println("Danh sách phòng đặt trước rỗng hoặc null.");
+//				    } else {
+//				        // Xử lý khi danh sách có phòng đặt trước
+//				        // Ví dụ: duyệt danh sách và thực hiện các thao tác khác
+//				        for (PhieuDatPhong maPhong : dsMaPhongDatTruoc) {
+//				            System.out.println("Phòng đặt trước: " + maPhong);
+//				        }
+//				    }
 				} catch (RemoteException e1) {
-					e1.printStackTrace();
+//				    e1.printStackTrace();
+				    // Xử lý các ngoại lệ khi gọi dịch vụ không thành công
 				}
 				if (dsMaPhongDatTruoc.size() != 0) {
 					for (PhieuDatPhong pdp : dsMaPhongDatTruoc) {

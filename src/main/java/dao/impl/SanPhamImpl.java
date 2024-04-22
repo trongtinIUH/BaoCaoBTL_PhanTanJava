@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.SanPhamService;
+import entity.ChiTietDichVu;
 import entity.SanPham;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -27,7 +28,7 @@ public class SanPhamImpl extends UnicastRemoteObject implements SanPhamService{
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
-			em.remove(sp);
+			em.persist(sp);
 			tx.commit();
 			return true;
 		} catch (Exception e) {
@@ -44,7 +45,7 @@ public class SanPhamImpl extends UnicastRemoteObject implements SanPhamService{
 
 		try {
 			tx.begin();
-			em.persist(sp);
+			em.merge(sp);
 			tx.commit();
 			return true;
 		} catch (Exception e) {
@@ -64,7 +65,7 @@ public class SanPhamImpl extends UnicastRemoteObject implements SanPhamService{
 	        SanPham sanPham = em.find(SanPham.class, ma);
 	        if (sanPham != null) {
 	            sanPham.setSoLuongTon(slTon);
-	            em.persist(sanPham); 
+	            em.merge(sanPham); 
 	            tx.commit(); 
 	            return true;
 	        } else {
@@ -85,6 +86,14 @@ public class SanPhamImpl extends UnicastRemoteObject implements SanPhamService{
 
 		try {
 			tx.begin();
+			
+			// Tìm và xóa tất cả các ChiTietDichVu liên quan đến SanPham
+	        String jpqlChiTietDichVu = "SELECT c FROM ChiTietDichVu c WHERE c.sanPham.maSanPham = :maSanPham";
+	        List<ChiTietDichVu> chiTietDichVus = em.createQuery(jpqlChiTietDichVu, ChiTietDichVu.class).setParameter("maSanPham", maSP).getResultList();
+	        for (ChiTietDichVu chiTietDichVu : chiTietDichVus) {
+	            em.remove(chiTietDichVu);
+	        }
+			
 			SanPham sp = em.find(SanPham.class, maSP);
 			em.remove(sp);
 			tx.commit();
