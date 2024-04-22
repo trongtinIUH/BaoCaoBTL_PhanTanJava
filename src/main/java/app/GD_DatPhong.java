@@ -327,12 +327,6 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (DataManager.getRole().equals("Quản lý")) {
-					Persistence.createEntityManagerFactory("jpa-mssql-manager");
-				} else if (DataManager.getRole().equals("Nhân viên")) {
-					Persistence.createEntityManagerFactory("jpa-mssql-employee");
-				}
-
 				try {
 					if (sizeDSTmp != tmp_dao.getAllTemp().size()) {
 						sizeDSTmp = tmp_dao.getAllTemp().size();
@@ -663,9 +657,11 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		panel_ChuaPhong.removeAll();
 		panel_ChuaPhong.revalidate();
 		panel_ChuaPhong.repaint();
-
+		System.out.println("========================================");
 		try {
 			for (Phong p : p_Service.getallPhongs()) {
+				
+				System.out.println("Trạng thái: " + p.getTrangThai());
 				if (i % 5 == 0) {
 					y += 130;
 					x = 40;
@@ -836,9 +832,13 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 			String loaiPhong = comboBox_LoaiPhong.getSelectedItem().toString();
 			String trangThai = comboBox_TrangThai.getSelectedItem().toString();
 			if (trangThai.equals("Đang sử dụng"))
-				trangThai = "Đang_sử_dụng";
+				trangThai = "Dang_su_dung";
 			else if (trangThai.equals("Đang sửa chữa"))
-				trangThai = "Đang_sửa_chữa";
+				trangThai = "Dang_sua_chua";
+			else if (trangThai.equals("Trống"))
+				trangThai = "Trong";
+			else if (trangThai.equals("Chờ"))
+				trangThai = "Cho";
 
 			if (!txtSoNguoi.getText().trim().equals("")) {
 				try {

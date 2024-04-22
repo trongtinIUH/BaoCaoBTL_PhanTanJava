@@ -15,7 +15,11 @@ import jakarta.persistence.*;
 @NamedNativeQueries({
 		@NamedNativeQuery(name = "HoaDonDatPhong.getAllHoaDonDatPhong", query = "SELECT * FROM HoaDonDatPhong", resultClass = HoaDonDatPhong.class),
 		@NamedNativeQuery(name = "HoaDonDatPhong.getHoaDonTheoMaHoaDon", query = "SELECT * FROM HoaDonDatPhong WHERE maHoaDon = :maHoaDon", resultClass = HoaDonDatPhong.class),
-		@NamedNativeQuery(name = "HoaDonDatPhong.getMaHDTheoMaPhieuDP", query = "SELECT maHoaDon FROM HoaDonDatPhong WHERE maPhieuDatPhong = :maPhieuDatPhong", resultClass = HoaDonDatPhong.class),
+		@NamedNativeQuery(name = "HoaDonDatPhong.getMaHDTheoMaPhieuDP", 
+		query = "select maHoaDon from PhieuDatPhong p "
+				+ "join ChiTietHoaDon o "
+				+ "on gioNhanPhong = ngayGioNhanPhong where p.maPhieu = :maPhieu", 
+				resultClass = String.class),
 		@NamedNativeQuery(name = "HoaDonDatPhong.getHoaDonDatPhongTheoMaHD", query = "SELECT * FROM HoaDonDatPhong WHERE maHoaDon = :maHoaDon", resultClass = HoaDonDatPhong.class),
 		@NamedNativeQuery(name = "HoaDonDatPhong.getHoaDonDatPhongTheoMaPDP", query = "SELECT * FROM PhieuDatPhong p JOIN ChiTietHoaDon o ON p.maPhong = o.maPhong JOIN HoaDonDatPhong hd ON hd.maKhachHang = p.maKhachHang WHERE maPhieu = :maPDP AND FORMAT(p.ngayGioNhanPhong, 'yyyy-MM-dd HH:mm') = FORMAT(o.gioNhanPhong, 'yyyy-MM-dd HH:mm')", resultClass = HoaDonDatPhong.class),
 		@NamedNativeQuery(name = "HoaDonDatPhong.getHoaDonDatPhongTheoTenKH", query = "SELECT maHoaDon, hd.maKhachHang, maNhanVien, ngayLapHoaDon, trangThai, maKhuyenMai, tienKhachDua FROM HoaDonDatPhong hd JOIN KhachHang kh ON kh.maKhachHang = hd.maKhachHang WHERE kh.hoTen LIKE CONCAT('%', :tenKH, '%')", resultClass = HoaDonDatPhong.class),

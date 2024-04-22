@@ -453,7 +453,7 @@ public class Dialog_ThemDichVu extends JDialog implements ActionListener, MouseL
 			e.printStackTrace();
 		}
 		try {
-			for (SanPham x : sp_Service.getallSp()) {
+			for (SanPham x : sp_Service.getAllSanPhams()) {
 				if (DataManager.getCtdvTempList() != null) {
 					int soLuong = x.getSoLuongTon();
 					for (TempThemDV tmp : DataManager.getCtdvTempList()) {

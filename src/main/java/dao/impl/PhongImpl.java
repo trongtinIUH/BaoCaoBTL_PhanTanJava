@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import dao.PhongService;
+import entity.Enum_TrangThai;
 import entity.Phong;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -145,8 +146,9 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
 
 	@Override
 	public List<Phong> getPhongTKTheoTrangThai(String trangThai, int soNguoi) throws RemoteException {
+		Enum_TrangThai enumTrangThai = Enum_TrangThai.valueOf(trangThai);
 		return em.createNamedQuery("Phong.getPhongTKTheoTrangThai", Phong.class)
-				.setParameter("trangThai", trangThai)
+				.setParameter("trangThai", enumTrangThai)
 				.setParameter("soNguoi", soNguoi)
 				.getResultList();
 	}
@@ -158,15 +160,16 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
 				.setParameter("soNguoi", soNguoi)
 				.getResultList();
 	}
-
+	
 	@Override
 	public List<Phong> getPhongTKTheoTenLoaiPhongVaTrangThai(String tenLoaiPhong, String trangThai, int soNguoi)
-			throws RemoteException {
-		return em.createNamedQuery("Phong.getPhongTKTheoTenLoaiPhongVaTrangThai",Phong.class)
-				.setParameter("tenLoaiPhong", tenLoaiPhong)
-				.setParameter("trangThai", trangThai)
-				.setParameter("soNguoi", soNguoi)
-				.getResultList();
+	        throws RemoteException {
+	    Enum_TrangThai enumTrangThai = Enum_TrangThai.valueOf(trangThai);
+	    return em.createNamedQuery("Phong.getPhongTKTheoTenLoaiPhongVaTrangThai",Phong.class)
+	            .setParameter("tenLoaiPhong", tenLoaiPhong)
+	            .setParameter("trangThai", enumTrangThai)
+	            .setParameter("soNguoi", soNguoi)
+	            .getResultList();
 	}
 
 	@Override

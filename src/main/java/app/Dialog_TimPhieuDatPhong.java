@@ -324,6 +324,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 		DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
 		Collections.sort(allPhieuDatPhong, Comparator.comparing(PhieuDatPhong::getNgayGioDatPhong));
 		for (PhieuDatPhong x : allPhieuDatPhong) {
+			System.out.println(x);
 			String ngayGioDat = x.getNgayGioDatPhong().format(formatter);
 			String ngayGioNhan = x.getNgayGioNhanPhong().format(formatter);
 			if (formatter1.format(x.getNgayGioDatPhong()).equals(formatter1.format(x.getNgayGioNhanPhong()))) {

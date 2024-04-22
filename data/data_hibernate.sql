@@ -280,7 +280,7 @@ go
 --)
 go
 
-insert into TempDatPhong values('000','00')
+insert into TempDatPhong(maPhong, soNguoiHat) values('000','00')
 go
 
 go 

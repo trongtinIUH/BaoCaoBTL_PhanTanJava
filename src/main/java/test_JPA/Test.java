@@ -1,17 +1,31 @@
 package test_JPA;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 import dao.ChiTietHoaDonServices;
+import dao.HoaDonDatPhongServices;
+import dao.PhongService;
+import dao.SanPhamService;
+import dao.TempDatPhongServices;
 import dao.impl.ChiTietHoaDon_dao_impl;
+import dao.impl.HoaDonDatPhongImpl;
+import dao.impl.PhongImpl;
+import dao.impl.SanPhamImpl;
+import dao.impl.TempDatPhongImpl;
+import entity.Phong;
+import entity.SanPham;
+import entity.TempDatPhong;
 
 public class Test {
 	public static void main(String[] args) throws RemoteException {
 //		EntityManager em;
 //		em = Persistence.createEntityManagerFactory("jpa-mssql").createEntityManager();
-		ChiTietHoaDonServices chiTietHoaDonServices = new ChiTietHoaDon_dao_impl();
-		
-		double result = chiTietHoaDonServices.tinhSoGioHatTheoNgay("2023-10-10");
-		System.out.println(result);
+		SanPhamService phamService = new SanPhamImpl();
+		List<SanPham> list = phamService.getAllSanPhams();
+		for (SanPham sanPham : list) {
+			System.out.println(sanPham);
+		}
 	}
 }

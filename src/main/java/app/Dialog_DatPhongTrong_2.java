@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -599,7 +600,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 		if (o.equals(btn_DatPhong)) {
 			int check = 0;
 			int checkPSD = 0;
-			String maHoaDon;
+			String maHoaDon = null;
 			try {
 				maHoaDon = TaoMaHDDP();
 			} catch (RemoteException e1) {
@@ -612,13 +613,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 				try {
 					for (TempDatPhong tmpDatPhong : tmpDatPhong_dao.getAllTemp()) {
 						// Sửa trống -> Đang sử dụng
-						Phong p = null;
-						try {
-							p = p_Service.getPhongTheoMaPhong(tmpDatPhong.getMaPhong());
-						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+						Phong p = p_Service.getPhongTheoMaPhong(tmpDatPhong.getMaPhong());
 						if (p != null && p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
 							checkPSD = 1;
 							List<ChiTietHoaDon> dsChiTietHoaDon = cthd_dao
@@ -641,122 +636,69 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 							PhieuDatPhong pdb = new PhieuDatPhong(TaoMaPDP(), p, nv, kh, ngayGioHT, ngayGioHT,
 									tmpDatPhong.getSoNguoiHat());
 							if (p.getTrangThai() != Enum_TrangThai.Cho) {
-								try {
-									pdp_Service.addPhieuDatPhong(pdb);
-								} catch (RemoteException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
+								pdp_Service.addPhieuDatPhong(pdb);
 								// Nếu là chờ thì sửa lại.
 							}
 							if (p.getTrangThai() == Enum_TrangThai.Cho) {
-								try {
-									pdp_Service.addPhieuDatPhong(pdb);
-								} catch (RemoteException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
+								pdp_Service.addPhieuDatPhong(pdb);
 							}
 
 							p.setTrangThai(Enum_TrangThai.Dang_su_dung);
 							p_Service.updatePhong(p, p.getMaPhong());
 
-								// Thêm phiếu đặt phòng
-								nv = new NhanVien(DataManager.getUserName());
-								kh = new KhachHang();
-								if (checkBox_KH.isSelected())
-									kh = kh_dao.getKhachHangTheoSDT("0000000000");
-								else
-									kh = kh_dao.getKhachHangTheoSDT(txtSDT.getText());
+							// Thêm vào HoaDonDatPhong
+							KhuyenMai km = new KhuyenMai(null);
+							java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
+							if (checkPSD == 1) {
+								hddp = hddp_dao.getHoaDonDatPhongTheoMaHD(maHoaDon);
+								check = 1;
+								checkPSD = 0;
+							}
+							if (check == 0) {
+								hddp = new HoaDonDatPhong(maHoaDon, kh, nv, sqlDate, false, km, 0.0);
+								hddp_dao.addHoaDonDatPhong(hddp);
+								check = 1;
+							}
 
-								PhieuDatPhong pdb1 = new PhieuDatPhong(TaoMaPDP(), p, nv, kh, ngayGioHT, ngayGioHT,
-										tmpDatPhong.getSoNguoiHat());
-								if (p.getTrangThai() != Enum_TrangThai.Cho) {
-									pdp_Service.addPhieuDatPhong(pdb1);
-									// Nếu là chờ thì sửa lại.
-								}
-								if (p.getTrangThai() == Enum_TrangThai.Cho) {
-									pdp_Service.addPhieuDatPhong(pdb);
-								}
+							// Thêm chi tiết hóa đơn
+							ChiTietHoaDon cthd;
 
-								p.setTrangThai(Enum_TrangThai.Dang_su_dung);
-								p_Service.updatePhong(p, p.getMaPhong());
+							cthd = new ChiTietHoaDon(hddp, p, Timestamp.valueOf(ngayGioHT), Timestamp.valueOf(ngayGioHT),
+									0);
+							cthd_dao.addChiTietHD(cthd);
 
 							// Thêm chi tiết dịch vụ, cập nhật lại số lượng sản phẩm trong csdl
 							if (DataManager.getCtdvTempList() != null) {
 								for (TempThemDV tmp : DataManager.getCtdvTempList()) {
-									try {
-										if(sp_Service.getLoaiSanPhamTheoMaSP(tmp.getMaSP()).equals("Thức ăn")) {
-											ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
-													new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.03);
-											if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
-												SanPham sp = null;
-												try {
-													sp = sp_Service.getSanPhamTheoMaSP(tmp.getMaSP());
-												} catch (RemoteException e1) {
-													// TODO Auto-generated catch block
-													e1.printStackTrace();
-												}
-												sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
-												ctdv_dao.addChiTietDV(ctdv);
-												try {
-													sp_Service.updateSanPham(sp);
-												} catch (RemoteException e1) {
-													// TODO Auto-generated catch block
-													e1.printStackTrace();
-												}
-											}
-										} else
-											try {
-												if(sp_Service.getLoaiSanPhamTheoMaSP(tmp.getMaSP()).equals("Đồ uống")) {
-													ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
-															new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.02);
-													if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
-														SanPham sp = null;
-														try {
-															sp = sp_Service.getSanPhamTheoMaSP(tmp.getMaSP());
-														} catch (RemoteException e1) {
-															// TODO Auto-generated catch block
-															e1.printStackTrace();
-														}
-														sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
-														ctdv_dao.addChiTietDV(ctdv);
-														try {
-															sp_Service.updateSanPham(sp);
-														} catch (RemoteException e1) {
-															// TODO Auto-generated catch block
-															e1.printStackTrace();
-														}
-													}
-												}
-												else {
-													ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
-															new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.01);
-													if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
-														SanPham sp = null;
-														try {
-															sp = sp_Service.getSanPhamTheoMaSP(tmp.getMaSP());
-														} catch (RemoteException e1) {
-															// TODO Auto-generated catch block
-															e1.printStackTrace();
-														}
-														sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
-														ctdv_dao.addChiTietDV(ctdv);
-														try {
-															sp_Service.updateSanPham(sp);
-														} catch (RemoteException e1) {
-															// TODO Auto-generated catch block
-															e1.printStackTrace();
-														}
-													}
-												}
-											} catch (RemoteException e1) {
-												// TODO Auto-generated catch block
-												e1.printStackTrace();
-											}
-									} catch (RemoteException e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();
+									if(sp_Service.getLoaiSanPhamTheoMaSP(tmp.getMaSP()).equals("Thức ăn")) {
+										ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
+												new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.03);
+										if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
+											SanPham sp = sp_Service.getSanPhamTheoMaSP(tmp.getMaSP());
+											sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
+											ctdv_dao.addChiTietDV(ctdv);
+											sp_Service.updateSanPham(sp);
+										}
+									}
+									else if(sp_Service.getLoaiSanPhamTheoMaSP(tmp.getMaSP()).equals("Đồ uống")) {
+										ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
+												new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.02);
+										if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
+											SanPham sp = sp_Service.getSanPhamTheoMaSP(tmp.getMaSP());
+											sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
+											ctdv_dao.addChiTietDV(ctdv);
+											sp_Service.updateSanPham(sp);
+										}
+									}
+									else {
+										ChiTietDichVu ctdv = new ChiTietDichVu(hddp, new Phong(tmp.getMaPhong()),
+												new SanPham(tmp.getMaSP()), tmp.getSoLuong(), tmp.getDonGia() * 1.01);
+										if (ctdv.getPhong().getMaPhong().equals(tmpDatPhong.getMaPhong())) {
+											SanPham sp = sp_Service.getSanPhamTheoMaSP(tmp.getMaSP());
+											sp.setSoLuongTon(sp.getSoLuongTon() - tmp.getSoLuong());
+											ctdv_dao.addChiTietDV(ctdv);
+											sp_Service.updateSanPham(sp);
+										}
 									}
 								}
 							}

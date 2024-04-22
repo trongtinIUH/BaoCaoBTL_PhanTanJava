@@ -44,12 +44,12 @@ public class HoaDonDatPhongImpl extends UnicastRemoteObject implements HoaDonDat
 	             .getSingleResult();
 	}
 
-
 	@Override
-	public String getMaHDTheoMaPhieuDP(String maPhieuDatPhong) throws RemoteException{
-	    return em.createNamedQuery("HoaDonDatPhong.getMaHDTheoMaPhieuDP", String.class)
-	             .setParameter("maPhieuDatPhong", maPhieuDatPhong)
-	             .getSingleResult();
+	public String getMaHDTheoMaPhieuDP(String maPhieuDatPhong) throws RemoteException {
+	    List<String> results = em.createNamedQuery("HoaDonDatPhong.getMaHDTheoMaPhieuDP", String.class)
+	            .setParameter("maPhieu", maPhieuDatPhong)
+	            .getResultList();
+	    return results.isEmpty() ? null : results.get(0);
 	}
 
 	@Override

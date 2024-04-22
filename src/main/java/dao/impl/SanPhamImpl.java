@@ -142,7 +142,7 @@ public class SanPhamImpl extends UnicastRemoteObject implements SanPhamService{
 	@Override
 	public List<SanPham> getallSp() throws RemoteException {
 		try {
-	        List<Object[]> results = em.createNamedQuery("SanPham.getAllSanPhamByIndex", Object[].class).getResultList();
+	        List<Object[]> results = em.createNamedQuery("Product.getAllSanPhamByIndex", Object[].class).getResultList();
 	        
 	        List<SanPham> sanPhams = new ArrayList<>();
 	        for (Object[] result : results) {

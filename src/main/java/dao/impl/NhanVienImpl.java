@@ -102,7 +102,7 @@ public class NhanVienImpl extends UnicastRemoteObject implements NhanVienService
 	public NhanVien findNhanVienToLogin(String maNV) throws RemoteException {
 		try {
 	  
-	        Object[] result = (Object[]) em.createNamedQuery("NhanVien.findNhanVienToLogin")
+	        Object[] result = (Object[]) em.createNamedQuery("NhanVien.findNVToLogin")
 	                                        .setParameter("maNhanVien", maNV)
 	                                        .getSingleResult();
 

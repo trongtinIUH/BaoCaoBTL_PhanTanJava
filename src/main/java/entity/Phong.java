@@ -17,8 +17,18 @@ import jakarta.persistence.*;
 	@NamedQuery(name = "Phong.getPhongTheoTenLoaiPhong", query = "SELECT p FROM Phong p JOIN p.loaiPhong lp WHERE lp.tenLoaiPhong = :tenLoaiPhong"),
 	@NamedQuery(name = "Phong.getPhongTheoMaCTHD", query = "SELECT p FROM Phong p JOIN p.chiTietHoaDons cthd JOIN cthd.hoaDon hd WHERE hd.maHoaDon = :maHoaDon"),
 	@NamedQuery(name = "Phong.getPhongTKTheoTrangThai",query = "SELECT p FROM Phong p JOIN p.loaiPhong lp WHERE p.trangThai = :trangThai AND lp.sucChua >= :soNguoi"),
-	@NamedQuery(name = "Phong.getPhongTKTheoTenLoaiPhong",query = "SELECT p FROM Phong p JOIN p.loaiPhong lp WHERE lp.tenLoaiPhong = :tenLoaiPhong AND lp.sucChua >= :soNguoi"),
-	@NamedQuery(name = "Phong.getPhongTKTheoTenLoaiPhongVaTrangThai",query = "SELECT p FROM Phong p JOIN p.loaiPhong lp WHERE lp.tenLoaiPhong = :tenLoaiPhong AND p.trangThai = :trangThai AND lp.sucChua >= :soNguoi"),
+	
+	
+	@NamedQuery(name = "Phong.getPhongTKTheoTenLoaiPhong",
+				query = "SELECT p FROM Phong p JOIN p.loaiPhong lp "
+						+ "WHERE lp.tenLoaiPhong = :tenLoaiPhong AND lp.sucChua >= :soNguoi"),
+	
+	@NamedQuery(name = "Phong.getPhongTKTheoTenLoaiPhongVaTrangThai",
+				query = "SELECT p FROM Phong p INNER JOIN p.loaiPhong lp "
+						+ "WHERE lp.tenLoaiPhong = :tenLoaiPhong AND p.trangThai = :trangThai "
+						+ "AND lp.sucChua >= :soNguoi"),
+	
+	
 	@NamedQuery(name = "Phong.getPhongTKTheoSoNguoiHat",query = "SELECT p FROM Phong p JOIN p.loaiPhong lp WHERE lp.sucChua >= :soNguoi"),
 	@NamedQuery(name = "Phong.tinhTongTienPhongTheoMaHoaDon", 
 			query = "SELECT SUM(lp.donGiaTheoGio * cthd.soGioHat) "
@@ -236,7 +246,7 @@ public class Phong implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("Phong [maPhong=%s, loaiPhong=%s, trangThai=%s]", maPhong, loaiPhong, trangThai);
+		return String.format("Phong [maPhong=%s, loaiPhong=%s, trangThai=%s]", maPhong, loaiPhong.getTenLoaiPhong(), trangThai);
 	}
 
 }
