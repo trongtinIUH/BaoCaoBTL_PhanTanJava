@@ -447,17 +447,18 @@ public class GD_ThongKe extends JPanel implements ActionListener {
 		int i = 0;
 		for (HoaDonDatPhong hd : hoadon_dao.getHoaDonTheoNgayLapHD(formattedDateTime)) {
 			i++;
+			String maKM = hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKhuyenMai() : null;
 			tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 					chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
-					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()));
+					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(maKM));
 			doanhThuDV += chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon());
 			Object[] row = { i, hd.getMaHoaDon(), hd.getNgayLapHoaDon(),
 					khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getHoTen(),
 					khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getSoDienThoai(),
-					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()),
+					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(maKM),
 					df.format(hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 							chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
-							khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()))),
+							khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(maKM))),
 					nhanvien_dao.findByID(hd.getNhanVien().getMaNhanVien()).getHoTen(), hd.getNgayLapHoaDon(), };
 			model.addRow(row);
 		}
@@ -488,9 +489,10 @@ public class GD_ThongKe extends JPanel implements ActionListener {
 		int i = 0;
 		for (HoaDonDatPhong hd : hoadon_dao.getHoaDonTheoThang(m, year)) {
 			i++;
+			String maKM = hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKhuyenMai() : null;
 			tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 					chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
-					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()));
+					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(maKM));
 			doanhThuDV += chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon());
 		}
 		lblTongDoanhThu.setText(df.format(tongDoanhThu));
@@ -530,9 +532,10 @@ public class GD_ThongKe extends JPanel implements ActionListener {
 		int i = 0;
 		for (HoaDonDatPhong hd : hoadon_dao.getHoaDonTheoNam(year)) {
 			i++;
+			String maKM = hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKhuyenMai() : null;
 			tongDoanhThu += hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 					chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
-					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai()));
+					khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(maKM));
 			doanhThuDV += chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon());
 		}
 		lblTongDoanhThu.setText(df.format(tongDoanhThu));
@@ -792,15 +795,7 @@ public class GD_ThongKe extends JPanel implements ActionListener {
 						}
 						try {
 							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // adjust
-																												// this
-																												// pattern
-																												// to
-																												// match
-																												// your
-																												// SQL
-																												// Server
-																												// date/time
-																												// format
+																					// format
 							String formattedDateTime = dateTimePicker.getDateTimeStrict().format(formatter);
 
 							DoanhThuLoaiPhong dtlp = p_Service.tinhTongDoanhThuLoaiPhongTheoNgay(formattedDateTime);

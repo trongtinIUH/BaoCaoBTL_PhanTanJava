@@ -1,7 +1,9 @@
 package dao.impl;
 
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Date;
 import java.util.List;
 
 import dao.PhongService;
@@ -186,46 +188,153 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
         }
 	}
 
-	@Override
-	public DoanhThuLoaiPhong tinhTongDoanhThuLoaiPhongTheoNgay(String ngay) throws RemoteException {
-		return em.createNamedQuery("Phong.tinhTongDoanhThuLoaiPhongTheoNgay", DoanhThuLoaiPhong.class)
-				.setParameter("ngay", ngay).getResultList().stream().findFirst().orElse(null);
+	@SuppressWarnings("unchecked")
+	public DoanhThuLoaiPhong tinhTongDoanhThuLoaiPhongTheoNgay(String ngay) {
+	    DoanhThuLoaiPhong dtlp = null;
+	    try {
+	    	String sql = "DECLARE @ngayNhap DATE = :ngay " +
+		            "SELECT " +
+		            " @ngayNhap AS ngayLapHoaDon, " +
+		            " 0 AS TongTienPhongThuong, " +
+		            " 0 AS TongTienPhongVIP " +
+		            "WHERE NOT EXISTS (" +
+		            " SELECT * FROM HoaDonDatPhong " +
+		            " WHERE ngayLapHoaDon = @ngayNhap " +
+		            ") " +
+		            "UNION ALL " +
+		            "SELECT " +
+		            " ngayLapHoaDon, " +
+		            " SUM(CTHD.soGioHat * CASE WHEN LP.maLoaiPhong LIKE 'PT%' THEN LP.donGiaTheoGio ELSE 0 END) AS TongTienPhongThuong, " +
+		            " SUM(CTHD.soGioHat * CASE WHEN LP.maLoaiPhong LIKE 'PV%' THEN LP.donGiaTheoGio ELSE 0 END) AS TongTienPhongVIP " +
+		            "FROM HoaDonDatPhong HDDP " +
+		            "INNER JOIN ChiTietHoaDon CTHD ON HDDP.maHoaDon = CTHD.maHoaDon " +
+		            "INNER JOIN Phong P ON CTHD.maPhong = P.maPhong " +
+		            "INNER JOIN LoaiPhong LP ON P.maLoaiPhong = LP.maLoaiPhong " +
+		            "WHERE HDDP.ngayLapHoaDon = @ngayNhap " +
+		            "GROUP BY HDDP.ngayLapHoaDon";
+
+	    	List<Object[]> results = em.createNativeQuery(sql)
+	                .setParameter("ngay", ngay)
+	                .getResultList();
+
+	            for (Object[] row : results) {
+	                Date date = (Date) row[0];
+	                dtlp = new DoanhThuLoaiPhong(date, (Double) row[1], (Double) row[2]);
+	            }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return dtlp;
 	}
 
-	@Override
-	public DoanhThuLoaiPhong tinhTongDoanhThuLoaiPhongTheoThang(String thang, int nam) throws RemoteException {
-		try {
-	        Query query = em.createNamedQuery("Phong.tinhTongDoanhThuLoaiPhongTheoThang");
-	        query.setParameter("thang", Integer.parseInt(thang));
-	        query.setParameter("nam", nam);
+	@SuppressWarnings("unchecked")
+	public DoanhThuLoaiPhong tinhTongDoanhThuLoaiPhongTheoThang(String thang, int nam) {
+	    DoanhThuLoaiPhong dtlp = null;
+	    try {
+	        String sql = "DECLARE @thang INT = :thang, @nam INT = :nam " +
+	            "SELECT " +
+	            "  FORMAT(DATEFROMPARTS(@nam, @thang, 1), 'yyyy-MM') AS ThangNam, " +
+	            "  0 AS TongTienPhongThuong, " +
+	            "  0 AS TongTienPhongVIP " +
+	            "WHERE NOT EXISTS (" +
+	            "  SELECT * " +
+	            "  FROM HoaDonDatPhong " +
+	            "  WHERE MONTH(ngayLapHoaDon) = @thang " +
+	            "    AND YEAR(ngayLapHoaDon) = @nam" +
+	            ")" +
+	            "UNION ALL " +
+	            "SELECT " +
+	            "  FORMAT(ngayLapHoaDon,'yyyy-MM') AS ThangNam, " +
+	            "  SUM(CTHD.soGioHat * CASE WHEN LP.maLoaiPhong LIKE 'PT%' THEN LP.donGiaTheoGio ELSE 0 END) AS TongTienPhongThuong, " +
+	            "  SUM(CTHD.soGioHat * CASE WHEN LP.maLoaiPhong LIKE 'PV%' THEN LP.donGiaTheoGio ELSE 0 END) AS TongTienPhongVIP " +
+	            "FROM HoaDonDatPhong HDDP " +
+	            "INNER JOIN ChiTietHoaDon CTHD ON HDDP.maHoaDon = CTHD.maHoaDon " +
+	            "INNER JOIN Phong P ON CTHD.maPhong = P.maPhong " +
+	            "INNER JOIN LoaiPhong LP ON P.maLoaiPhong = LP.maLoaiPhong " +
+	            "WHERE MONTH(ngayLapHoaDon) = @thang " +
+	            "  AND YEAR(ngayLapHoaDon) = @nam " +
+	            "GROUP BY FORMAT(ngayLapHoaDon,'yyyy-MM')";
 
-	        return (DoanhThuLoaiPhong) query.getSingleResult();
-	    } catch (NoResultException e) {
-	        return null;
+	        List<Object[]> results = em.createNativeQuery(sql)
+	            .setParameter("thang", thang)
+	            .setParameter("nam", nam)
+	            .getResultList();
+
+	        for (Object[] row : results) {
+	            dtlp = new DoanhThuLoaiPhong((Double) row[1], (Double) row[2]);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
 	    }
+	    return dtlp;
 	}
 	
 
-	@Override
-	public DoanhThuLoaiPhong tinhTongDoanhThuLoaiPhongTheoNam(int nam) throws RemoteException {
-	    Query query = em.createNativeQuery("Phong.tinhTongDoanhThuLoaiPhongTheoNam", DoanhThuLoaiPhong.class);
-	    query.setParameter("year", nam);
-	    
-	    List<DoanhThuLoaiPhong> results = query.getResultList();
-	    
-	    // Chỉ trả về kết quả nếu có ít nhất một dòng kết quả
-	    return results.isEmpty() ? null : results.get(0);
+	@SuppressWarnings("unchecked")
+	public DoanhThuLoaiPhong tinhTongDoanhThuLoaiPhongTheoNam(int nam) {
+	    DoanhThuLoaiPhong dtlp = null;
+	    try {
+	        String sql = "DECLARE @nam INT = :nam " +
+	            "SELECT " +
+	            "FORMAT(DATEFROMPARTS(@nam, 1, 1), 'yyyy') AS Nam,  " +
+	            "0 AS TongTienPhongThuong, " +
+	            "0 AS TongTienPhongVIP " +
+	            "WHERE NOT EXISTS ( " +
+	            "SELECT * " +
+	            "FROM HoaDonDatPhong " +
+	            "WHERE YEAR(ngayLapHoaDon) = @nam" +
+	            ")" +
+	            "UNION ALL " +
+	            "SELECT  " +
+	            "FORMAT(ngayLapHoaDon,'yyyy') AS Nam, " +
+	            "  SUM(CTHD.soGioHat * CASE WHEN LP.maLoaiPhong LIKE 'PT%' THEN LP.donGiaTheoGio ELSE 0 END) AS TongTienPhongThuong, " +
+	            "  SUM(CTHD.soGioHat * CASE WHEN LP.maLoaiPhong LIKE 'PV%' THEN LP.donGiaTheoGio ELSE 0 END) AS TongTienPhongVIP " +
+	            "FROM HoaDonDatPhong HDDP " +
+	            "INNER JOIN ChiTietHoaDon CTHD ON HDDP.maHoaDon = CTHD.maHoaDon " +
+	            "INNER JOIN Phong P ON CTHD.maPhong = P.maPhong " +
+	            "INNER JOIN LoaiPhong LP ON P.maLoaiPhong = LP.maLoaiPhong " +
+	            "WHERE YEAR(ngayLapHoaDon) = @nam " +
+	            "GROUP BY FORMAT(ngayLapHoaDon,'yyyy')";
+
+	        List<Object[]> results = em.createNativeQuery(sql)
+	            .setParameter("nam", nam)
+	            .getResultList();
+
+	        for (Object[] row : results) {
+	            dtlp = new DoanhThuLoaiPhong((Double) row[1], (Double) row[2]);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return dtlp;
 	}
 
-	@Override
-	public DoanhThuLoaiPhong tinhTongDoanhThuLoaiPhongTheoNhieuNam(int nam_bd, int nam_kt) throws RemoteException {
-		TypedQuery<DoanhThuLoaiPhong> query = em.createNamedQuery("Phong.tinhTongDoanhThuLoaiPhongTheoNhieuNam", DoanhThuLoaiPhong.class);
-	    query.setParameter("startYear", nam_bd);
-	    query.setParameter("endYear", nam_kt);
-	    
-	    List<DoanhThuLoaiPhong> results = query.getResultList();
-	    
-	    return results.isEmpty() ? null : results.get(0);
+	@SuppressWarnings("unchecked")
+	public DoanhThuLoaiPhong tinhTongDoanhThuLoaiPhongTheoNhieuNam(int nambt, int namkt) {
+	    DoanhThuLoaiPhong dtlp = null;
+	    try {
+	        String sql = "DECLARE @startYear INT = :startYear, @endYear INT = :endYear " +
+	            "SELECT  " +
+	            "SUM(CASE WHEN LP.maLoaiPhong LIKE 'PT%' THEN LP.donGiaTheoGio ELSE 0 END) AS TongTienPhongThuong, " +
+	            "SUM(CASE WHEN LP.maLoaiPhong LIKE 'PV%' THEN LP.donGiaTheoGio ELSE 0 END) AS TongTienPhongVIP " +
+	            "FROM HoaDonDatPhong HDDP " +
+	            "INNER JOIN ChiTietHoaDon CTHD ON HDDP.maHoaDon = CTHD.maHoaDon " +
+	            "INNER JOIN Phong P ON CTHD.maPhong = P.maPhong " +
+	            "INNER JOIN LoaiPhong LP ON P.maLoaiPhong = LP.maLoaiPhong " +
+	            "WHERE YEAR(ngayLapHoaDon) BETWEEN @startYear AND @endYear";
+
+	        List<Object[]> results = em.createNativeQuery(sql)
+	            .setParameter("startYear", nambt)
+	            .setParameter("endYear", namkt)
+	            .getResultList();
+
+	        for (Object[] row : results) {
+	            dtlp = new DoanhThuLoaiPhong(((BigDecimal) row[0]).doubleValue(), ((BigDecimal) row[1]).doubleValue());
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return dtlp;
 	}
 
 }
