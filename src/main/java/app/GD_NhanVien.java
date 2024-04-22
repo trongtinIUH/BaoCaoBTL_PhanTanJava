@@ -60,8 +60,8 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	Font font2 = new Font("Arial", Font.BOLD, 18); // thuộc tính
 	Font font3 = new Font("Arial", Font.PLAIN, 18); // jtexfield
 
-	private final String[] col = { "STT", "Mã nhân viên", "Họ tên", "Số điện thoại", "Giới tính", "Ngày sinh", "Chức vụ",
-			"Ảnh"};
+	private final String[] col = { "STT", "Mã nhân viên", "Họ tên", "Số điện thoại", "Giới tính", "Ngày sinh",
+			"Chức vụ", "Ảnh" };
 	private final JLabel lblTitle;
 	private final JPanel pnNorth;
 	private final SqlDateModel modelNgaySinh;
@@ -97,7 +97,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	private final JButton btnUser;
 	private final Dialog_User dialog_user = new Dialog_User();
 
-	public GD_NhanVien() throws RemoteException{
+	public GD_NhanVien() throws RemoteException {
 		dangNhap_dao = new DangNhap_dao_impl();
 		setBackground(new Color(246, 245, 255));
 		setLayout(null);
@@ -377,18 +377,18 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 
 	private void loadData() {
 		int i = 0;
-			
-			try {
-				nv_dao = new NhanVienImpl();
-				for (NhanVien nv : nv_dao.findAllNhanVien()) {
-					i++;
-					Object[] row = { i, nv.getMaNhanVien(), nv.getHoTen(), nv.getSoDienThoai(), getGT(nv), nv.getNgaySinh(),
-							nv.getChucVu(), nv.getAnhDaiDien()};
-					model.addRow(row);
-				}
-			} catch (RemoteException e) {
-				e.printStackTrace();
+
+		try {
+			nv_dao = new NhanVienImpl();
+			for (NhanVien nv : nv_dao.findAllNhanVien()) {
+				i++;
+				Object[] row = { i, nv.getMaNhanVien(), nv.getHoTen(), nv.getSoDienThoai(), getGT(nv), nv.getNgaySinh(),
+						nv.getChucVu(), nv.getAnhDaiDien() };
+				model.addRow(row);
 			}
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void xoaTrang() {
@@ -401,10 +401,14 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 
 	private String thuTuNhanVienTrongNam() {
 		int sl = 0;
+		Year year = Year.now();
+		String ma;
+		int lastTwoDigitsOfYear = year.getValue() % 100;
+		String lastTwoDigitsString = String.valueOf(lastTwoDigitsOfYear);
 		try {
 			nv_dao = new NhanVienImpl();
 			for (NhanVien nv : nv_dao.findAllNhanVien()) {
-				if (nv.getMaNhanVien().startsWith("23"))
+				if (nv.getMaNhanVien().startsWith(lastTwoDigitsString))
 					sl++;
 			}
 		} catch (RemoteException e) {
@@ -445,12 +449,12 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 	}
 
 	private void them() throws RemoteException {
-		//Gán dữ liệu cứng
-		if(rdoNam.isSelected())
+		// Gán dữ liệu cứng
+		if (rdoNam.isSelected())
 			imageLabel.setIcon(new ImageIcon("image\\nhanvien_nam.png"));
 		else
 			imageLabel.setIcon(new ImageIcon("image\\nhanvien_nu.png"));
-		
+
 		ImageIcon icon = (ImageIcon) imageLabel.getIcon();
 		if (icon != null) {
 			File imageFile = new File(icon.getDescription());
@@ -465,7 +469,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 			String hoTen = txtHoTen.getText();
 			String sDT = txtSDT.getText();
 			boolean gt;
-            gt = rdoNam.isSelected();
+			gt = rdoNam.isSelected();
 			Date ngaySinh = (Date) datePicker.getModel().getValue();
 			Date ngayHienTai = new Date(System.currentTimeMillis());
 
@@ -476,22 +480,24 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 			int tuoi = (int) ((ngayHienTai.getTime() - ngaySinh.getTime()) / millisecondsPerYear);
 			if (tuoi >= 18) {
 				String chucVu = (String) cbChucVu.getSelectedItem();
-				String role,mk;
+				String role, mk;
 				boolean trangthai;
-				if(cbChucVu.getSelectedItem().equals("Nhân viên quản lý")) {
-					role="Quản lý";
-					trangthai=true;
-					mk=ma;
-				}else {
-					role="Nhân viên";
-					trangthai=true;
-					mk=ma;
+				if (cbChucVu.getSelectedItem().equals("Nhân viên quản lý")) {
+					role = "Quản lý";
+					trangthai = true;
+					mk = ma;
+				} else {
+					role = "Nhân viên";
+					trangthai = true;
+					mk = ma;
 				}
 				NhanVien nv = new NhanVien(ma, hoTen, sDT, gt, ngaySinh, chucVu, absolutePath);
 				try {
 					if (nv_dao.addNhanVien(nv)) {
-						JOptionPane.showMessageDialog(this, "Thêm thành công | Tài Khoản và Mật Khẩu của bạn là: "+ma+"\nVui lòng tiến hành đổi mật khẩu để tăng bảo mật !");
-						TaiKhoan tk= new TaiKhoan(ma, mk, trangthai, nv= new NhanVien(ma, hoTen, sDT, gt, ngaySinh, chucVu, absolutePath), role);
+						JOptionPane.showMessageDialog(this, "Thêm thành công | Tài Khoản và Mật Khẩu của bạn là: " + ma
+								+ "\nVui lòng tiến hành đổi mật khẩu để tăng bảo mật !");
+						TaiKhoan tk = new TaiKhoan(ma, mk, trangthai,
+								nv = new NhanVien(ma, hoTen, sDT, gt, ngaySinh, chucVu, absolutePath), role);
 						dangNhap_dao.Them_taiKhoan_matKhau(tk);
 						clearTable();
 						loadData();
@@ -501,6 +507,8 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 				} catch (HeadlessException | RemoteException e) {
 					e.printStackTrace();
 				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Chưa đủ 18 tuổi không được thêm");
 			}
 		}
 	}
@@ -515,12 +523,16 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				int row = table.getSelectedRow();
 				try {
-					nv_dao.deleteNhanVien(model.getValueAt(row, 1).toString());
+					if(nv_dao.deleteNhanVien(model.getValueAt(row, 1).toString())) {						
+						clearTable();
+						loadData();
+						JOptionPane.showMessageDialog(this, "Xóa thành công!!");	
+					} else {
+						JOptionPane.showMessageDialog(this, "Xóa thất bại!!");
+					}
 				} catch (RemoteException e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(this, "Xóa thất bại!!");
 				}
-				model.removeRow(row);
-				JOptionPane.showMessageDialog(this, "Xóa thành công!!");
 			}
 		}
 	}
@@ -538,7 +550,7 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 			String ten = txtHoTen.getText().trim();
 			String sDT = txtSDT.getText().trim();
 			boolean gt;
-            gt = rdoNam.isSelected();
+			gt = rdoNam.isSelected();
 			Date ngaySinh = (Date) datePicker.getModel().getValue();
 
 			Date ngayHienTai = new Date(System.currentTimeMillis());
@@ -548,7 +560,6 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 
 			// Tính số tuổi
 			int tuoi = (int) ((ngayHienTai.getTime() - ngaySinh.getTime()) / millisecondsPerYear);
-			System.out.println(tuoi);
 			if (tuoi >= 18) {
 				NhanVien nv = new NhanVien(ma, ten, sDT, gt, ngaySinh, (String) cbChucVu.getSelectedItem(),
 						absolutePath);
@@ -711,6 +722,8 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 		} else if (obj.equals(btnLamMoi)) {
 			xoaTrang();
 			loadMa();
+			clearTable();
+			loadData();
 		} else if (obj.equals(btnTimKiem)) {
 			tim();
 		} else if (obj.equals(btnXuatExcel)) {
@@ -740,8 +753,8 @@ public class GD_NhanVien extends JPanel implements ActionListener, MouseListener
 		try {
 			modelNgaySinh.setValue((java.sql.Date) model.getValueAt(row, 5));
 		} catch (Exception e2) {
-            e2.printStackTrace();
-        }
+			e2.printStackTrace();
+		}
 
 		cbChucVu.setSelectedItem(model.getValueAt(row, 6));
 		imageLabel.setIcon(new ImageIcon(model.getValueAt(row, 7).toString()));
