@@ -4,8 +4,11 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import dao.NhanVienService;
 import entity.NhanVien;
+import entity.TaiKhoan;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
@@ -28,13 +31,16 @@ public class NhanVienImpl extends UnicastRemoteObject implements NhanVienService
 
 		try {
 			tx.begin();
+			TaiKhoan tk = em.find(TaiKhoan.class, id);
+			em.remove(tk);
 			NhanVien nv = em.find(NhanVien.class, id);
 			em.remove(nv);
 			tx.commit();
 			return true;
 		} catch (Exception e) {
-			tx.rollback();
-			e.printStackTrace();
+//			tx.rollback();
+//			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Nhân viên đã lập hóa đơn không được phép xóa");
 		}
 
 		return false;

@@ -32,9 +32,9 @@ public class NhanVien implements Serializable {
 	private boolean gioiTinh;
 	@Column(name = "ngaySinh", columnDefinition = "date", nullable = false)
 	private Date ngaySinh;
-	@Column(name = "chucVu", columnDefinition = "nvarchar(255)", nullable = false, unique = false)
+	@Column(name = "chucVu", columnDefinition = "nvarchar(50)", nullable = false, unique = false)
 	private String chucVu;
-	@Column(name = "anhDaiDien", columnDefinition = "nvarchar(50)", nullable = true)
+	@Column(name = "anhDaiDien", columnDefinition = "nvarchar(255)", nullable = true)
 	private String anhDaiDien;
 
 	@OneToMany(mappedBy = "nhanVien")

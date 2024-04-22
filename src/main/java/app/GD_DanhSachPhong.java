@@ -440,9 +440,9 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 			if (cbTrangThai.getSelectedItem().equals("Trống"))
 				trangThai = Enum_TrangThai.Trong;
 			if (cbTrangThai.getSelectedItem().equals("Chờ"))
-				trangThai = Enum_TrangThai.Cho;
+				trangThai = Enum_TrangThai.Trong;
 			if (cbTrangThai.getSelectedItem().equals("Đang sử dụng"))
-				trangThai = Enum_TrangThai.Dang_su_dung;
+				trangThai = Enum_TrangThai.Trong;
 			if (cbTrangThai.getSelectedItem().equals("Đang sửa chữa"))
 				trangThai = Enum_TrangThai.Dang_sua_chua;
 			int sucChua = Integer.parseInt(txtSucChua.getText());
