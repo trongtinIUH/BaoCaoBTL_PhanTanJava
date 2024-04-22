@@ -77,7 +77,15 @@ public class PhieuDatPhongImpl extends UnicastRemoteObject implements PhieuDatPh
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PhieuDatPhong> getMaPhongDatTruoc() throws RemoteException {
-		return em.createNativeQuery("PhieuDatPhong.getMaPhongDatTruoc", PhieuDatPhong.class).getResultList();
+		 List<PhieuDatPhong> result = new ArrayList<>();
+		    try {
+		        result = em.createNativeQuery("PhieuDatPhong.getMaPhongDatTruoc", PhieuDatPhong.class).getResultList();
+		    } catch (Exception e) {
+//		        e.printStackTrace();
+		        // Xử lý các ngoại lệ khi thực hiện truy vấn không thành công
+		    	System.out.println("Không có phòng đặt trước");
+		    }
+		    return result;
 	}
 
 	@Override
