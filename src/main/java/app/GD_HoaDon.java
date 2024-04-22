@@ -59,6 +59,7 @@ import dao.impl.KhuyenMaiImpl;
 import entity.ChiTietDichVu;
 import entity.ChiTietHoaDon;
 import entity.HoaDonDatPhong;
+import entity.KhuyenMai;
 
 public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 	/**
@@ -506,6 +507,7 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public void tim() throws RemoteException {
 		String searchTitle = txtTimKiem.getText();
 		if (searchTitle.equals("")) {
@@ -514,6 +516,17 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 			if (btnTimKiem.getText().equals("Tìm kiếm")) {
 				if (cbTimKiem.getSelectedItem().equals("Mã hóa đơn")) {
 					HoaDonDatPhong hd = hoadon_dao.getHoaDonDatPhongTheoMaHD(searchTitle);
+					KhuyenMai km= hd.getKhuyenMai();
+					String ma="";
+					float phantram;
+					if(km != null) {
+						ma=km.getMaKhuyenMai();
+						phantram=khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai());
+                    }
+					else {
+						ma="";
+						phantram= 0;
+					}
 					if (hd != null) {
 						btnTimKiem.setText("Hủy tìm");
 						int i = 1;
@@ -522,10 +535,10 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 								khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getHoTen(),
 								hd.getNhanVien().getMaNhanVien(), hd.getNgayLapHoaDon(),
 								hd.isTrangThai() ? "Đã thanh toán" : "Chưa thanh toán",
-								hd.getKhuyenMai().getMaKhuyenMai(),
-								hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
-										chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), khuyenmai_dao
-												.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai())) };
+										//hd.getKhuyenMai().getMaKhuyenMai(),
+										ma,
+										df.format(hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+										chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()), phantram)) };
 						modelOrderList.addRow(row);
 
 					} else {
@@ -538,16 +551,26 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 						int i = 0;
 						clearTableOrderList();
 						for (HoaDonDatPhong hd : dsHoaDonTenKH) {
+							KhuyenMai km= hd.getKhuyenMai();
+							String ma="";
+							float phantram;
+							if(km != null) {
+								ma=km.getMaKhuyenMai();
+								phantram=khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai());
+		                    }
+							else {
+								ma="";
+								phantram= 0;
+							}
 							i++;
 							Object[] row = { i, hd.getMaHoaDon(),
 									khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getHoTen(),
 									hd.getNhanVien().getMaNhanVien(), hd.getNgayLapHoaDon(),
 									hd.isTrangThai() ? "Đã thanh toán" : "Chưa thanh toán",
-									hd.getKhuyenMai().getMaKhuyenMai(),
-									hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+									ma,
+									df.format(hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 											chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
-											khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(
-													hd.getKhuyenMai().getMaKhuyenMai())) };
+											phantram) )};
 							modelOrderList.addRow(row);
 						}
 					} else
@@ -559,16 +582,26 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 						int i = 0;
 						clearTableOrderList();
 						for (HoaDonDatPhong hd : dsHoaDonMaNV) {
+							KhuyenMai km= hd.getKhuyenMai();
+							float phantram;
+							String ma="";
+							if(km != null) {
+								ma=km.getMaKhuyenMai();
+								phantram=khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai());
+		                    }
+							else {
+								ma="";
+								phantram= 0;
+							}
 							i++;
 							Object[] row = { i, hd.getMaHoaDon(),
 									khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getHoTen(),
 									hd.getNhanVien().getMaNhanVien(), hd.getNgayLapHoaDon(),
 									hd.isTrangThai() ? "Đã thanh toán" : "Chưa thanh toán",
-									hd.getKhuyenMai().getMaKhuyenMai(),
-									hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+									ma,
+									df.format(hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 											chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
-											khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(
-													hd.getKhuyenMai().getMaKhuyenMai())) };
+											phantram) )};
 							modelOrderList.addRow(row);
 						}
 					} else
@@ -580,16 +613,26 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 						int i = 0;
 						clearTableOrderList();
 						for (HoaDonDatPhong hd : dsHoaDonNgayLap) {
+							KhuyenMai km= hd.getKhuyenMai();
+							String ma="";
+							float phantram;
+							if(km != null) {
+								ma=km.getMaKhuyenMai();
+								phantram=khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(hd.getKhuyenMai().getMaKhuyenMai());
+		                    }
+							else {
+								ma="";
+								phantram= 0;
+							}
 							i++;
 							Object[] row = { i, hd.getMaHoaDon(),
 									khachhang_dao.getKhachHangTheoMaKH(hd.getKhachHang().getMaKhachHang()).getHoTen(),
 									hd.getNhanVien().getMaNhanVien(), hd.getNgayLapHoaDon(),
 									hd.isTrangThai() ? "Đã thanh toán" : "Chưa thanh toán",
-									hd.getKhuyenMai().getMaKhuyenMai(),
-									hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
+									ma,
+									df.format(	hd.tinhTongTienThanhToan(p_Service.tinhTongTienPhongTheoMaHoaDon(hd.getMaHoaDon()),
 											chitietdichvu_dao.tinhTongTienDVTheoMaHoaDon(hd.getMaHoaDon()),
-											khuyenmai_dao.getPhanTramKhuyenMaiTheoMaKM(
-													hd.getKhuyenMai().getMaKhuyenMai())) };
+											phantram)) };
 							modelOrderList.addRow(row);
 						}
 					} else
@@ -696,36 +739,64 @@ public class GD_HoaDon extends JPanel implements ActionListener, MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		int row = tableOrderList.getSelectedRow();
-		if (row >= 0) {
-			txtMaHD.setText(modelOrderList.getValueAt(row, 1).toString());
-			txtTenKH.setText(modelOrderList.getValueAt(row, 2).toString());
-			txtMaNV.setText(modelOrderList.getValueAt(row, 3).toString());
-			try {
-				Object dateValue = modelOrderList.getValueAt(row, 4);
-				LocalDateTime dateTime;
-				if (dateValue instanceof java.sql.Timestamp) {
-					dateTime = ((java.sql.Timestamp) dateValue).toLocalDateTime();
-				} else if (dateValue instanceof java.sql.Date) {
-					dateTime = ((java.sql.Date) dateValue).toLocalDate().atStartOfDay();
-				} else {
-					throw new IllegalArgumentException("Unsupported date type");
-				}
-				dateTimePicker.setDateTimeStrict(dateTime);
-			} catch (Exception e2) {
-                e2.printStackTrace();
-            }
-			cbTrangThai.setSelectedItem(modelOrderList.getValueAt(row, 5));
-			txtKhuyenMai.setText(modelOrderList.getValueAt(row, 6).toString());
-			txtTongTien.setText(modelOrderList.getValueAt(row, 7).toString());
-		}
-		clearTableOrderDetail();
-		clearTableServiceDetail();
-		try {
-			loadOrderDetailData(modelOrderList.getValueAt(row, 1).toString());
-		} catch (RemoteException e1) {
-			e1.printStackTrace();
-		}
+	    int row = tableOrderList.getSelectedRow();
+	    if (row >= 0) {
+	        Object maHD = modelOrderList.getValueAt(row, 1);
+	        if (maHD != null) {
+	            txtMaHD.setText(maHD.toString());
+	        }
+
+	        Object tenKH = modelOrderList.getValueAt(row, 2);
+	        if (tenKH != null) {
+	            txtTenKH.setText(tenKH.toString());
+	        }
+
+	        Object maNV = modelOrderList.getValueAt(row, 3);
+	        if (maNV != null) {
+	            txtMaNV.setText(maNV.toString());
+	        }
+
+	        try {
+	            Object dateValue = modelOrderList.getValueAt(row, 4);
+	            LocalDateTime dateTime;
+	            if (dateValue instanceof java.sql.Timestamp) {
+	                dateTime = ((java.sql.Timestamp) dateValue).toLocalDateTime();
+	            } else if (dateValue instanceof java.sql.Date) {
+	                dateTime = ((java.sql.Date) dateValue).toLocalDate().atStartOfDay();
+	            } else {
+	                throw new IllegalArgumentException("Unsupported date type");
+	            }
+	            dateTimePicker.setDateTimeStrict(dateTime);
+	        } catch (Exception e2) {
+	            e2.printStackTrace();
+	        }
+
+	        Object trangThai = modelOrderList.getValueAt(row, 5);
+	        if (trangThai != null) {
+	            cbTrangThai.setSelectedItem(trangThai);
+	        }
+
+	        Object khuyenMai = modelOrderList.getValueAt(row, 6);
+	        if (khuyenMai != null) {
+	            txtKhuyenMai.setText(khuyenMai.toString());
+	        }
+
+	        Object tongTien = modelOrderList.getValueAt(row, 7);
+	        if (tongTien != null) {
+	            txtTongTien.setText(tongTien.toString());
+	        }
+
+	        clearTableOrderDetail();
+	        clearTableServiceDetail();
+
+	        if (maHD != null) {
+	            try {
+	                loadOrderDetailData(maHD.toString());
+	            } catch (RemoteException e1) {
+	                e1.printStackTrace();
+	            }
+	        }
+	    }
 	}
 
 	@Override

@@ -21,8 +21,9 @@ import jakarta.persistence.OneToMany;
 
 		@NamedNativeQuery(name = "KhuyenMai.getKhuyenMaiTheoNgayBatDauKM", query = "SELECT maKhuyenMai, tenKhuyenMai, ngayBatDau, ngayKetThuc, phanTramKhuyenMai FROM KhuyenMai WHERE ngayBatDau = :ngayBatDau", resultClass = KhuyenMai.class),
 
-		@NamedNativeQuery(name = "KhuyenMai.getPhanTramKhuyenMaiTheoMaKM", query = "SELECT phanTramKhuyenMai FROM KhuyenMai WHERE maKhuyenMai = :maKM",resultClass =  Float.class)
-
+		@NamedNativeQuery(name = "KhuyenMai.getPhanTramKhuyenMaiTheoMaKM", query = "SELECT phanTramKhuyenMai FROM KhuyenMai WHERE maKhuyenMai = :maKM",resultClass =  Float.class),
+		@NamedNativeQuery(name = "KhuyenMai.getKhuyenMaiTheoMaKhuyenMai", query = "SELECT maKhuyenMai, tenKhuyenMai, ngayBatDau, ngayKetThuc, phanTramKhuyenMai FROM KhuyenMai WHERE maKhuyenMai = :maKhuyenMai", resultClass = KhuyenMai.class),
+		
 })
 public class KhuyenMai implements Serializable {
 

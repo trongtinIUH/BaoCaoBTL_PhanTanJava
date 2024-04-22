@@ -3,6 +3,7 @@ package dao.impl;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
 
 import dao.KhuyenMaiServices;
 import entity.KhuyenMai;
@@ -52,16 +53,17 @@ public class KhuyenMaiImpl extends UnicastRemoteObject implements KhuyenMaiServi
 		query.setParameter("ngayBatDau", ngayBatDau);
 		return query.getSingleResult();
 	}
-
+	
 	@Override
 	public float getPhanTramKhuyenMaiTheoMaKM(String maKM) throws RemoteException {
-		if (maKM == null) {
-			return 0.0f;
-		}else {
-			TypedQuery<Float> query = em.createNamedQuery("KhuyenMai.getPhanTramKhuyenMaiTheoMaKM", Float.class);
-			query.setParameter("maKM", maKM);
-			return query.getSingleResult();
-		}
+	    if (maKM == null) {
+	        return 0.0f;
+	    } else {
+	        TypedQuery<Float> query = em.createNamedQuery("KhuyenMai.getPhanTramKhuyenMaiTheoMaKM", Float.class);
+	        query.setParameter("maKM", maKM);
+	        List<Float> results = query.getResultList();
+	        return results.isEmpty() ? 0.0f : results.get(0);
+	    }
 	}
 
 	@Override
