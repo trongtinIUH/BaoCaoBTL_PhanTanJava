@@ -380,8 +380,10 @@ public class GD_DanhSachPhong extends JPanel implements ActionListener, MouseLis
 					trThai = "Đang sửa chữa";
 				else if (p.getTrangThai().toString().contentEquals("Trong"))
 					trThai = "Trống";
-				else 
+				else if(p.getTrangThai().toString().contentEquals("Cho"))
 					trThai = "Chờ";
+				else 
+					trThai = "Đã xóa";
 				if(loaiPhong != null) {
 				Object[] row = { i, p.getMaPhong(), loaiPhong.getTenLoaiPhong(), trThai, loaiPhong.getSucChua(),
 						loaiPhong.getDonGiaTheoGio() };

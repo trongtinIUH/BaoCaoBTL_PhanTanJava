@@ -357,6 +357,6 @@ GRANT DELETE ON TempPhongBiChuyen TO role_NV
 GRANT DELETE ON ChiTietDichVu TO role_NV;
 
 
-select * from NhanVien
+--select * from NhanVien
 
-select * from TaiKhoan where maTaiKhoan = '2110003'
+--select * from TaiKhoan where maTaiKhoan = '2110003'

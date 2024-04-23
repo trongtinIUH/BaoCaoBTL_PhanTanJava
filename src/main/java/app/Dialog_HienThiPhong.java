@@ -25,6 +25,7 @@ import javax.swing.JComponent;
 import dao.impl.LoaiPhongImpl;
 import dao.impl.PhongImpl;
 import dao.impl.TempDatPhongImpl;
+import entity.Enum_TrangThai;
 import entity.LoaiPhong;
 import entity.Phong;
 import entity.TempDatPhong;
@@ -130,8 +131,17 @@ public class Dialog_HienThiPhong extends JDialog implements ActionListener {
 		lblSucChua_1.setFont(new Font("Arial", Font.BOLD, 15));
 		lblSucChua_1.setBounds(130, 90, 120, 30);
 		getContentPane().add(lblSucChua_1);
-
-		lbltrangthai_1 = new JLabel(p.getTrangThai() + "");
+		
+		String trangThai = "";
+		if(p.getTrangThai().equals(Enum_TrangThai.Trong))
+			trangThai = "Trống";
+		else if (p.getTrangThai().equals(Enum_TrangThai.Dang_su_dung))
+			trangThai = "Đang dùng";
+		else if (p.getTrangThai().equals(Enum_TrangThai.Dang_sua_chua))
+			trangThai = "Bảo trì";
+		else if (p.getTrangThai().equals(Enum_TrangThai.Da_xoa))
+			trangThai = "Đã xóa";
+		lbltrangthai_1 = new JLabel(trangThai);
 		lbltrangthai_1.setFont(new Font("Arial", Font.BOLD, 15));
 		lbltrangthai_1.setBounds(130, 130, 120, 30);
 		getContentPane().add(lbltrangthai_1);

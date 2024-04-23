@@ -21,7 +21,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -44,7 +43,6 @@ import entity.PhieuDatPhong;
 import entity.Phong;
 import entity.TempDatPhong;
 import entity.TempThanhToan;
-import jakarta.persistence.Persistence;
 import dao.KhachHangServices;
 import dao.LoaiPhongServices;
 import dao.PhieuDatPhongService;
@@ -81,7 +79,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 	private Dialog_PhongCho dialog_PhongCho;
 	private Dialog_DatPhongCho dialog_DatPhongCho;
 	private int sizeDSPhong;
-	PhongService p_Service;
+	private PhongService p_Service;
 	LoaiPhongServices lp_dao = new LoaiPhongImpl();
 	private JButton btnPhong;
 	ArrayList<JButton> btnPhongList = new ArrayList<>();
@@ -316,8 +314,9 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		panel_ChuaPhong.setBackground(new Color(244, 242, 255, 255));
 		outerPanel.add(panel_ChuaPhong);
 		panel_ChuaPhong.setLayout(null);
-
-		loadData();
+		
+		List<Phong> dsPhong = getCurrentListRoom();
+		loadData(dsPhong);
 		setEnabledBtnDatPhong();
 		// Tạo một Timer để gọi lại loadRoomList() mỗi 5000 milliseconds (5 giây)
 		sizeDSTmp = tmp_dao.getAllTemp().size();
@@ -327,6 +326,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				List<Phong> dsPhong = getCurrentListRoom();
 				try {
 					if (sizeDSTmp != tmp_dao.getAllTemp().size()) {
 						sizeDSTmp = tmp_dao.getAllTemp().size();
@@ -354,28 +354,28 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 						sizeDSPhong = p_Service.getallPhongs().size();
 						outerPanel.setPreferredSize(new Dimension(1040, calculateSize()));
 						panel_ChuaPhong.setBounds(0, 0, 1059, calculateSize());
-						loadData();
+						loadData(dsPhong);
 					}
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 				}
 
 				if (DataManager.isChuyenPhong()) {
-					loadData();
+					loadData(dsPhong);
 					DataManager.setChuyenPhong(false);
 				}
 
 				if (DataManager.isDatPhongCho()) {
-					loadData();
+					loadData(dsPhong);
 					DataManager.setDatPhongCho(false);
 				}
 
 				if (DataManager.isThanhToan()) {
-					loadData();
+					loadData(dsPhong);
 					DataManager.setThanhToan(false);
 				}
 				if (DataManager.isDatPhong()) {
-					loadData();
+					loadData(dsPhong);
 					DataManager.setDatPhong(false);
 				}
 				try {
@@ -640,7 +640,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		btnBackPhongCho.addActionListener(this);
 	}
 
-	private void loadData() {
+	public void loadData(List<Phong> listRoom) {
 		// chỉnh sửa kích thước các icon thường______________________
 		int i = 0;
 		int x = 40;
@@ -657,11 +657,8 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		panel_ChuaPhong.removeAll();
 		panel_ChuaPhong.revalidate();
 		panel_ChuaPhong.repaint();
-		System.out.println("========================================");
 		try {
-			for (Phong p : p_Service.getallPhongs()) {
-				
-				System.out.println("Trạng thái: " + p.getTrangThai());
+			for (Phong p : listRoom) {
 				if (i % 5 == 0) {
 					y += 130;
 					x = 40;
@@ -696,7 +693,9 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				}
 
 				btnPhong.setVerticalTextPosition(SwingConstants.BOTTOM);
-				panel_ChuaPhong.add(btnPhong);
+				if(!p.getTrangThai().equals(Enum_TrangThai.Da_xoa)) {
+					panel_ChuaPhong.add(btnPhong);
+				}
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -756,6 +755,18 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		} else {
 			return 540 + (((i - 1) / 5) - 3) * 130;
 		}
+	}
+	
+	private List<Phong> getCurrentListRoom() {
+		try {
+			PhongService phongService = new PhongImpl();
+			return phongService.getallPhongs();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 
 	private void loadTimKiem(List<Phong> DSPhong) throws RemoteException {
@@ -909,7 +920,8 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				}
 			}
 		} else {
-			loadData();
+			List<Phong> dsPhong = getCurrentListRoom();
+			loadData(dsPhong);
 			btnTimKiem.setText("Tìm kiếm");
 		}
 	}
@@ -1065,12 +1077,15 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				}
 			}
 		}
+		
+		
 		if (o.equals(btnLamMoi)) {
 			comboBox_LoaiPhong.setSelectedIndex(0);
 			comboBox_TrangThai.setSelectedIndex(0);
 			outerPanel.setPreferredSize(new Dimension(1040, calculateSize()));
 			panel_ChuaPhong.setBounds(0, 0, 1059, calculateSize());
-			loadData();
+			List<Phong> listRoom = getCurrentListRoom();
+			loadData(listRoom);
 			txtSoNguoi.setText("");
 			txtMaPhong.setText("");
 		}
