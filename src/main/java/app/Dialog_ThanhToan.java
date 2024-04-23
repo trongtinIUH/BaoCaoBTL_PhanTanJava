@@ -1103,7 +1103,12 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	public boolean kiemTra2() throws RemoteException {
 		String maKhuyenMai = txtMaGiamGia.getText().trim();
 		KhuyenMai km = null;
-		km = km_dao.getKhuyenMaiTheoMaKhuyenMai(maKhuyenMai);
+		try {
+			km = km_dao.getKhuyenMaiTheoMaKhuyenMai(maKhuyenMai);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return true;
+		}
 		if (km != null) {
 			DateFormat df_KM = new SimpleDateFormat("yyyyMMddHHmm");
 			date_HT = new Date();
@@ -1122,7 +1127,8 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 					return true;
 				}
 			}
-		} else if (maKhuyenMai.equals("")) {
+		}
+		else if (maKhuyenMai.equals("")) {
 			return true;
 		} else {
 			JOptionPane.showMessageDialog(null, "Không tồn tại mã khuyến mãi bạn vừa nhập!!");

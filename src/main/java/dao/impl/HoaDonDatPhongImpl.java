@@ -139,7 +139,6 @@ public class HoaDonDatPhongImpl extends UnicastRemoteObject implements HoaDonDat
 	        query.setParameter("maNV", hd.getNhanVien().getMaNhanVien());
 	        query.setParameter("ngayLap", hd.getNgayLapHoaDon());
 	        query.setParameter("status", hd.isTrangThai());
-	        query.setParameter("maKM", hd.getKhuyenMai().getMaKhuyenMai());
 	        query.setParameter("tienKD", hd.getTienKhachDua());
 	        query.setParameter("maHD", hd.getMaHoaDon());
 	        int updatedRows = query.executeUpdate();

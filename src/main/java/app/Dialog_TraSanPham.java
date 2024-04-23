@@ -132,7 +132,7 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 				thanhToan.loadData();
 				thanhToan.clear_Tien();
 				thanhToan.load_Tien();
-				JOptionPane.showMessageDialog(this, "Trả thành công!!!");
+				JOptionPane.showMessageDialog(this, "Trả thành công!");
 				setVisible(false);
 			}
 		}else if(Integer.parseInt(txtSLTra.getText()) == Integer.parseInt(txtSLDat.getText())){

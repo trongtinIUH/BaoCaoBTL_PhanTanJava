@@ -254,7 +254,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		Image originalImage_phongtrong = phongtrong.getImage();
 		Image resizedImage_phongtrong = originalImage_phongtrong.getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
 		resizedIcon_phongtrong = new ImageIcon(resizedImage_phongtrong);
-//		panel_ChuaPhong.setLayout(null);
+		//		panel_ChuaPhong.setLayout(null);
 		ImageIcon phongsd = new ImageIcon("icon\\phongsd.png");
 		Image originalImage_phongsd = phongsd.getImage();
 		Image resizedImage_phongsd = originalImage_phongsd.getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
@@ -401,7 +401,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 			}
 		});
 
-//		Bắt đầu Timer
+		//		Bắt đầu Timer
 		timer.start();
 
 		//
@@ -414,20 +414,11 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				List<PhieuDatPhong> dsMaPhongDatTruoc = new ArrayList<PhieuDatPhong>();
 				try {
 					dsMaPhongDatTruoc = pdp_Service.getMaPhongDatTruoc();
-//				    if (dsMaPhongDatTruoc == null || dsMaPhongDatTruoc.isEmpty()) {
-//				        System.out.println("Danh sách phòng đặt trước rỗng hoặc null.");
-//				    } else {
-//				        // Xử lý khi danh sách có phòng đặt trước
-//				        // Ví dụ: duyệt danh sách và thực hiện các thao tác khác
-//				        for (PhieuDatPhong maPhong : dsMaPhongDatTruoc) {
-//				            System.out.println("Phòng đặt trước: " + maPhong);
-//				        }
-//				    }
 				} catch (RemoteException e1) {
-//				    e1.printStackTrace();
-					// Xử lý các ngoại lệ khi gọi dịch vụ không thành công
+					// TODO Auto-generated catch block
+					//						e1.printStackTrace();
 				}
-				if (dsMaPhongDatTruoc.size() != 0) {
+				if (dsMaPhongDatTruoc != null && !dsMaPhongDatTruoc.isEmpty()) {
 					for (PhieuDatPhong pdp : dsMaPhongDatTruoc) {
 						Phong p = null;
 						try {
@@ -475,14 +466,14 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 							if (gioHT == gioNhanPhong && phutHT < phutNhanPhong && (phutNhanPhong - phutHT == 20)) {
 								JOptionPane.showMessageDialog(null,
 										"Phòng " + pdp.getPhong().getMaPhong()
-												+ " Còn 20p nữa đến thời gian nhận phòng vui lòng liên hệ KH:"
-												+ kh.getSoDienThoai());
+										+ " Còn 20p nữa đến thời gian nhận phòng vui lòng liên hệ KH:"
+										+ kh.getSoDienThoai());
 							}
 							if (gioHT < gioNhanPhong && phutHT > phutNhanPhong && (phutNhanPhong - phutHT + 60) == 20) {
 								JOptionPane.showMessageDialog(null,
 										"Phòng " + pdp.getPhong().getMaPhong()
-												+ " Còn 20p nữa đến thời gian nhận phòng vui lòng liên hệ KH:"
-												+ kh.getSoDienThoai());
+										+ " Còn 20p nữa đến thời gian nhận phòng vui lòng liên hệ KH:"
+										+ kh.getSoDienThoai());
 							}
 							if (gioHT == gioNhanPhong && phutHT == phutNhanPhong) {
 								JOptionPane.showMessageDialog(null, "Phòng " + pdp.getPhong().getMaPhong()
@@ -500,6 +491,10 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 							}
 						}
 					}
+				} else {
+
+					JOptionPane.showMessageDialog(null, "Không có phòng đặt trước hiện có.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
 				}
 			}
 		});
@@ -660,7 +655,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		System.out.println("========================================");
 		try {
 			for (Phong p : p_Service.getallPhongs()) {
-				
+
 				System.out.println("Trạng thái: " + p.getTrangThai());
 				if (i % 5 == 0) {
 					y += 130;

@@ -61,8 +61,14 @@ public class ChiTietDichVu_dao_impl extends UnicastRemoteObject implements ChiTi
 
 	@Override
 	public double tinhTongTienDVTheoMaHoaDon(String maHD) {
+		double n = 0;
 		String jpql = "SELECT SUM(c.gia * c.soLuong) FROM ChiTietDichVu c WHERE c.hoaDon.maHoaDon = :maHD GROUP BY c.hoaDon.maHoaDon";
-		return em.createQuery(jpql, Double.class).setParameter("maHD", maHD).getSingleResult();
+		try {
+			return em.createQuery(jpql, Double.class).setParameter("maHD", maHD).getSingleResult();
+		} catch (Exception e) {
+			// TODO: handle exception
+			return n;
+		}
 	}
 
 	@Override
