@@ -558,6 +558,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 		tongTienDichVu = 0;
 		tongSoGioHat = 0;
 		tongSoPhutHat = 0;
+		ctdv_dao = new ChiTietDichVu_dao_impl();
 		
 		if(tempTT_dao.getAllTemp().size() == 0) {
 			for (ChiTietHoaDon cthd : cthd_dao.getChiTietHoaDonTheoMaHD(lbl_MaHoaDon_1.getText().trim())) {
@@ -951,23 +952,25 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 			if (kiemTra2()) {
 				if (JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn thanh toán hóa đơn này", "Thông báo",
 						JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
 					// Update Phòng
 					for (int row = 0; row < tblThanhToan.getRowCount(); row++) {
 						String maPhong_Item = model.getValueAt(row, 1).toString().replaceAll(" (Bị chuyển)", "");
-						Enum_TrangThai trangThaiPhong = Enum_TrangThai.Trong;
+						if(!maPhong_Item.equals("")) {
+							Enum_TrangThai trangThaiPhong = Enum_TrangThai.Trong;
 
-						PhieuDatPhong pdp = null;
-						try {
-							pdp = pdp_Service.getPhieuDatPhongPhongCho(maPhong_Item);
-						} catch (RemoteException e) {
-							e.printStackTrace();
+							PhieuDatPhong pdp = null;
+							try {
+								pdp = pdp_Service.getPhieuDatPhongPhongCho(maPhong_Item);
+							} catch (RemoteException e) {
+								e.printStackTrace();
+							}
+							if (pdp != null)
+								trangThaiPhong = Enum_TrangThai.Cho;
+
+							Phong phong = new Phong(maPhong_Item, trangThaiPhong);
+//							System.out.println(phong);
+							p_Service.updatePhong(phong, maPhong_Item);
 						}
-						if (pdp != null)
-							trangThaiPhong = Enum_TrangThai.Cho;
-
-						Phong phong = new Phong(maPhong_Item, trangThaiPhong);
-						p_Service.updatePhong(phong, maPhong_Item);
 					}
 
 					// Update lại hóa đơn
@@ -989,12 +992,8 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 						tienKhachDua = Double.parseDouble(txtTienNhan.getText().trim()) + hd_dao.getHoaDonDatPhongTheoMaHD(maHD).getTienKhachDua();
 
 					if (txtMaGiamGia.getText().trim().equals("")) {
-						@SuppressWarnings("deprecation")
-						java.sql.Date ngayCoDinh = new java.sql.Date(2020, 10, 10);
-						km = new KhuyenMai("NULL", "NULL", ngayCoDinh, ngayCoDinh, 0);
-						km_dao.addKhuyenMai(km);
 						HoaDonDatPhong hd_update1 = new HoaDonDatPhong(maHD, kh_update, nv, ngayLap,
-								trangThai_ThanhToan, km, tienKhachDua);
+								trangThai_ThanhToan, null, tienKhachDua);
 						hd_dao.updateHoaDon2(hd_update1);
 
 					} else {
@@ -1072,7 +1071,7 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 					for(int row =0; row < tblThanhToan.getRowCount(); row++) {
 						if(model.getValueAt(row, 1).toString().contains(" (Bị chuyển)")) {
 							String maPhongBiChuyen = model.getValueAt(row, 1).toString().substring(0,4);
-							System.out.println(maPhongBiChuyen);
+							
 							temChuyen_dao.deleteTempPhongBiChuyen(maPhongBiChuyen);
 						}
 					}

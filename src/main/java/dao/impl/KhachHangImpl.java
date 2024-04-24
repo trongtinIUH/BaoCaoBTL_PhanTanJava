@@ -134,10 +134,17 @@ public class KhachHangImpl extends UnicastRemoteObject implements KhachHangServi
     }
 
 	@Override
-    public KhachHang getKhachHangTheoSDT(String soDienThoai) throws RemoteException{
-        TypedQuery<KhachHang> query = em.createNamedQuery("KhachHang.getKhachHangTheoSDT", KhachHang.class);
-        query.setParameter("sdt", soDienThoai);
-        return query.getSingleResult();
-    }
+	public KhachHang getKhachHangTheoSDT(String soDienThoai) throws RemoteException {
+	    TypedQuery<KhachHang> query = em.createNamedQuery("KhachHang.getKhachHangTheoSDT", KhachHang.class);
+	    query.setParameter("sdt", soDienThoai);
+	    
+	    List<KhachHang> results = null;
+	    try {
+	    	results = query.getResultList();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	    return results.isEmpty() ? null : results.get(0);
+	}
 		
 }

@@ -2,6 +2,7 @@ package app;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -418,41 +419,29 @@ public class Dialog_PhongCho extends JDialog implements ActionListener {
 					// Khách hàng đến đúng giờ
 					TempDatPhong tmp = new TempDatPhong(p.getMaPhong(), Integer.parseInt(lbl_SoNguoi_1.getText()));
 					try {
-						tmp_dao.addTemp(tmp);
-					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						try {
-							dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
-									Integer.parseInt(lbl_SoNguoi_1.getText()), trangChu);
-						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					} catch (NumberFormatException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					try {
-						tmp_dao.addTemp(tmp);
-					} catch (RemoteException e12) {
-						// TODO Auto-generated catch block
-						e12.printStackTrace();
-					}
-					try {
 						dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
 								Integer.parseInt(lbl_SoNguoi_1.getText()), trangChu);
-					} catch (NumberFormatException | RemoteException e13) {
+					} catch (NumberFormatException | RemoteException e1) {
 						// TODO Auto-generated catch block
-						e13.printStackTrace();
+						e1.printStackTrace();
+					}
+					try {
+						boolean result = tmp_dao.addTemp(tmp);
+						if(!result) {
+							JOptionPane.showMessageDialog(this, "Phòng đã được thêm vào danh sách đặt!");
+							dispose();
+							dialog_DatPhongTrong_2.setVisible(true);
+							return;
+						}
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+//						e1.printStackTrace();
 					}
 					dispose();
 					JOptionPane.showMessageDialog(this,
 							"Phòng " + p.getMaPhong() + " được thêm vào danh sách đặt phòng thành công.");
 					DataManager.setSoDienThoaiKHDat("");
 					dialog_DatPhongTrong_2.setVisible(true);
-				}
 				} else if (tongsophut_np - tongsophut_ht < -30) {
 					// Khách hàng đến trễ hơn giờ nhận phòng 30 phút
 					// Thực hiện công việc B

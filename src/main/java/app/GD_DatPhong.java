@@ -415,9 +415,8 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				try {
 					dsMaPhongDatTruoc = pdp_Service.getMaPhongDatTruoc();
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					//						e1.printStackTrace();
 				}
+			
 				if (dsMaPhongDatTruoc != null && !dsMaPhongDatTruoc.isEmpty()) {
 					for (PhieuDatPhong pdp : dsMaPhongDatTruoc) {
 						Phong p = null;
@@ -492,9 +491,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 						}
 					}
 				} else {
-
-					JOptionPane.showMessageDialog(null, "Không có phòng đặt trước hiện có.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-
+					System.out.println("Không có phòng nào đặt trước");
 				}
 			}
 		});
@@ -533,7 +530,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		Image resizedImage_phongsd4 = originalImage_phongsd4.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon resizedIcon_phongsd4 = new ImageIcon(resizedImage_phongsd4);
 
-		ImageIcon phongcho4 = new ImageIcon("Dicon\\phongcho.png");
+		ImageIcon phongcho4 = new ImageIcon("icon\\phongcho.png");
 		Image originalImage_phongcho4 = phongcho4.getImage();
 		Image resizedImage_phongcho4 = originalImage_phongcho4.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon resizedIcon_phongcho4 = new ImageIcon(resizedImage_phongcho4);
@@ -1018,6 +1015,12 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		}
 		if (o instanceof JButton) {
 			JButton clickedButton = (JButton) o;
+			try {
+				p_Service = new PhongImpl();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			for (JButton btn : btnPhongList) {
 				if (btn == clickedButton) {
 					String maPhong = clickedButton.getText().replace("Phòng ", "");

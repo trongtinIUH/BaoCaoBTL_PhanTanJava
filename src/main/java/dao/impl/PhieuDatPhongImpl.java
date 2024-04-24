@@ -77,13 +77,14 @@ public class PhieuDatPhongImpl extends UnicastRemoteObject implements PhieuDatPh
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PhieuDatPhong> getMaPhongDatTruoc() throws RemoteException {
-		 List<PhieuDatPhong> result = new ArrayList<>();
-		    try {
-		        result = em.createNativeQuery("PhieuDatPhong.getMaPhongDatTruoc", PhieuDatPhong.class).getResultList();
-		    } catch (Exception e) {
-		        return null;
-		    }
-		    return result;
+	    List<PhieuDatPhong> result = new ArrayList<>();
+	    try {
+	        result = em.createNativeQuery("PhieuDatPhong.getMaPhongDatTruoc", PhieuDatPhong.class).getResultList();
+	    } catch (Exception e) {
+	        // Log the exception here, if necessary
+	        // e.printStackTrace();
+	    }
+	    return result;
 	}
 
 	@Override

@@ -69,7 +69,6 @@ public class ChiTietDichVu_dao_impl extends UnicastRemoteObject implements ChiTi
 
 	@Override
 	public boolean addChiTietDV(ChiTietDichVu ctdv) {
-		System.out.println(ctdv);
 	    try {
 	        em.getTransaction().begin(); // Bắt đầu một transaction
 	        em.persist(ctdv); // Lưu đối tượng vào cơ sở dữ liệu

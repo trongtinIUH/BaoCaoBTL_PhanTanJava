@@ -115,7 +115,6 @@ public class Dialog_TraSanPham extends JDialog implements ActionListener {
 				donGia = s.getDonGia() * 1.01;
 			}
 			ChiTietDichVu ctdv = new ChiTietDichVu(hd,ph,sp,soLuong,donGia);
-			
 			try {
 				for(SanPham sanPham : sp_Service.getAllSanPhams()) {
 					if(sanPham.getMaSanPham().equals(s.getMaSanPham())) {
