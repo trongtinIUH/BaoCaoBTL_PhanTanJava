@@ -1,40 +1,40 @@
 package server;
 
-import java.io.DataInputStream;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import app.App_Karaoke4T;
+import dao.DangNhapServices;
+import dao.PhongService;
+import dao.impl.DangNhap_dao_impl;
+import dao.impl.PhongImpl;
 
 
 
 public class Server {
-	public static void main(String[] args) {
-		
-	}
-}
-
-class ClientHandler implements Runnable{
-	private Socket socket;
-
-	public ClientHandler(Socket client) {
-		super();
-		this.socket = client;
-	}
-
-	@Override
-	public void run() {
-		
+	private static final String URL = "rmi://192.168.43.157:2081/";
+	public static void main(String[] args) throws NamingException {
 		try {
-			DataInputStream in = new DataInputStream(socket.getInputStream());
-			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-		     App_Karaoke4T app_Karaoke4T = new App_Karaoke4T();
+			PhongService phongService = new PhongImpl();
+			DangNhapServices dangNhapServices = new DangNhap_dao_impl();
 			
-		}catch (Exception e) {
+			App_Karaoke4T app_Karaoke4T = new App_Karaoke4T();
+			Context context = new InitialContext();
+			LocateRegistry.createRegistry(2081);
+			
+			context.bind(URL + "phongServices", phongService);
+			context.bind(URL + "dangNhapServices", dangNhapServices);
+			context.bind(URL + "app_Karaoke4T", app_Karaoke4T);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+		System.out.println("Server is running...");
+
 	}
-	
 }

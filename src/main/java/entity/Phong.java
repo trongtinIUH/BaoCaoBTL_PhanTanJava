@@ -250,7 +250,9 @@ public class Phong implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("Phong [maPhong=%s, loaiPhong=%s, trangThai=%s]", maPhong, loaiPhong.getTenLoaiPhong(), trangThai);
+		return "Phong [maPhong=" + maPhong + ", trangThai=" + trangThai + "]";
 	}
+	
+	
 
 }
