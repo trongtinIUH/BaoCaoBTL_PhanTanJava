@@ -68,6 +68,7 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
 		return false;
 	}
 
+
 	@Override
 	public boolean deletePhong(String maPhong) throws RemoteException {
 		EntityTransaction tx = em.getTransaction();

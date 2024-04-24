@@ -21,6 +21,7 @@ import entity.Phong;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 public class PhieuDatPhongImpl extends UnicastRemoteObject implements PhieuDatPhongService{
@@ -53,22 +54,21 @@ public class PhieuDatPhongImpl extends UnicastRemoteObject implements PhieuDatPh
 
 	@Override
 	public boolean xoaPhieuDatPhongTheoMa(String maPhong) throws RemoteException {
-		EntityTransaction tx = em.getTransaction();
+	    try {
+	        EntityTransaction tx = em.getTransaction();
+	        tx.begin();
+	        Query query = em.createNativeQuery("DELETE FROM PhieuDatPhong WHERE maPhong = :maPhong")
+	            .setParameter("maPhong", maPhong);
+	        int rows = query.executeUpdate();
+	        tx.commit();
+	        return rows > 0;
+	    } catch (Exception e) {
+	        System.out.println("Error deleting PhieuDatPhong: " + e.getMessage());
+	        e.printStackTrace();
+	    }
 
-		try {
-			tx.begin();
-			PhieuDatPhong ph = em.find(PhieuDatPhong.class, maPhong);
-			em.remove(ph);
-			tx.commit();
-			return true;
-		} catch (Exception e) {
-			tx.rollback();
-			e.printStackTrace();
-		}
-
-		return false;
+	    return false;
 	}
-
 	@Override
 	public List<PhieuDatPhong> getAllsPhieuDatPhong() throws RemoteException {
 		return em.createNamedQuery("PDP.getAllsPhieu", PhieuDatPhong.class).getResultList();

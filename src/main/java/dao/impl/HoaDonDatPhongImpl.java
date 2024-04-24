@@ -53,10 +53,11 @@ public class HoaDonDatPhongImpl extends UnicastRemoteObject implements HoaDonDat
 	}
 
 	@Override
-	public HoaDonDatPhong getHoaDonDatPhongTheoMaHD(String maHoaDon) throws RemoteException{
-	    return em.createNamedQuery("HoaDonDatPhong.getHoaDonDatPhongTheoMaHD", HoaDonDatPhong.class)
+	public HoaDonDatPhong getHoaDonDatPhongTheoMaHD(String maHoaDon) throws RemoteException {
+	    List<HoaDonDatPhong> results = em.createNamedQuery("HoaDonDatPhong.getHoaDonDatPhongTheoMaHD", HoaDonDatPhong.class)
 	             .setParameter("maHoaDon", maHoaDon)
-	             .getSingleResult();
+	             .getResultList();
+	    return results.isEmpty() ? null : results.get(0);
 	}
 
 	@Override

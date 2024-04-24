@@ -338,8 +338,12 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 
 				Enum_TrangThai trangThai = Enum_TrangThai.Cho;
 				Phong phong = new Phong(lbl_Phong.getText(), trangThai);
+				//Phong phong = new Phong();
 				try {
-					p_Service.updatePhong(phong, lbl_Phong.getText());
+					// phong = p_Service.getPhongTheoMaPhong(lbl_Phong.getText());
+				//	 p_Service.updatePhong(phong, lbl_Phong.getText());
+					 //  phong.setTrangThai(trangThai);
+					    p_Service.updatePhong(phong, lbl_Phong.getText());
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
