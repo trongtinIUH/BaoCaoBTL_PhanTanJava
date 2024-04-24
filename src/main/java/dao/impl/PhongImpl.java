@@ -57,9 +57,14 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
 
 		try {
 			tx.begin();
-			em.merge(ph);
-			tx.commit();
-			return true;
+			Phong phongToUpdate = em.find(Phong.class, ph.getMaPhong());
+			// Cập nhật thông tin của phòng
+	        phongToUpdate.setTrangThai(ph.getTrangThai());
+	        phongToUpdate.setMaPhong(maPhongMoi);
+
+	        // Lưu thay đổi vào cơ sở dữ liệu
+	        em.merge(phongToUpdate);
+	        tx.commit();
 		} catch (Exception e) {
 			tx.rollback();
 			e.printStackTrace();

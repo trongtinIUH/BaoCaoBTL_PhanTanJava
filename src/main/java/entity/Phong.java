@@ -17,6 +17,10 @@ import jakarta.persistence.*;
 	@NamedQuery(name = "Phong.getPhongTheoTenLoaiPhong", query = "SELECT p FROM Phong p JOIN p.loaiPhong lp WHERE lp.tenLoaiPhong = :tenLoaiPhong"),
 	@NamedQuery(name = "Phong.getPhongTheoMaCTHD", query = "SELECT p FROM Phong p JOIN p.chiTietHoaDons cthd JOIN cthd.hoaDon hd WHERE hd.maHoaDon = :maHoaDon"),
 	@NamedQuery(name = "Phong.getPhongTKTheoTrangThai",query = "SELECT p FROM Phong p JOIN p.loaiPhong lp WHERE p.trangThai = :trangThai AND lp.sucChua >= :soNguoi"),
+	@NamedQuery(
+		    name = "Phong.updatePhong",
+		    query = "UPDATE Phong p SET p.trangThai = :trangThaiMoi WHERE p.maPhong = :maPhong"
+		),
 	
 	
 	@NamedQuery(name = "Phong.getPhongTKTheoTenLoaiPhong",
