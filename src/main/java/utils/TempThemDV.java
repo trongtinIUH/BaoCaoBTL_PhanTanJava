@@ -1,6 +1,12 @@
 package utils;
 
-public class TempThemDV {
+import java.io.Serializable;
+
+public class TempThemDV implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2116335656180361736L;
 	private String maPhong;
 	private String maSP;
 	private String tenSP;

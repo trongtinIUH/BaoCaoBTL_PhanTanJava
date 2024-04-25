@@ -1,6 +1,12 @@
 package utils;
 
-public class ModelThongKeKH {
+import java.io.Serializable;
+
+public class ModelThongKeKH implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4165332439656711158L;
 	private String maKH;
 	private String tenKH;
 	private String soDienThoai;

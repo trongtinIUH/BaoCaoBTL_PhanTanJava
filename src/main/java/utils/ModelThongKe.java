@@ -1,8 +1,13 @@
 package utils;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class ModelThongKe {
+public class ModelThongKe implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7973746042592971288L;
 	private String month;
 	private String year;
 	private double tongDoanhThu;
