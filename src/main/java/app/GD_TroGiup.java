@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 
 import javax.swing.ImageIcon;
@@ -378,7 +379,7 @@ public class GD_TroGiup extends JPanel implements MouseListener{
         return treeNode;
     }
 	
-	public static void main(String[] args) throws RemoteException {
+	public static void main(String[] args) throws RemoteException, UnknownHostException {
 		 GD_TrangChu trangChuInstance = new GD_TrangChu();
          new GD_TroGiup(trangChuInstance).setVisible(true);
     }
@@ -404,7 +405,7 @@ public class GD_TroGiup extends JPanel implements MouseListener{
 					GD_TrangDangNhap dangNhap = null;
 					try {
 						dangNhap = new GD_TrangDangNhap();
-					} catch (RemoteException e1) {
+					} catch (RemoteException | UnknownHostException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}

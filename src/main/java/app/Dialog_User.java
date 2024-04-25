@@ -4,7 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
+import java.util.Map;
 
 import javax.swing.JDialog;
 import java.awt.Color;
@@ -29,6 +32,7 @@ import dao.NhanVienService;
 import dao.impl.NhanVienImpl;
 import entity.NhanVien;
 
+
 public class Dialog_User extends JDialog implements ActionListener{
 	/**
 	 * 
@@ -51,8 +55,15 @@ public class Dialog_User extends JDialog implements ActionListener{
 	private  DangNhapServices dangNhap_dao;
 	private final String trangthaidangnhap;
     private String hinhanh_url;
+    private InetAddress ip;
 //	private GD_TrangDangNhap gd_dangNhap = new GD_TrangDangNhap(); 
 	public Dialog_User() throws RemoteException {
+		try {
+			ip = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setTitle("User");
 		setSize(400, 300);
 		setLocationRelativeTo(null);
@@ -65,7 +76,14 @@ public class Dialog_User extends JDialog implements ActionListener{
 		    public void windowOpened(WindowEvent e) {
 				NhanVien nv = null;
 				try {
-					nv = nv_dao.findByID(DataManager.getUserName());
+					String mnv = "";
+					Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+					for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+						if (entry.getKey().equals(ip.getHostAddress())) {
+							mnv = entry.getValue();
+						}
+					}
+					nv = nv_dao.findByID(mnv);
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -174,7 +192,7 @@ public class Dialog_User extends JDialog implements ActionListener{
 			GD_TrangDangNhap dangNhap = null;
 			try {
 				dangNhap = new GD_TrangDangNhap();
-			} catch (RemoteException e1) {
+			} catch (RemoteException | UnknownHostException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}

@@ -36,10 +36,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.awt.event.ActionEvent;
 
 public class GD_TrangChu extends JFrame implements ActionListener, WindowListener {
@@ -73,9 +76,12 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 	private JPanel panel_chuaTime;
 	private final TempDatPhongServices tmp_dao ;
 	private Dialog_User dialog_User= new Dialog_User();
+	private InetAddress ip;
+	
 
-	public GD_TrangChu() throws RemoteException {
+	public GD_TrangChu() throws RemoteException, UnknownHostException {
 		super("Karaoke 4T");
+		ip = InetAddress.getLocalHost();
 		tmp_dao = new TempDatPhongImpl();
 		thongKe = new GD_ThongKe();
 		hoaDon	 = new GD_HoaDon();
@@ -85,7 +91,7 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 		initialize();
 	}
 
-	public static void main(String[] args) throws RemoteException{
+	public static void main(String[] args) throws RemoteException, UnknownHostException{
 		GD_TrangChu home = new GD_TrangChu();
 		home.setVisible(true);
 	}
@@ -609,7 +615,7 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 			try {
 				phongService = new PhongImpl();
 				List<Phong> rooms = phongService.getallPhongs();
-				datPhong.loadData(rooms);
+//				datPhong.loadData(rooms);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -678,6 +684,19 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		Map<String, Boolean> loadData = DataManager.getLoadData();
+		Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+		String mnv = "";
+		String ip_tam = "";
+		for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+			if (entry.getKey().equals(ip.getHostAddress())) {
+				mnv = entry.getValue();
+				ip_tam = entry.getKey();
+			}
+		}
+		DataManager.deleteFromMapIP_MSNV(ip.getHostAddress());
+		
+		DataManager.deleteFromMapLoadData(mnv);
 	}
 
 	@Override

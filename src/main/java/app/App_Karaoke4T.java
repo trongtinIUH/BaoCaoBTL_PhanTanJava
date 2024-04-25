@@ -1,6 +1,7 @@
 package app;
 import javax.swing.*;
 import java.awt.*;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 
 public class App_Karaoke4T extends JFrame{
@@ -9,7 +10,7 @@ public class App_Karaoke4T extends JFrame{
     private  JLabel label;
     private  JProgressBar progressBar;
 
-	public App_Karaoke4T() throws RemoteException {
+	public App_Karaoke4T() throws RemoteException, UnknownHostException {
 		label = new JLabel();
         progressBar = new JProgressBar();
      // Tạo một cửa sổ mới
@@ -68,7 +69,7 @@ public class App_Karaoke4T extends JFrame{
 		
     }
 
-    public static void main(String[] args) throws RemoteException {
+    public static void main(String[] args) throws RemoteException, UnknownHostException {
         new App_Karaoke4T();
     }
 }

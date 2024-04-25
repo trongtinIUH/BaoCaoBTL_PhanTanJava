@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -17,6 +19,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.time.LocalDateTime;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -137,8 +140,10 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 	private final KhachHangServices kh_dao;
 	private final DecimalFormat df;
 	private final SanPhamService sp_Service = new SanPhamImpl();
+	private InetAddress ip;
 
-	public Dialog_DatPhongTrong_2(String maPhong, Phong p, LoaiPhong lp, int soNguoi, GD_TrangChu trangChu) throws RemoteException {
+	public Dialog_DatPhongTrong_2(String maPhong, Phong p, LoaiPhong lp, int soNguoi, GD_TrangChu trangChu) throws RemoteException, UnknownHostException {
+		ip = InetAddress.getLocalHost();
 		df = new DecimalFormat("#,###,### VNĐ");
 		// màn
 		// hình******************************************************************************
@@ -560,7 +565,14 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 		} else {
 			if (!lbl_TenKH_1.getText().equals("")) {
 				String customer = lbl_TenKH_1.getText();
-				String employee = DataManager.getUserName();
+				String mnv = "";
+				Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+				for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+					if (entry.getKey().equals(ip.getHostAddress())) {
+						mnv = entry.getValue();
+					}
+				}
+				String employee = mnv;
 				try {
 					nv = nv_dao.findNhanVienToLogin(employee);
 				} catch (RemoteException e) {
@@ -626,7 +638,14 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 						if (!tmpDatPhong.getMaPhong().equals("000") && !(p.getTrangThai() == Enum_TrangThai.Dang_su_dung)) {
 
 							// Thêm phiếu đặt phòng
-							NhanVien nv = new NhanVien(DataManager.getUserName());
+							String mnv = "";
+							Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+							for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+								if (entry.getKey().equals(ip.getHostAddress())) {
+									mnv = entry.getValue();
+								}
+							}
+							NhanVien nv = new NhanVien(mnv);
 							KhachHang kh = new KhachHang();
 							if (checkBox_KH.isSelected())
 								kh = kh_dao.getKhachHangTheoSDT("0000000000");
@@ -714,7 +733,18 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				DataManager.setDatPhong(true);
+				Map<String, Boolean> loadData = DataManager.getLoadData();
+				Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+				String mnv = "";
+				for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+					if (entry.getKey().equals(ip.getHostAddress())) {
+						mnv = entry.getValue();
+					}
+				}
+					
+				for (Map.Entry<String, Boolean> entry : loadData.entrySet()) {
+						entry.setValue(true);
+				}
 				DataManager.setCtdvTempList(null);
 				JOptionPane.showMessageDialog(this, "Đặt phòng thành công, thời gian bắt đầu được tính!");
 				DataManager.setSoDienThoaiKHDat("");

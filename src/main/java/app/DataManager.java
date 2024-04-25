@@ -1,21 +1,21 @@
 package app;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import utils.TempThemDV;
 
 public class DataManager {
 
-	private static String userName;
 	private static String role = "QL";
 	private static String rolePassword = "QLpassword";
-	private static boolean thanhToan;
-	private static boolean datPhong;
 	private static String soDienThoaiKHDat = "";
 	private static String soDienThoaiKHDatCho = "";
 	private static String maPhongDatCho = "";
 	private static String soNguoiHatDatCho = "";
-	private static boolean chuyenPhong, datPhongCho, phongTrong;
+	private static Map<String, Boolean> loadData = new HashMap<>();
+	private static Map<String, String> mapIP_MSNV = new HashMap<>();
 	private static ArrayList<TempThemDV> ctdvTempList;
 	private static double tongTienDV;
 	private static boolean loadDV = false;
@@ -24,7 +24,41 @@ public class DataManager {
 	private static boolean timerChayTB = false;
 	private static boolean loadSDTCho = false;
 	private static String maNhanVien;
+	private static String rmiURL = "rmi://172.20.10.2:7878/";
+	private static String ipServer = "172.20.10.2";
+
+	public static Map<String, String> getMapIP_MSNV() {
+		return mapIP_MSNV;
+	}
 	
+	public static void deleteFromMapLoadData(String key) {
+        if (DataManager.loadData.containsKey(key)) {
+        	DataManager.loadData.remove(key);
+        }
+    }
+	
+	public static void deleteFromMapIP_MSNV(String key) {
+        if (DataManager.mapIP_MSNV.containsKey(key)) {
+        	DataManager.mapIP_MSNV.remove(key);
+        }
+    }
+
+	public static void setMapIP_MSNV(Map<String, String> mapIP_MSNV) {
+		DataManager.mapIP_MSNV = mapIP_MSNV;
+	}
+	
+	public static void addMapIP_MSNV(String key, String value) {
+		DataManager.mapIP_MSNV.put(key, value);
+	}
+
+	public static Map<String, Boolean> getLoadData() {
+		return loadData;
+	}
+
+	public static void setLoadData(Map<String, Boolean> loadData) {
+		DataManager.loadData = loadData;
+	}
+
 	public static String getMaNV() {
 		return maNhanVien;
 	}
@@ -63,14 +97,6 @@ public class DataManager {
 
 	public static void setSoNguoiHatDatCho(String soNguoiHatDatCho) {
 		DataManager.soNguoiHatDatCho = soNguoiHatDatCho;
-	}
-
-	public static boolean isPhongTrong() {
-		return phongTrong;
-	}
-
-	public static void setPhongTrong(boolean phongTrong) {
-		DataManager.phongTrong = phongTrong;
 	}
 
 	public static boolean isTimerChayTB() {
@@ -137,59 +163,23 @@ public class DataManager {
 		DataManager.soDienThoaiKHDat = soDienThoaiKHDat;
 	}
 
-	public static boolean isDatPhong() {
-		return datPhong;
-	}
-
-	public static void setDatPhong(boolean datPhong) {
-		DataManager.datPhong = datPhong;
-	}
-
-	public static boolean isChuyenPhong() {
-		return chuyenPhong;
-	}
-
-	public static void setChuyenPhong(boolean chuyenPhong) {
-		DataManager.chuyenPhong = chuyenPhong;
-	}
-
-	public static boolean isDatPhongCho() {
-		return datPhongCho;
-	}
-
-	public static void setDatPhongCho(boolean datPhongCho) {
-		DataManager.datPhongCho = datPhongCho;
-	}
-
-	public static boolean isChuyenPhongTrong() {
-		return phongTrong;
-	}
-
-	public static void setChuyenPhongTrong(boolean phongTrong) {
-		DataManager.phongTrong = phongTrong;
-	}
-
-	public static String getUserName() {
-		return userName;
-	}
-
-	public static void setUserName(String userName) {
-		DataManager.userName = userName;
-	}
-
-	public static boolean isThanhToan() {
-		return thanhToan;
-	}
-
-	public static void setThanhToan(boolean thanhToan) {
-		DataManager.thanhToan = thanhToan;
-	}
-
 	public static String getMaHD_trongDSThanhToan() {
 		return maHD_trongDSThanhToan;
 	}
 
 	public static void setMaHD_trongDSThanhToan(String maHD_trongDSThanhToan) {
 		DataManager.maHD_trongDSThanhToan = maHD_trongDSThanhToan;
+	}
+
+	public static String getRmiURL() {
+		return rmiURL;
+	}
+
+	public static String getIpServer() {
+		return ipServer;
+	}
+
+	public static void addLoadData(String key, boolean value) {
+		loadData.put(key, value);
 	}
 }

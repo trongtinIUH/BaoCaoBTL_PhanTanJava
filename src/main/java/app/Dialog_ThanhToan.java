@@ -1,6 +1,7 @@
 package app;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -8,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -16,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -167,8 +171,10 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 	@SuppressWarnings("unused")
 	private final String maPh;
 	private final JTextField txtTienGiam;
+	private InetAddress ip;
 
-	public Dialog_ThanhToan(String maPhong) throws RemoteException {
+	public Dialog_ThanhToan(String maPhong) throws RemoteException, UnknownHostException {
+		ip = InetAddress.getLocalHost();
 		this.maPh = maPhong;
 		getContentPane().setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
@@ -193,7 +199,14 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 			public void windowOpened(WindowEvent e) {
 				NhanVien nv = null;
 				try {
-					nv = nv_dao.findByID(DataManager.getUserName());
+					String mnv = "";
+					Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+					for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+						if (entry.getKey().equals(ip.getHostAddress())) {
+							mnv = entry.getValue();
+						}
+					}
+					nv = nv_dao.findByID(mnv);
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 				}
@@ -978,7 +991,13 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 					KhachHang kh = kh_dao.getKhachHangTheoSDT(lbl_sdtKH_1.getText().trim());
 					String maKH = kh.getMaKhachHang();
 					KhachHang kh_update = new KhachHang(maKH);
-					String maNV = DataManager.getUserName();
+					String maNV = "";
+					Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+					for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+						if (entry.getKey().equals(ip.getHostAddress())) {
+							maNV = entry.getValue();
+						}
+					}
 					NhanVien nv = new NhanVien(maNV);
 					java.sql.Date ngayLap = new java.sql.Date(System.currentTimeMillis());
 					Boolean trangThai_ThanhToan = true;
@@ -1078,7 +1097,18 @@ public class Dialog_ThanhToan extends JDialog implements ActionListener {
 
 					JOptionPane.showMessageDialog(this, "Thanh Toán thành công");
 					tempTT_dao.deleteALLTempThanhToan();
-					DataManager.setThanhToan(true);
+					Map<String, Boolean> loadData = DataManager.getLoadData();
+					Map<String, String> mapIP_MSNV1 = DataManager.getMapIP_MSNV();
+					String mnv = "";
+					for (Map.Entry<String, String> entry : mapIP_MSNV1.entrySet()) {
+						if (entry.getKey().equals(ip.getHostAddress())) {
+							mnv = entry.getValue();
+						}
+					}
+ 					
+					for (Map.Entry<String, Boolean> entry : loadData.entrySet()) {
+							entry.setValue(true);
+					}
 					DataManager.setSoDienThoaiKHDat("");
 
 					if (chckbx_XuatHoaDon.isSelected()) {

@@ -6,6 +6,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -119,8 +122,9 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 	private LoaiPhong lp;
 	private Dialog_PhongDangSD dialog_PhongDangSD;
 	private Dialog_TimPDP_DaThanhToan dialog_TimPDP_DaThanhToan;
-
-	public Dialog_TimPhieuDatPhong() throws RemoteException {
+	private InetAddress ip;
+	public Dialog_TimPhieuDatPhong() throws RemoteException, UnknownHostException {
+		ip = InetAddress.getLocalHost();
 		tmp_dao = new TempDatPhongImpl();
 		// kích thước
 		getContentPane().setBackground(Color.WHITE);
@@ -833,7 +837,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 		if (o.equals(btn_XemPhong)) {
 			try {
 				xemPhong();
-			} catch (RemoteException e1) {
+			} catch (RemoteException | UnknownHostException e1) {
 				e1.printStackTrace();
 			}
 		}
@@ -843,7 +847,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 		if (o.equals(btn_NhanPhong)) {
 			try {
 				nhanPhong();
-			} catch (NumberFormatException | RemoteException e1) {
+			} catch (NumberFormatException | RemoteException | UnknownHostException e1) {
 				e1.printStackTrace();
 			}
 			clearTable();
@@ -1003,7 +1007,18 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				if (tb == JOptionPane.YES_OPTION) {
 					JOptionPane.showMessageDialog(this, "Phòng hủy thành công!");
 					pdp_Service.xoaPhieuDatPhongTheoMa(maphong);
-					DataManager.setDatPhongCho(true);
+					Map<String, Boolean> loadData = DataManager.getLoadData();
+					Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+					String mnv = "";
+					for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+						if (entry.getKey().equals(ip.getHostAddress())) {
+							mnv = entry.getValue();
+						}
+					}
+ 					
+					for (Map.Entry<String, Boolean> entry : loadData.entrySet()) {
+							entry.setValue(true);
+					}
 					Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 					Phong phong = new Phong(maphong, trangThai);
 					try {
@@ -1028,7 +1043,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 
 	}
 
-	public void xemPhong() throws RemoteException {
+	public void xemPhong() throws RemoteException, UnknownHostException {
 		int row = tblPhieuDatPhong.getSelectedRow();
 		String maphong = (String) tblPhieuDatPhong.getValueAt(row, 1);
 		String hinhthuc = (String) tblPhieuDatPhong.getValueAt(row, 7);
@@ -1047,7 +1062,18 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
-				DataManager.setDatPhongCho(true);
+				Map<String, Boolean> loadData = DataManager.getLoadData();
+				Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+				String mnv = "";
+				for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+					if (entry.getKey().equals(ip.getHostAddress())) {
+						mnv = entry.getValue();
+					}
+				}
+					
+				for (Map.Entry<String, Boolean> entry : loadData.entrySet()) {
+						entry.setValue(true);
+				}
 				dialog_PhongCho.setModal(true);
 				dialog_PhongCho.setVisible(true);
 			} else if (hinhthuc.equals("Đặt trước") && p.getTrangThai() == Enum_TrangThai.Dang_su_dung) {
@@ -1056,7 +1082,18 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
-				DataManager.setDatPhong(true);
+				Map<String, Boolean> loadData = DataManager.getLoadData();
+				Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+				String mnv = "";
+				for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+					if (entry.getKey().equals(ip.getHostAddress())) {
+						mnv = entry.getValue();
+					}
+				}
+					
+				for (Map.Entry<String, Boolean> entry : loadData.entrySet()) {
+						entry.setValue(true);
+				}
 				dialog_PhongDangSD.setModal(true);
 				dialog_PhongDangSD.setVisible(true);
 			} else if (hinhthuc.equals("Đặt trực tiếp") && trangthai.equals("Chưa TT")
@@ -1066,7 +1103,18 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
-				DataManager.setDatPhong(true);
+				Map<String, Boolean> loadData = DataManager.getLoadData();
+				Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+				String mnv = "";
+				for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+					if (entry.getKey().equals(ip.getHostAddress())) {
+						mnv = entry.getValue();
+					}
+				}
+					
+				for (Map.Entry<String, Boolean> entry : loadData.entrySet()) {
+						entry.setValue(true);
+				}
 				dialog_PhongDangSD.setModal(true);
 				dialog_PhongDangSD.setVisible(true);
 
@@ -1077,7 +1125,18 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 					e.printStackTrace();
 				}
 
-				DataManager.setDatPhong(true);
+				Map<String, Boolean> loadData = DataManager.getLoadData();
+				Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+				String mnv = "";
+				for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+					if (entry.getKey().equals(ip.getHostAddress())) {
+						mnv = entry.getValue();
+					}
+				}
+					
+				for (Map.Entry<String, Boolean> entry : loadData.entrySet()) {
+						entry.setValue(true);
+				}
 				dialog_TimPDP_DaThanhToan.setModal(true);
 				dialog_TimPDP_DaThanhToan.setVisible(true);
 			}
@@ -1086,7 +1145,7 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 			JOptionPane.showMessageDialog(null, "chưa chọn phòng chờ hiển thị!");
 	}
 
-	public void nhanPhong() throws NumberFormatException, RemoteException {
+	public void nhanPhong() throws NumberFormatException, RemoteException, UnknownHostException {
 		int row = tblPhieuDatPhong.getSelectedRow();
 		String maphong = tblPhieuDatPhong.getValueAt(row, 1).toString();
 		String songuoi = tblPhieuDatPhong.getValueAt(row, 6).toString();
@@ -1153,7 +1212,18 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 						// Thực hiện công việc B
 						JOptionPane.showMessageDialog(this, "Phòng hủy do đến trễ quá 30 phút!");
 						pdp_Service.xoaPhieuDatPhongTheoMa(maphong);
-						DataManager.setDatPhongCho(true);
+						Map<String, Boolean> loadData = DataManager.getLoadData();
+						Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+						String mnv = "";
+						for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+							if (entry.getKey().equals(ip.getHostAddress())) {
+								mnv = entry.getValue();
+							}
+						}
+	 					
+						for (Map.Entry<String, Boolean> entry : loadData.entrySet()) {
+								entry.setValue(true);
+						}
 						Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 						Phong phong = new Phong(maphong, trangThai);
 						p_Service.updatePhong(phong, maphong);
@@ -1172,7 +1242,18 @@ public class Dialog_TimPhieuDatPhong extends JDialog implements ActionListener, 
 					// Thực hiện công việc B
 					JOptionPane.showMessageDialog(this, "Phòng hủy do đến trễ quá 30 phút!");
 					pdp_Service.xoaPhieuDatPhongTheoMa(maphong);
-					DataManager.setDatPhongCho(true);
+					Map<String, Boolean> loadData = DataManager.getLoadData();
+					Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+					String mnv = "";
+					for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+						if (entry.getKey().equals(ip.getHostAddress())) {
+							mnv = entry.getValue();
+						}
+					}
+ 					
+					for (Map.Entry<String, Boolean> entry : loadData.entrySet()) {
+							entry.setValue(true);
+					}
 					Enum_TrangThai trangThai = Enum_TrangThai.Trong;
 					Phong phong = new Phong(maphong, trangThai);
 					p_Service.updatePhong(phong, maphong);
