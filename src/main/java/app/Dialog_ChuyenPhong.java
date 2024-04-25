@@ -9,6 +9,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -18,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -108,10 +111,12 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 	private LocalDateTime ngayGioDatPhong;
 	private LocalDateTime ngay_GioNhanPhong;
 	private String loaiPhong;
+	private InetAddress ip;
 	private final JLabel lblPhongHienTai_1;
 	private final TempPhongBiChuyenServices tempChuyen_dao;
 	private  ChiTietDichVuServices ctdv_dao;
-	public Dialog_ChuyenPhong(String maPhong, String soNguoi) throws RemoteException {
+	public Dialog_ChuyenPhong(String maPhong, String soNguoi) throws RemoteException, UnknownHostException {
+		ip = InetAddress.getLocalHost();
 		getContentPane().setBackground(Color.WHITE);
 		setSize(800, 480);
 		setLocationRelativeTo(null);
@@ -132,7 +137,14 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 			public void windowOpened(WindowEvent e) {
 				NhanVien nv = null;
 				try {
-					nv = nv_dao.findByID(DataManager.getUserName());
+					String mnv = "";
+					Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+					for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+						if (entry.getKey().equals(ip.getHostAddress())) {
+							mnv = entry.getValue();
+						}
+					}
+					nv = nv_dao.findByID(mnv);
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -533,8 +545,18 @@ public class Dialog_ChuyenPhong extends JDialog implements ActionListener, Mouse
 					
 					JOptionPane.showMessageDialog(null,
 							"Chuyển sang phòng " + model.getValueAt(tblChuyenPhong.getSelectedRow(), 0) + " thành công!!");
-					DataManager.setChuyenPhong(true);	
-					
+					Map<String, Boolean> loadData = DataManager.getLoadData();
+					Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+					String mnv = "";
+					for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+						if (entry.getKey().equals(ip.getHostAddress())) {
+							mnv = entry.getValue();
+						}
+					}
+ 					
+					for (Map.Entry<String, Boolean> entry : loadData.entrySet()) {
+							entry.setValue(true);
+					}	
 
 					//Chuyển dịch vụ sang phòng mới
 					List<ChiTietDichVu> dsChiTietDV = ctdv_dao.getChiTietDichVuTheoMaHDVaMaPhong(maHD, txtMa.getText());

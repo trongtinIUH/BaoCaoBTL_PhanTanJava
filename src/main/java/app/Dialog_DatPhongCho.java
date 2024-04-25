@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -90,11 +93,13 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 	private final GD_TrangChu trangChu;
 	private LocalDateTime ngayGioDatPhong;
 	private LocalDateTime ngay_GioNhanPhong;
+	private InetAddress ip;
 
-	public Dialog_DatPhongCho(String maPhong, Phong p, LoaiPhong lp, int songuoi, GD_TrangChu trangChu) throws RemoteException{
+	public Dialog_DatPhongCho(String maPhong, Phong p, LoaiPhong lp, int songuoi, GD_TrangChu trangChu) throws RemoteException, UnknownHostException{
 
 		// màn
 		// hình******************************************************************************
+		ip = InetAddress.getLocalHost();
 		this.trangChu = trangChu;
 		getContentPane().setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
@@ -331,7 +336,18 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 			if (khachHang != null && khachHang.getHoTen().equals(lbl_TenKH_1.getText())) {
 				JOptionPane.showMessageDialog(this, "Đặt phòng thành công, thời gian bắt đầu được tính !");
 				DataManager.setSoDienThoaiKHDat("");
-				DataManager.setDatPhongCho(true);
+				Map<String, Boolean> loadData = DataManager.getLoadData();
+				Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+				String mnv = "";
+				for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+					if (entry.getKey().equals(ip.getHostAddress())) {
+						mnv = entry.getValue();
+					}
+				}
+					
+				for (Map.Entry<String, Boolean> entry : loadData.entrySet()) {
+						entry.setValue(true);
+				}
 				DataManager.setSoDienThoaiKHDatCho("");
 				DataManager.setMaPhongDatCho("");
 				DataManager.setSoNguoiHatDatCho("");
@@ -353,7 +369,13 @@ public class Dialog_DatPhongCho extends JDialog implements ActionListener {
 				String maPhieu = generateRandomCode();
 				String maPhong = lbl_Phong.getText();
 				Phong ph1 = new Phong(maPhong);
-				String maNV = DataManager.getUserName();
+				String maNV = "";
+				Map<String, String> mapIP_MSNV1 = DataManager.getMapIP_MSNV();
+				for (Map.Entry<String, String> entry : mapIP_MSNV1.entrySet()) {
+					if (entry.getKey().equals(ip.getHostAddress())) {
+						maNV = entry.getValue();
+					}
+				}
 				NhanVien nv = new NhanVien(maNV);
 				try {
 					kh = khachHang_dao.getKhachHangTheoSDT(sdt);

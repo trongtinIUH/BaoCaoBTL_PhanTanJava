@@ -6,6 +6,7 @@ import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 
 import javax.swing.ImageIcon;
@@ -189,7 +190,7 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 						}
 						
 					}else JOptionPane.showMessageDialog(null, "Số điện thoại không tồn tại!");
-				} catch (HeadlessException | RemoteException e1) {
+				} catch (HeadlessException | RemoteException | UnknownHostException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
@@ -200,7 +201,7 @@ public class GD_QuenMatKhau extends JFrame implements ActionListener {
 			GD_TrangDangNhap dn = null;
 			try {
 				dn = new GD_TrangDangNhap();
-			} catch (RemoteException e1) {
+			} catch (RemoteException | UnknownHostException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}

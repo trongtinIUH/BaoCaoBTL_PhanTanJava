@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -12,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -101,8 +104,15 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 	private final String maP;
 	private final TempPhongBiChuyenServices tempChuyen_dao;
 	private final GD_DatPhong datPhong;
-
+	private InetAddress ip;
+	
 	public Dialog_PhongDangSD(String maPhong, GD_DatPhong datPhong) throws RemoteException{
+		try {
+			ip = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// kích thước giao diện
 		maP = maPhong;
 		this.datPhong = datPhong;
@@ -364,7 +374,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 		if (o.equals(btnChuyenPhong)) {
 			try {
 				dialog_ChuyenPhong = new Dialog_ChuyenPhong(lblPhong_1.getText(), lblSoNguoi_1.getText());
-			} catch (RemoteException e1) {
+			} catch (RemoteException | UnknownHostException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -375,7 +385,14 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 
 		if (o.equals(btnThemDV)) {
 			try {
-				dialog_ThemDichVu = new Dialog_ThemDichVu(lblTenKH_1.getText(), DataManager.getUserName(),
+				String mnv = "";
+				Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+				for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+					if (entry.getKey().equals(ip.getHostAddress())) {
+						mnv = entry.getValue();
+					}
+				}
+				dialog_ThemDichVu = new Dialog_ThemDichVu(lblTenKH_1.getText(), mnv,
 						lblPhong_1.getText());
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
@@ -610,7 +627,7 @@ public class Dialog_PhongDangSD extends JDialog implements ActionListener {
 			try {
 				dialog_DatPhongTrong_2 = new Dialog_DatPhongTrong_2(lblPhong_1.getText(), p, lp,
 						pdp_of_room.getSoNguoiHat(), trangChu);
-			} catch (RemoteException e1) {
+			} catch (RemoteException | UnknownHostException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}

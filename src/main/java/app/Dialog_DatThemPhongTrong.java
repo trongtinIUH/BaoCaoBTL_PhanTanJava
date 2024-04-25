@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -70,7 +73,14 @@ public class Dialog_DatThemPhongTrong extends JDialog implements ActionListener{
 	private final JLabel lbl_Loai_1;
 	private final JTextField txtHoten;
 	private PhongService p_Service ;
+	private InetAddress ip;
 	public Dialog_DatThemPhongTrong(String hoten) {
+		try {
+			ip = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//màn hình******************************************************************************
 		getContentPane().setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
@@ -287,7 +297,14 @@ public class Dialog_DatThemPhongTrong extends JDialog implements ActionListener{
 		if(o.equals(btn_ThemDV)) {
 			
 			try {
-				dialog_ThemDichVu = new Dialog_ThemDichVu(txtHoten.getText(), DataManager.getUserName(), "");
+				String mnv = "";
+				Map<String, String> mapIP_MSNV = DataManager.getMapIP_MSNV();
+				for (Map.Entry<String, String> entry : mapIP_MSNV.entrySet()) {
+					if (entry.getKey().equals(ip.getHostAddress())) {
+						mnv = entry.getValue();
+					}
+				}
+				dialog_ThemDichVu = new Dialog_ThemDichVu(txtHoten.getText(), mnv, "");
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

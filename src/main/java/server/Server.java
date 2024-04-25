@@ -42,7 +42,7 @@ import dao.impl.ThongKeImpl;
 
 
 public class Server {
-	private static final String URL = "rmi://192.168.43.157:7878/";
+	private static final String URL = "rmi://192.168.40.116:7878/";
 	public static void main(String[] args) throws NamingException {
 		try {
 			ChiTietDichVuServices chiTietDichVuServices = new ChiTietDichVu_dao_impl();
