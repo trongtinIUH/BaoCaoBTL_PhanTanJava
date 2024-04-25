@@ -43,7 +43,7 @@ import dao.impl.ThongKeImpl;
 
 
 public class Server {
-	private static final String URL = "rmi://172.20.10.2:7878/";
+	private static final String URL = "rmi://172.20.10.2:7872/";
 	
 	public static void main(String[] args) throws NamingException {
 		try {
@@ -64,7 +64,7 @@ public class Server {
 			TempThanhToanServices tempThanhToanServices = new TempThanhToanImpl();
 			ThongKeServices thongKeServices = new ThongKeImpl();
 			Context context = new InitialContext();
-			LocateRegistry.createRegistry(7878);
+			LocateRegistry.createRegistry(7872);
 			
 			context.bind(URL + "clientConnectionServices", clientConnectionServices);
 			context.bind(URL + "chiTietDichVuServices", chiTietDichVuServices);

@@ -229,11 +229,11 @@ public class GD_TrangDangNhap extends JFrame implements ActionListener {
 							if (roleName.equals("Quản lý")) {
 								DataManager.setRole("QL");
 								DataManager.setRolePassword("QLpassword");
-								Persistence.createEntityManagerFactory("jpa-mssql-manager");
+//								Persistence.createEntityManagerFactory("jpa-mssql-manager");
 							} else if (roleName.equals("Nhân viên")) {
 								DataManager.setRole("NV");
 								DataManager.setRolePassword("NVpassword");
-								Persistence.createEntityManagerFactory("jpa-mssql-employee");
+//								Persistence.createEntityManagerFactory("jpa-mssql-employee");
 								gd_TrangChu.btnDanhSachPhong.setEnabled(false);
 								gd_TrangChu.btnNhanVien.setEnabled(false);
 								gd_TrangChu.btnSanPham.setEnabled(false);

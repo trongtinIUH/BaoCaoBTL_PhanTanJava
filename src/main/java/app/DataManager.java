@@ -24,7 +24,7 @@ public class DataManager {
 	private static boolean timerChayTB = false;
 	private static boolean loadSDTCho = false;
 	private static String maNhanVien;
-	private static String rmiURL = "rmi://172.20.10.2:7878/";
+	private static String rmiURL = "rmi://172.20.10.2:7872/";
 	private static String ipServer = "172.20.10.2";
 
 	public static Map<String, String> getMapIP_MSNV() {
