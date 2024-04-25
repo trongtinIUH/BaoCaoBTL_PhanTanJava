@@ -188,9 +188,6 @@ public class ChiTietHoaDon_dao_impl extends UnicastRemoteObject implements ChiTi
 	            ChiTietHoaDon.class);
 	        query.setParameter("trangThai", Enum_TrangThai.Dang_su_dung);
 	        List<ChiTietHoaDon> results = query.getResultList();
-	        for (ChiTietHoaDon cthd : results) {
-	            System.out.println(cthd);
-	        }
 	        return results;
 	    } catch (Exception e) {
 	        e.printStackTrace();

@@ -752,7 +752,7 @@ public class Dialog_DatPhongTrong_2 extends JDialog implements ActionListener, M
 				khachHang = khachHang_dao.getKhachHangTheoSDT(sdt);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+//				e1.printStackTrace();
 			}
 			if (khachHang != null) {
 				String hoTen = khachHang.getHoTen();

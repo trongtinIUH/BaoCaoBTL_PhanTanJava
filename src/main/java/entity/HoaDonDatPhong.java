@@ -21,7 +21,7 @@ import jakarta.persistence.*;
 				+ "on gioNhanPhong = ngayGioNhanPhong where p.maPhieu = :maPhieu", 
 				resultClass = String.class),
 		@NamedNativeQuery(name = "HoaDonDatPhong.getHoaDonDatPhongTheoMaHD", query = "SELECT * FROM HoaDonDatPhong WHERE maHoaDon = :maHoaDon", resultClass = HoaDonDatPhong.class),
-		@NamedNativeQuery(name = "HoaDonDatPhong.getHoaDonDatPhongTheoMaPDP", query = "SELECT * FROM PhieuDatPhong p JOIN ChiTietHoaDon o ON p.maPhong = o.maPhong JOIN HoaDonDatPhong hd ON hd.maKhachHang = p.maKhachHang WHERE maPhieu = :maPDP AND FORMAT(p.ngayGioNhanPhong, 'yyyy-MM-dd HH:mm') = FORMAT(o.gioNhanPhong, 'yyyy-MM-dd HH:mm')", resultClass = HoaDonDatPhong.class),
+		@NamedNativeQuery(name = "HoaDonDatPhong.getHoaDonDatPhongTheoMaPDP", query = "SELECT hd.* FROM PhieuDatPhong p JOIN ChiTietHoaDon o ON p.maPhong = o.maPhong JOIN HoaDonDatPhong hd ON hd.maHoaDon = o.maHoaDon WHERE maPhieu = :maPDP AND FORMAT(p.ngayGioNhanPhong, 'yyyy-MM-dd HH:mm') = FORMAT(o.gioNhanPhong, 'yyyy-MM-dd HH:mm')", resultClass = HoaDonDatPhong.class),
 		@NamedNativeQuery(name = "HoaDonDatPhong.getHoaDonDatPhongTheoTenKH", query = "SELECT maHoaDon, hd.maKhachHang, maNhanVien, ngayLapHoaDon, trangThai, maKhuyenMai, tienKhachDua FROM HoaDonDatPhong hd JOIN KhachHang kh ON kh.maKhachHang = hd.maKhachHang WHERE kh.hoTen LIKE CONCAT('%', :tenKH, '%')", resultClass = HoaDonDatPhong.class),
 		@NamedNativeQuery(name = "HoaDonDatPhong.getHoaDonDatPhongTheoMaNV", query = "SELECT maHoaDon, maKhachHang, maNhanVien, ngayLapHoaDon, trangThai, maKhuyenMai, tienKhachDua "
 				+ "FROM HoaDonDatPhong " + "WHERE maNhanVien = :maNV", resultClass = HoaDonDatPhong.class),

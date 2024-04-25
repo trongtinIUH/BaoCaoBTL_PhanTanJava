@@ -22,10 +22,7 @@ public class Test {
 	public static void main(String[] args) throws RemoteException {
 //		EntityManager em;
 //		em = Persistence.createEntityManagerFactory("jpa-mssql").createEntityManager();
-		SanPhamService phamService = new SanPhamImpl();
-		List<SanPham> list = phamService.getAllSanPhams();
-		for (SanPham sanPham : list) {
-			System.out.println(sanPham);
-		}
+		PhongService  phongService = new PhongImpl();
+		phongService.getallPhongs().forEach(System.out::println);
 	}
 }

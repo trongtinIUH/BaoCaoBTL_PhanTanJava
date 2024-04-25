@@ -3,6 +3,7 @@ package dao.impl;
 import dao.TempDatPhongServices;
 import entity.TempDatPhong;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
 import java.rmi.RemoteException;
@@ -33,10 +34,19 @@ public class TempDatPhongImpl extends UnicastRemoteObject implements TempDatPhon
 
     @Override
     public boolean addTemp(TempDatPhong tempDatPhong) throws RemoteException {
-        em.getTransaction().begin();
-        em.persist(tempDatPhong);
-        em.getTransaction().commit();
-        return true;
+    	EntityTransaction tx = em.getTransaction();
+
+		try {
+			tx.begin();
+			em.persist(tempDatPhong);
+			tx.commit();
+			return true;
+		} catch (Exception e) {
+			tx.rollback();
+//			e.printStackTrace();
+		}
+
+		return false;
     }
 
     @Override

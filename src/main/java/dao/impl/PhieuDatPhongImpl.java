@@ -21,6 +21,7 @@ import entity.Phong;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 public class PhieuDatPhongImpl extends UnicastRemoteObject implements PhieuDatPhongService{
@@ -53,22 +54,21 @@ public class PhieuDatPhongImpl extends UnicastRemoteObject implements PhieuDatPh
 
 	@Override
 	public boolean xoaPhieuDatPhongTheoMa(String maPhong) throws RemoteException {
-		EntityTransaction tx = em.getTransaction();
+	    try {
+	        EntityTransaction tx = em.getTransaction();
+	        tx.begin();
+	        Query query = em.createNativeQuery("DELETE FROM PhieuDatPhong WHERE maPhong = :maPhong")
+	            .setParameter("maPhong", maPhong);
+	        int rows = query.executeUpdate();
+	        tx.commit();
+	        return rows > 0;
+	    } catch (Exception e) {
+	        System.out.println("Error deleting PhieuDatPhong: " + e.getMessage());
+	        e.printStackTrace();
+	    }
 
-		try {
-			tx.begin();
-			PhieuDatPhong ph = em.find(PhieuDatPhong.class, maPhong);
-			em.remove(ph);
-			tx.commit();
-			return true;
-		} catch (Exception e) {
-			tx.rollback();
-			e.printStackTrace();
-		}
-
-		return false;
+	    return false;
 	}
-
 	@Override
 	public List<PhieuDatPhong> getAllsPhieuDatPhong() throws RemoteException {
 		return em.createNamedQuery("PDP.getAllsPhieu", PhieuDatPhong.class).getResultList();
@@ -77,15 +77,14 @@ public class PhieuDatPhongImpl extends UnicastRemoteObject implements PhieuDatPh
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PhieuDatPhong> getMaPhongDatTruoc() throws RemoteException {
-		 List<PhieuDatPhong> result = new ArrayList<>();
-		    try {
-		        result = em.createNativeQuery("PhieuDatPhong.getMaPhongDatTruoc", PhieuDatPhong.class).getResultList();
-		    } catch (Exception e) {
-//		        e.printStackTrace();
-		        // Xử lý các ngoại lệ khi thực hiện truy vấn không thành công
-		    	System.out.println("Không có phòng đặt trước");
-		    }
-		    return result;
+	    List<PhieuDatPhong> result = new ArrayList<>();
+	    try {
+	        result = em.createNativeQuery("PhieuDatPhong.getMaPhongDatTruoc", PhieuDatPhong.class).getResultList();
+	    } catch (Exception e) {
+	        // Log the exception here, if necessary
+	        // e.printStackTrace();
+	    }
+	    return result;
 	}
 
 	@Override

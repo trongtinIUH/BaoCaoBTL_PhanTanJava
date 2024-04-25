@@ -2,20 +2,11 @@ package dao.impl;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import dao.ChiTietDichVuServices;
 import entity.ChiTietDichVu;
-import entity.HoaDonDatPhong;
-import entity.Phong;
-import entity.SanPham;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class ChiTietDichVu_dao_impl extends UnicastRemoteObject implements ChiTietDichVuServices {
@@ -78,7 +69,6 @@ public class ChiTietDichVu_dao_impl extends UnicastRemoteObject implements ChiTi
 
 	@Override
 	public boolean addChiTietDV(ChiTietDichVu ctdv) {
-		System.out.println(ctdv);
 	    try {
 	        em.getTransaction().begin(); // Bắt đầu một transaction
 	        em.persist(ctdv); // Lưu đối tượng vào cơ sở dữ liệu

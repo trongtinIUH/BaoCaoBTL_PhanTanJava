@@ -57,9 +57,14 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
 
 		try {
 			tx.begin();
-			em.merge(ph);
-			tx.commit();
-			return true;
+			Phong phongToUpdate = em.find(Phong.class, ph.getMaPhong());
+			// Cập nhật thông tin của phòng
+	        phongToUpdate.setTrangThai(ph.getTrangThai());
+	        phongToUpdate.setMaPhong(maPhongMoi);
+
+	        // Lưu thay đổi vào cơ sở dữ liệu
+	        em.merge(phongToUpdate);
+	        tx.commit();
 		} catch (Exception e) {
 			tx.rollback();
 			e.printStackTrace();
@@ -68,22 +73,24 @@ public class PhongImpl extends UnicastRemoteObject implements PhongService{
 		return false;
 	}
 
+
 	@Override
 	public boolean deletePhong(String maPhong) throws RemoteException {
-		EntityTransaction tx = em.getTransaction();
+	    EntityTransaction tx = em.getTransaction();
 
-		try {
-			tx.begin();
-			Phong ph = em.find(Phong.class, maPhong);
-			em.remove(ph);
-			tx.commit();
-			return true;
-		} catch (Exception e) {
-			tx.rollback();
-			e.printStackTrace();
-		}
+	    try {
+	        tx.begin();
+	        Phong ph = em.find(Phong.class, maPhong);
+	        ph.setTrangThai(Enum_TrangThai.Da_xoa);
+	        em.merge(ph);
+	        tx.commit();
+	        return true;
+	    } catch (Exception e) {
+	        tx.rollback();
+	        e.printStackTrace();
+	    }
 
-		return false;
+	    return false;
 	}
 
 	@Override

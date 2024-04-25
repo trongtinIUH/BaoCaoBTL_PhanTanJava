@@ -21,7 +21,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -44,7 +43,6 @@ import entity.PhieuDatPhong;
 import entity.Phong;
 import entity.TempDatPhong;
 import entity.TempThanhToan;
-import jakarta.persistence.Persistence;
 import dao.KhachHangServices;
 import dao.LoaiPhongServices;
 import dao.PhieuDatPhongService;
@@ -81,7 +79,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 	private Dialog_PhongCho dialog_PhongCho;
 	private Dialog_DatPhongCho dialog_DatPhongCho;
 	private int sizeDSPhong;
-	PhongService p_Service;
+	private PhongService p_Service;
 	LoaiPhongServices lp_dao = new LoaiPhongImpl();
 	private JButton btnPhong;
 	ArrayList<JButton> btnPhongList = new ArrayList<>();
@@ -254,7 +252,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		Image originalImage_phongtrong = phongtrong.getImage();
 		Image resizedImage_phongtrong = originalImage_phongtrong.getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
 		resizedIcon_phongtrong = new ImageIcon(resizedImage_phongtrong);
-//		panel_ChuaPhong.setLayout(null);
+		//		panel_ChuaPhong.setLayout(null);
 		ImageIcon phongsd = new ImageIcon("icon\\phongsd.png");
 		Image originalImage_phongsd = phongsd.getImage();
 		Image resizedImage_phongsd = originalImage_phongsd.getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
@@ -316,8 +314,9 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		panel_ChuaPhong.setBackground(new Color(244, 242, 255, 255));
 		outerPanel.add(panel_ChuaPhong);
 		panel_ChuaPhong.setLayout(null);
-
-		loadData();
+		
+		List<Phong> dsPhong = getCurrentListRoom();
+		loadData(dsPhong);
 		setEnabledBtnDatPhong();
 		// Tạo một Timer để gọi lại loadRoomList() mỗi 5000 milliseconds (5 giây)
 		sizeDSTmp = tmp_dao.getAllTemp().size();
@@ -327,6 +326,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				List<Phong> dsPhong = getCurrentListRoom();
 				try {
 					if (sizeDSTmp != tmp_dao.getAllTemp().size()) {
 						sizeDSTmp = tmp_dao.getAllTemp().size();
@@ -354,28 +354,28 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 						sizeDSPhong = p_Service.getallPhongs().size();
 						outerPanel.setPreferredSize(new Dimension(1040, calculateSize()));
 						panel_ChuaPhong.setBounds(0, 0, 1059, calculateSize());
-						loadData();
+						loadData(dsPhong);
 					}
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 				}
 
 				if (DataManager.isChuyenPhong()) {
-					loadData();
+					loadData(dsPhong);
 					DataManager.setChuyenPhong(false);
 				}
 
 				if (DataManager.isDatPhongCho()) {
-					loadData();
+					loadData(dsPhong);
 					DataManager.setDatPhongCho(false);
 				}
 
 				if (DataManager.isThanhToan()) {
-					loadData();
+					loadData(dsPhong);
 					DataManager.setThanhToan(false);
 				}
 				if (DataManager.isDatPhong()) {
-					loadData();
+					loadData(dsPhong);
 					DataManager.setDatPhong(false);
 				}
 				try {
@@ -401,7 +401,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 			}
 		});
 
-//		Bắt đầu Timer
+		//		Bắt đầu Timer
 		timer.start();
 
 		//
@@ -414,20 +414,10 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				List<PhieuDatPhong> dsMaPhongDatTruoc = new ArrayList<PhieuDatPhong>();
 				try {
 					dsMaPhongDatTruoc = pdp_Service.getMaPhongDatTruoc();
-//				    if (dsMaPhongDatTruoc == null || dsMaPhongDatTruoc.isEmpty()) {
-//				        System.out.println("Danh sách phòng đặt trước rỗng hoặc null.");
-//				    } else {
-//				        // Xử lý khi danh sách có phòng đặt trước
-//				        // Ví dụ: duyệt danh sách và thực hiện các thao tác khác
-//				        for (PhieuDatPhong maPhong : dsMaPhongDatTruoc) {
-//				            System.out.println("Phòng đặt trước: " + maPhong);
-//				        }
-//				    }
 				} catch (RemoteException e1) {
-//				    e1.printStackTrace();
-					// Xử lý các ngoại lệ khi gọi dịch vụ không thành công
 				}
-				if (dsMaPhongDatTruoc.size() != 0) {
+			
+				if (dsMaPhongDatTruoc != null && !dsMaPhongDatTruoc.isEmpty()) {
 					for (PhieuDatPhong pdp : dsMaPhongDatTruoc) {
 						Phong p = null;
 						try {
@@ -475,14 +465,14 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 							if (gioHT == gioNhanPhong && phutHT < phutNhanPhong && (phutNhanPhong - phutHT == 20)) {
 								JOptionPane.showMessageDialog(null,
 										"Phòng " + pdp.getPhong().getMaPhong()
-												+ " Còn 20p nữa đến thời gian nhận phòng vui lòng liên hệ KH:"
-												+ kh.getSoDienThoai());
+										+ " Còn 20p nữa đến thời gian nhận phòng vui lòng liên hệ KH:"
+										+ kh.getSoDienThoai());
 							}
 							if (gioHT < gioNhanPhong && phutHT > phutNhanPhong && (phutNhanPhong - phutHT + 60) == 20) {
 								JOptionPane.showMessageDialog(null,
 										"Phòng " + pdp.getPhong().getMaPhong()
-												+ " Còn 20p nữa đến thời gian nhận phòng vui lòng liên hệ KH:"
-												+ kh.getSoDienThoai());
+										+ " Còn 20p nữa đến thời gian nhận phòng vui lòng liên hệ KH:"
+										+ kh.getSoDienThoai());
 							}
 							if (gioHT == gioNhanPhong && phutHT == phutNhanPhong) {
 								JOptionPane.showMessageDialog(null, "Phòng " + pdp.getPhong().getMaPhong()
@@ -500,6 +490,8 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 							}
 						}
 					}
+				} else {
+					System.out.println("Không có phòng nào đặt trước");
 				}
 			}
 		});
@@ -538,7 +530,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		Image resizedImage_phongsd4 = originalImage_phongsd4.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon resizedIcon_phongsd4 = new ImageIcon(resizedImage_phongsd4);
 
-		ImageIcon phongcho4 = new ImageIcon("Dicon\\phongcho.png");
+		ImageIcon phongcho4 = new ImageIcon("icon\\phongcho.png");
 		Image originalImage_phongcho4 = phongcho4.getImage();
 		Image resizedImage_phongcho4 = originalImage_phongcho4.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon resizedIcon_phongcho4 = new ImageIcon(resizedImage_phongcho4);
@@ -640,7 +632,7 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		btnBackPhongCho.addActionListener(this);
 	}
 
-	private void loadData() {
+	public void loadData(List<Phong> listRoom) {
 		// chỉnh sửa kích thước các icon thường______________________
 		int i = 0;
 		int x = 40;
@@ -657,11 +649,8 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		panel_ChuaPhong.removeAll();
 		panel_ChuaPhong.revalidate();
 		panel_ChuaPhong.repaint();
-		System.out.println("========================================");
 		try {
-			for (Phong p : p_Service.getallPhongs()) {
-				
-				System.out.println("Trạng thái: " + p.getTrangThai());
+			for (Phong p : listRoom) {
 				if (i % 5 == 0) {
 					y += 130;
 					x = 40;
@@ -696,7 +685,9 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				}
 
 				btnPhong.setVerticalTextPosition(SwingConstants.BOTTOM);
-				panel_ChuaPhong.add(btnPhong);
+				if(!p.getTrangThai().equals(Enum_TrangThai.Da_xoa)) {
+					panel_ChuaPhong.add(btnPhong);
+				}
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -756,6 +747,18 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		} else {
 			return 540 + (((i - 1) / 5) - 3) * 130;
 		}
+	}
+	
+	private List<Phong> getCurrentListRoom() {
+		try {
+			PhongService phongService = new PhongImpl();
+			return phongService.getallPhongs();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 
 	private void loadTimKiem(List<Phong> DSPhong) throws RemoteException {
@@ -909,7 +912,8 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				}
 			}
 		} else {
-			loadData();
+			List<Phong> dsPhong = getCurrentListRoom();
+			loadData(dsPhong);
 			btnTimKiem.setText("Tìm kiếm");
 		}
 	}
@@ -1011,6 +1015,12 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 		}
 		if (o instanceof JButton) {
 			JButton clickedButton = (JButton) o;
+			try {
+				p_Service = new PhongImpl();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			for (JButton btn : btnPhongList) {
 				if (btn == clickedButton) {
 					String maPhong = clickedButton.getText().replace("Phòng ", "");
@@ -1065,12 +1075,15 @@ public class GD_DatPhong extends JPanel implements ActionListener {
 				}
 			}
 		}
+		
+		
 		if (o.equals(btnLamMoi)) {
 			comboBox_LoaiPhong.setSelectedIndex(0);
 			comboBox_TrangThai.setSelectedIndex(0);
 			outerPanel.setPreferredSize(new Dimension(1040, calculateSize()));
 			panel_ChuaPhong.setBounds(0, 0, 1059, calculateSize());
-			loadData();
+			List<Phong> listRoom = getCurrentListRoom();
+			loadData(listRoom);
 			txtSoNguoi.setText("");
 			txtMaPhong.setText("");
 		}

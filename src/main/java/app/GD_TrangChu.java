@@ -21,8 +21,11 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.border.CompoundBorder;
 
+import dao.PhongService;
 import dao.TempDatPhongServices;
+import dao.impl.PhongImpl;
 import dao.impl.TempDatPhongImpl;
+import entity.Phong;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -36,6 +39,7 @@ import java.awt.event.WindowListener;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class GD_TrangChu extends JFrame implements ActionListener, WindowListener {
@@ -601,6 +605,15 @@ public class GD_TrangChu extends JFrame implements ActionListener, WindowListene
 			resetActiveTab();
 			btnDatPhong.setBackground(Color.decode("#F2F0FF"));
 			cardLayout.show(cardPanel, "DatPhong");
+			PhongService phongService;
+			try {
+				phongService = new PhongImpl();
+				List<Phong> rooms = phongService.getallPhongs();
+				datPhong.loadData(rooms);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else if (o.equals(btnDanhSachPhong)) {
 			resetActiveTab();
 			btnDanhSachPhong.setBackground(Color.decode("#F2F0FF"));
