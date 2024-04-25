@@ -6,10 +6,10 @@ import java.rmi.registry.LocateRegistry;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
-import app.App_Karaoke4T;
+import app.DataManager;
 import dao.ChiTietDichVuServices;
 import dao.ChiTietHoaDonServices;
+import dao.ClientConnectionService;
 import dao.DangNhapServices;
 import dao.HoaDonDatPhongServices;
 import dao.KhachHangServices;
@@ -25,6 +25,7 @@ import dao.TempThanhToanServices;
 import dao.ThongKeServices;
 import dao.impl.ChiTietDichVu_dao_impl;
 import dao.impl.ChiTietHoaDon_dao_impl;
+import dao.impl.ClientConnectionServiceImpl;
 import dao.impl.DangNhap_dao_impl;
 import dao.impl.HoaDonDatPhongImpl;
 import dao.impl.KhachHangImpl;
@@ -42,9 +43,11 @@ import dao.impl.ThongKeImpl;
 
 
 public class Server {
-	private static final String URL = "rmi://192.168.40.116:7878/";
+	private static final String URL = "rmi://172.20.10.2:7878/";
+	
 	public static void main(String[] args) throws NamingException {
 		try {
+			ClientConnectionService clientConnectionServices = new ClientConnectionServiceImpl();
 			ChiTietDichVuServices chiTietDichVuServices = new ChiTietDichVu_dao_impl();
 			ChiTietHoaDonServices chiTietHoaDonServices = new ChiTietHoaDon_dao_impl();
 			DangNhapServices dangNhapServices = new DangNhap_dao_impl();
@@ -63,6 +66,7 @@ public class Server {
 			Context context = new InitialContext();
 			LocateRegistry.createRegistry(7878);
 			
+			context.bind(URL + "clientConnectionServices", clientConnectionServices);
 			context.bind(URL + "chiTietDichVuServices", chiTietDichVuServices);
 			context.bind(URL + "chiTietHoaDonServices", chiTietHoaDonServices);
 			context.bind(URL + "dangNhapServices", dangNhapServices);
@@ -78,6 +82,8 @@ public class Server {
 			context.bind(URL + "tempPhongBiChuyenServices", tempPhongBiChuyenServices);
 			context.bind(URL + "tempThanhToanServices", tempThanhToanServices);
 			context.bind(URL + "thongKeServices", thongKeServices);
+			
+			System.out.println(DataManager.getLoadData());
 			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

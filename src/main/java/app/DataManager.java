@@ -24,22 +24,22 @@ public class DataManager {
 	private static boolean timerChayTB = false;
 	private static boolean loadSDTCho = false;
 	private static String maNhanVien;
-	private static String rmiURL = "rmi://192.168.40.116:7878/";
-	private static String ipServer = "192.168.40.116";
+	private static String rmiURL = "rmi://172.20.10.2:7878/";
+	private static String ipServer = "172.20.10.2";
 
 	public static Map<String, String> getMapIP_MSNV() {
 		return mapIP_MSNV;
 	}
 	
 	public static void deleteFromMapLoadData(String key) {
-        if (loadData.containsKey(key)) {
-        	loadData.remove(key);
+        if (DataManager.loadData.containsKey(key)) {
+        	DataManager.loadData.remove(key);
         }
     }
 	
 	public static void deleteFromMapIP_MSNV(String key) {
-        if (mapIP_MSNV.containsKey(key)) {
-        	mapIP_MSNV.remove(key);
+        if (DataManager.mapIP_MSNV.containsKey(key)) {
+        	DataManager.mapIP_MSNV.remove(key);
         }
     }
 
@@ -48,7 +48,7 @@ public class DataManager {
 	}
 	
 	public static void addMapIP_MSNV(String key, String value) {
-		mapIP_MSNV.put(key, value);
+		DataManager.mapIP_MSNV.put(key, value);
 	}
 
 	public static Map<String, Boolean> getLoadData() {
