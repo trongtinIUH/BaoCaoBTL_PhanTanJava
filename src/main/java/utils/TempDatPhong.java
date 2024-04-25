@@ -1,6 +1,12 @@
 package utils;
 
-public class TempDatPhong {
+import java.io.Serializable;
+
+public class TempDatPhong implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6238220535725074578L;
 	private String maPhong;
 	private int soNguoiHat;
 

@@ -1,6 +1,12 @@
 package utils;
 
-public class ModelThongKeDTNhieuNam {
+import java.io.Serializable;
+
+public class ModelThongKeDTNhieuNam implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6206864255621236139L;
 	private String nam;
 	private int tongSoHoaDon;
 	private double tongDoanhThu;

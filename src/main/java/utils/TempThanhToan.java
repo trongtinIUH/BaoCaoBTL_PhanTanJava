@@ -1,6 +1,12 @@
 package utils;
 
-public class TempThanhToan {
+import java.io.Serializable;
+
+public class TempThanhToan implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4918917749377908187L;
 	private String maPhong;
 
 	public TempThanhToan(String maPhong) {

@@ -1,6 +1,12 @@
 package utils;
 
-public class TempPhongBiChuyen {
+import java.io.Serializable;
+
+public class TempPhongBiChuyen implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2275877752150535181L;
 	private String maPhong;
 	private String maPhongMoi;
 
