@@ -24,6 +24,8 @@ public class DataManager {
 	private static boolean timerChayTB = false;
 	private static boolean loadSDTCho = false;
 	private static String maNhanVien;
+	private static String rmiURL = "rmi://192.168.43.157:7878/";
+	private static String ipServer = "192.168.43.157";
 	
 	public static String getMaNV() {
 		return maNhanVien;
@@ -191,5 +193,13 @@ public class DataManager {
 
 	public static void setMaHD_trongDSThanhToan(String maHD_trongDSThanhToan) {
 		DataManager.maHD_trongDSThanhToan = maHD_trongDSThanhToan;
+	}
+
+	public static String getRmiURL() {
+		return rmiURL;
+	}
+
+	public static String getIpServer() {
+		return ipServer;
 	}
 }
