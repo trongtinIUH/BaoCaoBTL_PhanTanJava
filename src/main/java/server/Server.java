@@ -6,7 +6,6 @@ import java.rmi.registry.LocateRegistry;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import app.DataManager;
 import dao.ChiTietDichVuServices;
 import dao.ChiTietHoaDonServices;
 import dao.ClientConnectionService;
@@ -43,7 +42,7 @@ import dao.impl.ThongKeImpl;
 
 
 public class Server {
-	private static final String URL = "rmi://172.20.10.2:7872/";
+	private static final String URL = "rmi://192.168.43.157:7878/";
 	
 	public static void main(String[] args) throws NamingException {
 		try {
@@ -64,7 +63,7 @@ public class Server {
 			TempThanhToanServices tempThanhToanServices = new TempThanhToanImpl();
 			ThongKeServices thongKeServices = new ThongKeImpl();
 			Context context = new InitialContext();
-			LocateRegistry.createRegistry(7872);
+			LocateRegistry.createRegistry(7878);
 			
 			context.bind(URL + "clientConnectionServices", clientConnectionServices);
 			context.bind(URL + "chiTietDichVuServices", chiTietDichVuServices);
@@ -82,8 +81,6 @@ public class Server {
 			context.bind(URL + "tempPhongBiChuyenServices", tempPhongBiChuyenServices);
 			context.bind(URL + "tempThanhToanServices", tempThanhToanServices);
 			context.bind(URL + "thongKeServices", thongKeServices);
-			
-			System.out.println(DataManager.getLoadData());
 			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

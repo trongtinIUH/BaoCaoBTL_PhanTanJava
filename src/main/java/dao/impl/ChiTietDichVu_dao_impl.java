@@ -23,6 +23,7 @@ public class ChiTietDichVu_dao_impl extends UnicastRemoteObject implements ChiTi
 
 	}
 
+	@SuppressWarnings({ "unchecked", "unused" })
 	@Override
 	public List<ChiTietDichVu> getAllChiTietDichVu() throws RemoteException {
 		String sql = "select * from ChiTietDichVu";

@@ -20,10 +20,9 @@ public class ClientConnectionServiceImpl extends UnicastRemoteObject implements 
 
     @Override
     public void clientConnected() throws RemoteException {
+    	System.out.println("===================================");
     	System.out.println(DataManager.getMapIP_MSNV());
-    	System.out.println("=============================");
     	System.out.println(DataManager.getRole());
-    	System.out.println("=============================");
     	System.out.println(DataManager.getLoadData());
         System.out.println("A client has connected.");
         System.out.println("===================================");
